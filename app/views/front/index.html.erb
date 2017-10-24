@@ -76,7 +76,8 @@
 							username: $("#login-username").val(),
 							password: $("#login-password").val()
 						}, function(result) {
-							
+							//TODO
+							console.log(result);
 						});
 						break;
 					case "cancel-login":
@@ -99,11 +100,12 @@
 							$("#register-password-mismatch").show();
 							break;
 						}
-						$.post("./login", {
+						$.post("./register", {
 							username: $("#register-username").val(),
 							password: $("#register-password").val()
 						}, function(result) {
-							
+							//TODO
+							console.log(result);
 						});
 						break;
 					case "cancel-register":
