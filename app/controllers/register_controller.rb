@@ -1,8 +1,6 @@
 
 class RegisterController < ApplicationController
-  def index
-  end
-  
   def create
+    render plain: "bar"
   end
 end

@@ -1,6 +1,6 @@
 
 Rails.application.routes.draw do
-  get '/login' => 'login#index'
+  #get '/login' => 'login#index'
   post '/login' => 'login#create'
   
   get '/register' => 'register#index'
