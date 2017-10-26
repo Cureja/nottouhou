@@ -1,2 +1,65 @@
-<h1>Register#index</h1>
-<p>Find me in app/views/register/index.html.erb</p>
+<!doctype html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<style>
+		h1 {
+			width: 100%;
+			text-align: center;
+		}
+		
+		div.center {
+			justify-content: center;
+			text-align: center;
+		}
+		
+		input {
+			width: 200px;
+			margin-bottom: 10px;
+		}
+		
+		div.error {
+			color: red;
+			margin-bottom: 10px;
+		}
+	</style>
+	<script>
+		function setError(e) {
+			$("#error-field").html(e);
+		}
+		
+		$(document).ready(function() {
+			$("#register-form").submit(function(e) {
+				$.post(window.location, {
+					username: $("#username").val(),
+					password: $("#password").val(),
+					password_confirm: $("#password-confirm").val()
+				}, function(result) {
+					console.log(result);
+					if (result["error"] != undefined) {
+						setError(result["error"]);
+					}
+					else {
+						setError("");
+						//TODO
+					}
+				});
+				return false;
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Not Touhou</h1>
+	<div><form id="register-form">
+		<div class="center"><input type="text" placeholder="Username" id="username"></input></div>
+		<div class="center"><input type="password" placeholder="Password" id="password"></input></div>
+		<div class="center"><input type="password" placeholder="Confirm password" id="password-confirm"></input></div>
+		<div class="center"><input type="submit" value="Register"></input></div>
+	</form></div>
+	<div><form action="./../">
+		<div class="center"><input type="submit" id="cancel-register" value="Cancel"></input></div>
+	</form></div>
+	<div class="center error" id="error-field"></div>
+</body>
+</html>

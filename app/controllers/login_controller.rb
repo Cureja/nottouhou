@@ -7,10 +7,18 @@ class LoginController < ApplicationController
     password = params[:password]
     user = User.find_by(username: username)
     if user.nil? || !user.authenticate(password) then
-      render plain: "0 Invalid username or password"
+      render :json => {
+        :error => "Invalid username or password"
+      }
       return
     end
     # should be good
-    render plain: "1"
+    render :json => {
+      :redirect => "../profile/",
+      :authtoken => ""
+    }
+  end
+  
+  def index
   end
 end

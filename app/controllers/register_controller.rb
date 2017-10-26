@@ -9,18 +9,34 @@ class RegisterController < ApplicationController
       return
     end
     password = params[:password]
-    if !username.match(/[a-zA-Z0-9]{6,20}/) then
-      render plain: "0 Invalid password"
+    password2 = params[:password_confirm]
+    if password != password2 then
+      render :json => {
+        :error => "Passwords do not match"
+      }
+      return
+    end
+    if !password.match(/[a-zA-Z0-9]{6,20}/) then
+      render :json => {
+        :error => "Passwords contains illegal characters or has illegal length"
+      }
       return
     end
     user = User.find_by(username: username)
     if !user.nil? then
-      # user already exists
-      render plain: "0 Username taken"
+      render :json => {
+        :error => "Username is taken"
+      }
       return
     end
     user = User.create(username: username, password: password, password_confirmation: password)
     # should be good
-    render plain: "1"
+    render :json => {
+      :redirect => "../profile/",
+      :authtoken => ""
+    }
+  end
+  
+  def index
   end
 end

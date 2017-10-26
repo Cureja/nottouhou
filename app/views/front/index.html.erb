@@ -24,130 +24,15 @@
 			width: 200px;
 			margin-bottom: 10px;
 		}
-		
-		div.error {
-			color: red;
-			margin-bottom: 10px;
-			display: none;
-		}
 	</style>
-	<script>
-		$(document).ready(function() {
-			let errors = [
-				$("#login-missing-field"),
-				$("#login-failed"),
-				$("#register-missing-field"),
-				$("#register-password-mismatch"),
-				$("#register-password-invalid"),
-			];
-			
-			function hideErrors() {
-				errors.forEach(function(e) {
-					e.hide();
-				});
-			}
-			
-			//inclusive
-			function between(x, a, b) {
-				return a <= x && x <= b;
-			}
-			
-			/*
-			if someone really wants to they can forge a request with
-			improper lengths and whatnot, so everything has to be
-			checked serverside as well
-			*/
-			
-			$("button").click(function(e) {
-				hideErrors();
-				switch (this.id) {
-					case "login":
-						$("#login-div").show();
-						$("#default-div").hide();
-						break;
-					case "do-login":
-						if (!between($("#login-username").val().length, 3, 20) ||
-							!between($("#login-password").val().length, 6, 20)) {
-							//TODO this isn't exactly the right error to show. someone else make a proper error message
-							$("#login-missing-field").show();
-							break;
-						}
-						$.post("./login", {
-							username: $("#login-username").val(),
-							password: $("#login-password").val()
-						}, function(result) {
-							//TODO
-							console.log(result);
-						});
-						break;
-					case "cancel-login":
-						$("#default-div").show();
-						$("#login-div").hide();
-						break;
-					case "register":
-						$("#register-div").show();
-						$("#default-div").hide();
-						break;
-					case "do-register":
-						if (!between($("#register-username").val().length, 3, 20) ||
-							!between($("#register-password").val().length, 6, 20) ||
-							!between($("#register-password-confirm").val().length, 6, 20)) {
-							//TODO this isn't exactly the right error to show. someone else make a proper error message
-							$("#register-missing-field").show();
-							break;
-						}
-						if ($("#register-password").val() != $("#register-password-confirm").val()) {
-							$("#register-password-mismatch").show();
-							break;
-						}
-						$.post("./register", {
-							username: $("#register-username").val(),
-							password: $("#register-password").val()
-						}, function(result) {
-							//TODO
-							console.log(result);
-						});
-						break;
-					case "cancel-register":
-						$("#default-div").show();
-						$("#register-div").hide();
-						break;
-				}
-			});
-		});
-	</script>
 </head>
 <body>
 	<h1>Not Touhou</h1>
-	<div id="default-div">
-		<div class="center"><button class="login" id="login">Log in</button></div>
-		<div class="center"><button class="login" id="register">Register</button></div>
-	</div>
-	<div id="login-div" style="display: none;">
-		<div class="center"><input class="login" type="text" placeholder="Username" id="login-username"></input></div>
-		<div class="center"><input class="login" type="password" placeholder="Password" id="login-password"></input></div>
-		<div class="center error" id="login-missing-field">Not all fields are filled out</div>
-		<div class="center error" id="login-failed">Invalid username or password</div>
-		<div class="center"><button class="login" id="do-login">Log in</button></div>
-		<div class="center"><button class="login" id="cancel-login">Cancel</button></div>
-	</div>
-	<div id="register-div" style="display: none;">
-		<div class="center" style="margin-bottom: 10px">
-			Usernames may contain 3-20 characters and consist of<br>
-			alphanumeric characters and non-consecutive dashes (i.e. john-smith).<br>
-			<br>
-			Passwords may contain 6-20 characters and consist of<br>
-			only alphanumeric characters.<br><br>
-		</div>
-		<div class="center"><input class="login" type="text" placeholder="Username" id="register-username"></input></div>
-		<div class="center error" id="register-username-taken">Username is taken</div>
-		<div class="center"><input class="login" type="password" placeholder="Password" id="register-password"></input></div>
-		<div class="center"><input class="login" type="password" placeholder="Confirm password" id="register-password-confirm"></input></div>
-		<div class="center error" id="register-missing-field">Not all fields are filled out</div>
-		<div class="center error" id="register-password-mismatch">Passwords do not match</div>
-		<div class="center error" id="register-password-invalid">Password contains illegal characters</div>
-		<div class="center"><button class="login" id="do-register">Register</button></div>
-		<div class="center"><button class="login" id="cancel-register">Cancel</button></div>
-	</div>
+	<div><form action="./login/">
+		<div class="center"><input class="login" type="submit" value="Log in"</div>
+	</form></div>
+	<div><form action="./register/">
+		<div class="center"><input class="login" type="submit" value="Register"</div>
+	</form></div>
 </body>
 </html>
