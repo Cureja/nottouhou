@@ -1,31 +1,21 @@
-
 # Basic Style Guide
 Will be updated as people push code that gives me OCD.
 
 ### General
-Tabs, not spaces. Align line wraps with spaces if need be.
+Tabs, not spaces (except where stated otherwise). Align line wraps with spaces if need be. Braces on the same line.
 
 ### JS
-Braces on new line, except when creating an array with predetermined data i.e.
-
-	var xs = {
-		"foo",
-		"bar"
-	}
+Nothing JS-specific yet.
 	
 ### CSS
-Braces on same line i.e.
-
-	div {
-		float: left
-	}
+Nothing CSS-specific yet.
 
 ### HTML
 Lowercase tags. `<div>`, not `<DIV>`
-Generally, indent for every subtag. Exceptions for deep nesting of tags or where not indenting is more readable.
+Generally, indent for every subtag. Exceptions for deep nesting of tags or where not indenting is more readable. Not indenting `<head>` or `<body>` is also fine.
 
 ### Ruby
-TBD when I learn Ruby syntax.
+Two spaces per tab.
 
 ### Commits
 Commit messages take verb form i.e.
