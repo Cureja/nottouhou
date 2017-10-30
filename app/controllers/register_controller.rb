@@ -30,7 +30,8 @@ class RegisterController < ApplicationController
       return
     end
     user = User.create(username: username, password: password, password_confirmation: password)
-    # should be good
+    session[:user_id] ||= user.id
+    
     render :json => {
       :redirect => "../profile/",
       :authtoken => ""
@@ -38,5 +39,6 @@ class RegisterController < ApplicationController
   end
   
   def index
+    redirect_if_logged_in
   end
 end

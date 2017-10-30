@@ -12,7 +12,8 @@ class LoginController < ApplicationController
       }
       return
     end
-    # should be good
+    session[:user_id] ||= user.id
+    
     render :json => {
       :redirect => "../profile/",
       :authtoken => ""
@@ -20,5 +21,6 @@ class LoginController < ApplicationController
   end
   
   def index
+    redirect_if_logged_in
   end
 end
