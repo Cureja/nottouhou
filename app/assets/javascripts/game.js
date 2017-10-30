@@ -56,7 +56,7 @@ $(document).ready(() => {
 
 	let projectiles = [];
 	let projectile = {};
-	let texture = PIXI.Texture.fromImage('./projectile.png');
+	let texture = PIXI.Texture.fromImage('../images/projectile.png');
 	projectile.handle = new PIXI.Sprite(texture);
 	projectile.onUpdate = function() {
 	    this.handle.x += 1;
@@ -69,7 +69,7 @@ $(document).ready(() => {
 	};
 
 	function shoot(startPosition){
-		let texture = PIXI.Texture.fromImage('./projectile.png');
+		let texture = PIXI.Texture.fromImage('../images/projectile.png');
 		var projectile1 = new PIXI.Sprite(texture);
 		var projectile2 = new PIXI.Sprite(texture);
 		var projectile3 = new PIXI.Sprite(texture);
@@ -94,8 +94,8 @@ $(document).ready(() => {
 		projectiles.push(projectile3);
 	}
 
-	PIXI.loader.add("./idles.json", {crossOrigin: ''})
-						 .add('./projectile.png').load(() => {
+	PIXI.loader.add("../images/idles.json", {crossOrigin: ''})
+						 .add('../images/projectile.png').load(() => {
 		let frames = [];
 		for (let k = 0; k < 4; k++) {
 			frames.push(PIXI.Texture.fromFrame("idle" + k));
