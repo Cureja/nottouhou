@@ -32,6 +32,9 @@ class RegisterController < ApplicationController
     user = User.create(username: username, password: password, password_confirmation: password)
     session[:user_id] ||= user.id
     
+    # TODO use flash object for error messages
+    # can also redirect_to profile#index
+    
     render :json => {
       :redirect => "../profile/",
       :authtoken => ""
