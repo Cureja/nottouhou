@@ -14,10 +14,13 @@ class LoginController < ApplicationController
     end
     session[:user_id] ||= user.id
     
-    render :json => {
-      :redirect => "../profile/",
-      :authtoken => ""
-    }
+    redirect_if_logged_in
+    
+    
+    #render :json => {
+    #  :redirect => "../profile/",
+    #  :authtoken => ""
+    #}
   end
   
   def index

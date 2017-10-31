@@ -33,12 +33,13 @@ class RegisterController < ApplicationController
     session[:user_id] ||= user.id
     
     # TODO use flash object for error messages
-    # can also redirect_to profile#index
     
-    render :json => {
-      :redirect => "../profile/",
-      :authtoken => ""
-    }
+    redirect_if_logged_in
+    
+    # render :json => {
+    #   :redirect => "../profile/",
+    #   :authtoken => ""
+    # }
   end
   
   def index
