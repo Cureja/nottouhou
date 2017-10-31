@@ -6,17 +6,42 @@
 	<style>
 		div.currentuser {
 			border: 2px solid black;
-			width: 100px;
-			height: 30px;
+			width: 35%;
+			height: auto;
 			text-align: center;
-			float: right;
+			float: center;
+			border-radius: 20px;
+			box-shadow: 0px 0px 30px #3F5EFB;
+			margin: 0 auto;
+		}
+		p{
+			font-family: sans-serif;
+			color: #FC466B;
+		}
+		.profilepic{
+				float: left;
+				height: 25%;
+				width: 25%;
+				padding: 5px 5pc 5px 5px;
+				border-radius: 20px
+		}
+		.bg{
+			background-image: url("https://s-media-cache-ak0.pinimg.com/originals/0d/6f/da/0d6fda32e9f18caac0aad8f2ed25c8c8.jpg");
+			height: 100%;
+			background position: center;
+			background-repeat:  no-repeat;
+			background-size: cover;
 		}
 	</style>
-	<script>
-	
-	</script>
 </head>
-<body>
-	<div class="currentuser"><%=@user.username%></div>
+<body class = "bg">
+		<div class="currentuser">
+			<img src = "https://pbs.twimg.com/profile_images/743699043390369792/a8zCm-8j_400x400.jpg"class = "profilepic">
+			<p>Username: <%=@user.username%></p>
+			<p>Level: <%=@user.level%></p>
+			<p>Exp: <%=@user.exp%></p>
+			<p>Level Progress: <%=@user.campaign_progress%></p>
+			<p>Player Since: <%=@user.created_at%></p>
+		</div>
 </body>
 </html>
