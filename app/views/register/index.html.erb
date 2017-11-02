@@ -2,7 +2,6 @@
 <html>
 <head>
 	<title>Register</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<style>
 		h1 {
 			width: 100%;
@@ -16,7 +15,9 @@
 		
 		input {
 			width: 200px;
+			margin: 0 auto;
 			margin-bottom: 10px;
+			display: block;
 		}
 		
 		div.error {
@@ -24,43 +25,21 @@
 			margin-bottom: 10px;
 		}
 	</style>
-	<script>
-		function setError(e) {
-			$("#error-field").html(e);
-		}
-		
-		$(document).ready(function() {
-			$("#register-form").submit(function(e) {
-				$.post(window.location, {
-					username: $("#username").val(),
-					password: $("#password").val(),
-					password_confirm: $("#password-confirm").val()
-				}, function(result) {
-					console.log(result);
-					if (result["error"] != undefined) {
-						setError(result["error"]);
-					}
-					//else {
-					//	setError("");
-					//	window.location.href = result["redirect"];
-					//}
-				});
-				return false;
-			});
-		});
-	</script>
 </head>
 <body>
 	<h1>Not Touhou</h1>
-	<div><form id="register-form">
-		<div class="center"><input type="text" placeholder="Username" id="username"></input></div>
-		<div class="center"><input type="password" placeholder="Password" id="password"></input></div>
-		<div class="center"><input type="password" placeholder="Confirm password" id="password-confirm"></input></div>
-		<div class="center"><input type="submit" value="Register"></input></div>
-	</form></div>
-	<div><form action="./../">
-		<div class="center"><input type="submit" id="cancel-register" value="Cancel"></input></div>
-	</form></div>
-	<div class="center error" id="error-field"></div>
+	<div class="center">
+		<form accept-charset="UTF-8" action="/register" method="post">
+			<input name="username" type="text" placeholder="Username" value="<%= flash[:username] %>"/>
+			<input name="password" type="password" placeholder="Password" value="<%= flash[:password] %>"/>
+			<input name="password_confirm" type="password" placeholder="Confirm password" value="<%= flash[:password_confirm] %>"/>
+			<input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+			<input type="submit" value="Register"/>
+		</form>
+		<form action="./../">
+			<input type="submit" value="Cancel"/>
+		</form>
+	</div>
+	<div class="center error"><%= simple_format(flash[:error]) %></div>
 </body>
 </html>
