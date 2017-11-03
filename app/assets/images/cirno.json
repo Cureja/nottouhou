@@ -1,0 +1,108 @@
+{
+    "frames": {
+        "right0": {
+            "trimmed": false,
+            "frame": {
+                "y": 0,
+                "x": 45,
+                "w": 45,
+                "h": 62
+            },
+            "rotated": false,
+            "sourceSize": {
+                "h": 62,
+                "w": 45
+            },
+            "spriteSourceSize": {
+                "y": 0,
+                "x": 0,
+                "w": 45,
+                "h": 62
+            }
+        },
+        "idle3": {
+            "trimmed": false,
+            "frame": {
+                "y": 0,
+                "x": 230,
+                "w": 47,
+                "h": 62
+            },
+            "rotated": false,
+            "sourceSize": {
+                "h": 62,
+                "w": 47
+            },
+            "spriteSourceSize": {
+                "y": 0,
+                "x": 0,
+                "w": 47,
+                "h": 62
+            }
+        },
+        "idle2": {
+            "trimmed": false,
+            "frame": {
+                "y": 0,
+                "x": 183,
+                "w": 47,
+                "h": 62
+            },
+            "rotated": false,
+            "sourceSize": {
+                "h": 62,
+                "w": 47
+            },
+            "spriteSourceSize": {
+                "y": 0,
+                "x": 0,
+                "w": 47,
+                "h": 62
+            }
+        },
+        "idle1": {
+            "trimmed": false,
+            "frame": {
+                "y": 0,
+                "x": 136,
+                "w": 47,
+                "h": 62
+            },
+            "rotated": false,
+            "sourceSize": {
+                "h": 62,
+                "w": 47
+            },
+            "spriteSourceSize": {
+                "y": 0,
+                "x": 0,
+                "w": 47,
+                "h": 62
+            }
+        },
+        "idle0": {
+            "trimmed": false,
+            "frame": {
+                "y": 0,
+                "x": 89,
+                "w": 47,
+                "h": 62
+            },
+            "rotated": false,
+            "sourceSize": {
+                "h": 62,
+                "w": 46
+            },
+            "spriteSourceSize": {
+                "y": 0,
+                "x": 0,
+                "w": 46,
+                "h": 62
+            }
+        }
+    },
+    "meta": {
+        "image": "cirno.png",
+        "format": "RGBA8888"
+    }
+}
