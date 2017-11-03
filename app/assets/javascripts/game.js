@@ -2,6 +2,8 @@
 //for console debugging
 let app;
 let player;
+let projectiles = [];
+let cd = 5;
 
 $(document).ready(() => {
 	app = new PIXI.Application();
@@ -54,13 +56,10 @@ $(document).ready(() => {
 		}
 	};
 
-	let projectiles = [];
 	let projectile = {};
 	let texture = PIXI.Texture.fromImage('../images/projectile.png');
 	projectile.handle = new PIXI.Sprite(texture);
 	projectile.onUpdate = function() {
-	    this.handle.x += 1;
-	    this.handle.y += 1;
 			if (this.handle.x < minx || this.handle.x > maxx || this.handle.y < miny || this.handle.y > maxy) {
 				this.handle = null;
 			}
@@ -69,33 +68,70 @@ $(document).ready(() => {
 	};
 
 	function shoot(startPosition){
+		cd = 5;
 		let texture = PIXI.Texture.fromImage('../images/projectile.png');
-		var projectile1 = new PIXI.Sprite(texture);
+		/*for(i = 0; i < 3; i++){
+			var projectile = new PIXI.sprite(texture);
+			projectiles.push(projectile);
+
+			projectiles[projectile.length - i + 1].position.y = startPosition.y;
+			if(i == 0){
+				projectiles[projectile.length - i + 1].rotation = 12.35;
+				projectiles[projectile.length - i + 1].position.x = startPosition.x - 10;
+			}
+			else if(i == 1){
+				projectiles[projectile.length - i + 1].rotation = 0;
+				projectiles[projectile.length - i + 1].position.x = startPosition.x;
+			}
+			else {
+				projectiles[projectile.length - i + 1].rotation = .35;
+				projectiles[projectile.length - i + 1].position.x = startPosition.x + 10;
+			}
+			app.stage.addChild(projectiles[projectile.length - i + 1]);
+		}*/
+	  var projectile1 = new PIXI.Sprite(texture);
 		var projectile2 = new PIXI.Sprite(texture);
 		var projectile3 = new PIXI.Sprite(texture);
 
-		projectile1.position.x = startPosition.x;
+		projectile1.position.x = startPosition.x - 10;
 		projectile1.position.y = startPosition.y;
 		projectile2.position.x = startPosition.x;
 		projectile2.position.y = startPosition.y;
-		projectile3.position.x = startPosition.x;
+		projectile3.position.x = startPosition.x + 10;
 		projectile3.position.y = startPosition.y;
 
-		/*projectile1.rotation = 0.75;
-		projectile2.rotation = 0.75;
-		projectile3.rotation = 0.75;*/
+		projectile1.rotation = 12.35;
+		projectile2.rotation = 0;
+		projectile3.rotation = .35;
 
 		app.stage.addChild(projectile1);
 		app.stage.addChild(projectile2);
 		app.stage.addChild(projectile3);
 
-		projectiles.push(projectile1);
-		projectiles.push(projectile2);
-		projectiles.push(projectile3);
+		projectiles.push({
+			"projectile": projectile1,
+			"update": function(self) {
+				self.position.x -= 1;
+				self.position.y -= 3;//up and left
+			}
+		});
+		projectiles.push({
+			"projectile": projectile2,
+			"update": function(self) {
+				self.position.y -= 3;//up
+			}
+		});
+		projectiles.push({
+			"projectile": projectile3,
+			"update": function(self) {
+				self.position.x += 1;
+				self.position.y -= 3;//up and right
+			}
+		});
 	}
 
 	PIXI.loader.add("../images/idles.json", {crossOrigin: ''})
-						 .add('../images/projectile.png').load(() => {
+						 .add('./images/projectile.png').load(() => {
 		let frames = [];
 		for (let k = 0; k < 4; k++) {
 			frames.push(PIXI.Texture.fromFrame("idle" + k));
@@ -152,6 +188,7 @@ $(document).ready(() => {
 	app.ticker.add(() => {
 		let xdir = 0;
 		let ydir = 0;
+
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
 		}
@@ -164,8 +201,13 @@ $(document).ready(() => {
 		if ((keys[VK_DOWN] || keys[VK_S]) && ydir == 0) {
 			ydir = 1;
 		}
-		if (keys[VK_Z]) {
-			shoot({x: player.handle.x, y: player.handle.y});
+		if(cd <= 0){
+			if (keys[VK_Z]) {
+				shoot({x: player.handle.x, y: player.handle.y});
+			}
+		}
+		else{
+		  cd--;
 		}
 		if (xdir < 0) {
 			player.animate("idleLeft");
@@ -179,8 +221,16 @@ $(document).ready(() => {
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
 
 		for(var i = projectiles.length - 1; i >= 0; i--){
-			projectiles[i].position.x -= Math.cos(projectiles[i].rotation + 20) * MOVEMENT_SPEED;
-			projectiles[i].position.y -= Math.sin(projectiles[i].rotation + 20) * MOVEMENT_SPEED;
+			//projectiles[i].position.x -= Math.cos(projectiles[i].rotation + 20) * MOVEMENT_SPEED;
+			//projectiles[i].position.y -= Math.sin(projectiles[i].rotation + 20) * MOVEMENT_SPEED;
+			//if (projectiles[i].position.y < 0) {
+			//	//destroy
+			//}
+			projectiles[i].update(projectiles[i].projectile);
+			/*if(projectiles[i].projectile.position.y < 0){
+				delete projectiles[i].projectile;
+				projectiles.splice(i, 1);
+			}*/
 		}
 	});
 });

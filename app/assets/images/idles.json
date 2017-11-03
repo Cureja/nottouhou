@@ -362,7 +362,7 @@
         }
     },
     "meta": {
-        "image": "./idles.png", 
+        "image": "./idles.png",
         "format": "RGBA8888"
     }
 }
