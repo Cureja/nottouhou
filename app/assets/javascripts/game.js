@@ -1,5 +1,4 @@
 
-//for console debugging
 let app;
 let player;
 let projectiles = [];
@@ -7,7 +6,7 @@ let cd = 5;
 
 $(document).ready(() => {
 	app = new PIXI.Application();
-	$("#game-container").append(app.view); //adds game to webpage
+	$("#game-container").append(app.view);
 	app.renderer.backgroundColor = 0x222222;
 	app.renderer.resize(600, 600);
 
@@ -37,10 +36,10 @@ $(document).ready(() => {
 				let miny = this.handle.height / 2;
 				let maxy = app.renderer.height - miny;
 
-				this.handle.x += x; //movement
+				this.handle.x += x;
 				this.handle.y += y;
 
-				if (this.handle.x < minx) { //if out of bounds move back to edge
+				if (this.handle.x < minx) {
 					this.handle.x = minx;
 				}
 				else if (this.handle.x > maxx) {
@@ -56,9 +55,9 @@ $(document).ready(() => {
 		}
 	};
 
-	let projectile = {};
-	let texture = PIXI.Texture.fromImage('../images/projectile.png');
-	projectile.handle = new PIXI.Sprite(texture);
+	/*let projectile = {};
+	let pTexture = PIXI.Texture.fromImage('./projectile.png');
+	projectile.handle = new PIXI.Sprite(pTexture);
 	projectile.onUpdate = function() {
 			if (this.handle.x < minx || this.handle.x > maxx || this.handle.y < miny || this.handle.y > maxy) {
 				this.handle = null;
@@ -67,29 +66,30 @@ $(document).ready(() => {
 			//array of projectiles, give it its own index so it can be easily referenced and deleted
 	};
 
-	function shoot(startPosition){
-		cd = 5;
-		let texture = PIXI.Texture.fromImage('../images/projectile.png');
-		/*for(i = 0; i < 3; i++){
-			var projectile = new PIXI.sprite(texture);
-			projectiles.push(projectile);
+	let focus = {};
+	let fTexture = PIXI.Texture.fromImage('./focus.png')
+	focus.handle = new PIXI.Sprite(fTexture)*/
+	function focus(startPosition){
+		cd = 20;
+		let texture = PIXI.Texture.fromImage('./focus.png');
+		var focus = new PIXI.Sprite(texture);
+		focus.position.x = startPosition.x;
+		focus.position.y = startPosition.y;
+		focus.rotation = 0;
 
-			projectiles[projectile.length - i + 1].position.y = startPosition.y;
-			if(i == 0){
-				projectiles[projectile.length - i + 1].rotation = 12.35;
-				projectiles[projectile.length - i + 1].position.x = startPosition.x - 10;
+		app.stage.addChild(focus);
+		projectiles.push({
+			"projectile": focus,
+			"update": function(self){
+				self.position.y -= 2;
 			}
-			else if(i == 1){
-				projectiles[projectile.length - i + 1].rotation = 0;
-				projectiles[projectile.length - i + 1].position.x = startPosition.x;
-			}
-			else {
-				projectiles[projectile.length - i + 1].rotation = .35;
-				projectiles[projectile.length - i + 1].position.x = startPosition.x + 10;
-			}
-			app.stage.addChild(projectiles[projectile.length - i + 1]);
-		}*/
-	  var projectile1 = new PIXI.Sprite(texture);
+		});
+	}
+
+	function shoot(startPosition){
+		cd = 10;
+		let texture = PIXI.Texture.fromImage('./projectile.png');
+		var projectile1 = new PIXI.Sprite(texture);
 		var projectile2 = new PIXI.Sprite(texture);
 		var projectile3 = new PIXI.Sprite(texture);
 
@@ -130,8 +130,8 @@ $(document).ready(() => {
 		});
 	}
 
-	PIXI.loader.add("../images/idles.json", {crossOrigin: ''})
-						 .add('./images/projectile.png').load(() => {
+	PIXI.loader.add("./idles.json", {crossOrigin: ''})
+						 .add('./projectile.png').load(() => {
 		let frames = [];
 		for (let k = 0; k < 4; k++) {
 			frames.push(PIXI.Texture.fromFrame("idle" + k));
@@ -154,7 +154,7 @@ $(document).ready(() => {
 		player.handle = new PIXI.extras.AnimatedSprite(player.anims.idle);
 		player.handle.x = app.renderer.width / 2;
 		player.handle.y = app.renderer.height / 2;
-		player.handle.anchor.set(0.5); //0 is top left, 0.5 is middle, 1 is bottom right
+		player.handle.anchor.set(0.5);
 		player.handle.animationSpeed = 0.5;
 		player.handle.play();
 
@@ -183,8 +183,6 @@ $(document).ready(() => {
 		keys[e.keyCode] = false;
 	});
 
-	//FIXME xdir/ydir assume topleft is 0,0. is this the case?
-
 	app.ticker.add(() => {
 		let xdir = 0;
 		let ydir = 0;
@@ -202,8 +200,11 @@ $(document).ready(() => {
 			ydir = 1;
 		}
 		if(cd <= 0){
-			if (keys[VK_Z]) {
+			if (keys[VK_Z] && !keys[VK_SHIFT]) {
 				shoot({x: player.handle.x, y: player.handle.y});
+			}
+			else if (keys[VK_Z] && keys[VK_SHIFT]){
+				focus({x: player.handle.x, y:player.handle.y});
 			}
 		}
 		else{
