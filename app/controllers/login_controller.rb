@@ -27,6 +27,7 @@ class LoginController < ApplicationController
       do_error
     else
       session[:user_id] ||= user.id
+      cookies.permanent.signed[:user_id] = user.id
       redirect_if_logged_in
     end
   end
