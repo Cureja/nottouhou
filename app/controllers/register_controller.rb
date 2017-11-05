@@ -1,4 +1,3 @@
-
 class RegisterController < ApplicationController  
   add_flash_types :error, :username, :password, :password_confirm
   
@@ -39,6 +38,7 @@ class RegisterController < ApplicationController
     else
       user = User.create(username: @username, password: @password, password_confirmation: @password)
       session[:user_id] ||= user.id
+      remember user #uses login_helper
       redirect_if_logged_in
     end
   end
