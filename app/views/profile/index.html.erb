@@ -4,44 +4,83 @@
 	<title>Profile - <%=@user.username%></title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<style>
-		div.currentuser {
-			border: 2px solid black;
-			width: 35%;
-			height: auto;
-			text-align: center;
-			float: center;
-			border-radius: 20px;
-			box-shadow: 0px 0px 30px #3F5EFB;
-			margin: 0 auto;
+		ul{
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #2956B2;
+			position: fixed;
+    	top: 10px;
+    	width: 65%;
+			border-radius: 10px;
 		}
 		p{
 			font-family: sans-serif;
 			color: #FC466B;
+			font-weight: bold;
 		}
-		.profilepic{
-				float: left;
-				height: 25%;
-				width: 25%;
-				padding: 5px 5pc 5px 5px;
-				border-radius: 20px
+		li{
+			float:left;
 		}
-		.bg{
-			background-image: url("https://s-media-cache-ak0.pinimg.com/originals/0d/6f/da/0d6fda32e9f18caac0aad8f2ed25c8c8.jpg");
+		li a{
+				display: block;
+				color: #659CEF;
+				text-align: center;
+				padding: 14px 16px;
+				text-decoration: none;
+		}
+
+		li a:hover {
+			background-color: #DCF600;
+		}
+
+		.background{
+			background-image: url("../../assets/SpaceBackground.jpg");
 			height: 100%;
 			background position: center;
 			background-repeat:  no-repeat;
 			background-size: cover;
 		}
+		.userProfile{
+			border-radius: 50%;
+			float: left;
+			width: 100px;
+			height: 100px;
+
+			background-image: url('/../../assets/QuestionMark.png');
+			background-repeat: no-repeat;
+ 			background-position: center center;
+ 			background-size: cover;
+		}
+		.currentUser {
+			border: 2px solid black;
+			width: 30%;
+			height: auto;
+			text-align: center;
+			float: right;
+			border-radius: 10px;
+			margin: auto;
+		}
+
 	</style>
 </head>
-<body class = "bg">
-		<div class="currentuser">
-			<img src = "https://pbs.twimg.com/profile_images/743699043390369792/a8zCm-8j_400x400.jpg"class = "profilepic">
-			<p>Username: <%=@user.username%></p>
-			<p>Level: <%=@user.level%></p>
-			<p>Exp: <%=@user.exp%></p>
-			<p>Level Progress: <%=@user.campaign_progress%></p>
-			<p>Player Since: <%=@user.created_at%></p>
+<body class = "background">
+	<div>
+		<ul>
+			<li><a>Campaign</a></li>
+			<li><a>Replays</a></li>
+			<li><a>Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a>Message Board</a></li>
+			<li><a>Log Out</a></li>
+		<ul>
+	</div>
+	<div class="currentUser">
+		<div class = "userProfile">
 		</div>
+		<p> <%=@user.username%></p>
+		<div class >
+	</div>
 </body>
 </html>
