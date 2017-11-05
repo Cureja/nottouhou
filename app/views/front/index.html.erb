@@ -3,37 +3,55 @@
 <head>
 	<title>Not Touhou</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
 	<style>
+
 		h1 {
 			width: 100%;
 			text-align: center;
 		}
-		
+
 		div.center {
 			//display: flex;
 			//flex-direction: column;
 			justify-content: center;
 			text-align: center;
 		}
-		
+
+
 		button.login {
 			width: 100px;
 			margin-bottom: 10px;
 		}
-		
+
 		input.login {
+			background-color: #FF69B4; /* pink */
+			border: 2px solid #fefefe; /*white */
+      color: white;
+			padding: 15px 32px;
 			width: 200px;
 			margin-bottom: 10px;
 		}
+
+		div.spacing{
+			margin-top: 700px;
+		}
+
+		.background{
+		background: url("../assets/weeb.jpg")no-repeat center fixed;
+		background-size: cover;
+		}
+
 	</style>
 </head>
-<body>
-	<h1>Not Touhou</h1>
-	<div><form action="./login/">
-		<div class="center"><input class="login" type="submit" value="Log in"</div>
-	</form></div>
-	<div><form action="./register/">
-		<div class="center"><input class="login" type="submit" value="Register"</div>
-	</form></div>
+<body class = 'background'>
+	<div class="spacing"
+	 <div><form action="./login/">
+		 <div class="center"><input class="login" type="submit" value="Log in"</div>
+	 </form></div>
+	 <div><form action="./register/">
+		 <div class="center"><input class="login" type="submit" value="Register"</div>
+	 </form></div>
 </body>
 </html>
