@@ -68,19 +68,20 @@
 	</style>
 </head>
 <body class="background">
-	<div>
-		<ul>
-			<li><a>Campaign</a></li>
-			<li><a>Replays</a></li>
-			<li><a>Hi-Scores</a></li>
-			<li><a>Coop</a></li>
-			<li><a>Message Board</a></li>
-			<li><a href="../logout">Log Out</a></li>
-		<ul>
-	</div>
+	<ul>
+		<li><a>Campaign</a></li>
+		<li><a>Replays</a></li>
+		<li><a>Hi-Scores</a></li>
+		<li><a>Coop</a></li>
+		<li><a>Message Board</a></li>
+		<li><a href="../logout">Log Out</a></li>
+	</ul>
 	<div class="currentUser">
 		<div class="userProfile"></div>
-		<p><%=@user.username%></p><div>
+		<p><%= @user.username %></p>
 	</div>
+	<br>
+	<a style="position: absolute; top: 200px; left: 200px; background: white;" href="../game">Temporary button. Click here to go to the proof-of-concept game demo.</a>
+	<p style="position: absolute; top: 230px; left: 200px; background: white;">(You may have to log out and in first)</p>
 </body>
 </html>
