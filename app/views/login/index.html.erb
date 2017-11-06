@@ -16,7 +16,7 @@
 		input {
 			background-color: #FF69B4; /* pink */
 			border: 2px solid #fefefe; /*white */
-      color: white;
+			color: white;
 			padding: 15px 32px;
 			width: 200px;
 			margin: 0 auto;
@@ -34,29 +34,25 @@
 		}
 
 		.background{
-		background: url("../assets/weeb.jpg")no-repeat center fixed;
-		background-size: cover;
+			background: url("../assets/weeb.jpg") no-repeat center fixed;
+			background-size: cover;
 		}
 
 	</style>
-
-
-
 </head>
-<body>
-<body class = 'background'>
+<body class="background">
 	<div class="center">
-	 <div class="spacing">
-		 <form accept-charset="UTF-8" action="/login" method="post">
-			 <input name="username" type="text" placeholder="Username" value="<%= flash[:username] %>"/>
-			 <input name="password" type="password" placeholder="Password" value="<%= flash[:password] %>"/>
-			 <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
-			 <input type="submit" value="Log in"/>
-		 </form>
-		 <form action="/">
-			 <input type="submit" value="Cancel"/>
-	  	</form>
-	 </div>
-	 <div class="center error"><%= simple_format(flash[:error]) %></div>
+	<div class="spacing">
+		<form accept-charset="UTF-8" action="/login" method="post">
+			<input name="username" type="text" placeholder="Username" value="<%= flash[:username] %>"/>
+			<input name="password" type="password" placeholder="Password" value="<%= flash[:password] %>"/>
+			<input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>"/>
+			<input type="submit" value="Log in"/>
+		</form>
+		<form action="/">
+			<input type="submit" value="Cancel"/>
+		</form>
+	</div>
+	<div class="center error"><%= simple_format(flash[:error]) %></div>
 </body>
 </html>
