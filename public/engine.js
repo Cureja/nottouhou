@@ -276,9 +276,12 @@ class Player {
 		} else {
 			player.shootCooldown = 0;
 			if (focus) {
-				//let single = new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3);
-				//addSmoothMovementEvents(0, single, this.handle.x, this.handle.y - 100, 2);
-				//single.dispatch();
+				let single = new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3);
+				single.addEvent(102, function(self) {
+					self.handle.y -= 3;
+					return 102;
+				});
+				single.dispatch();
 			} else {
 				let trio = [
 					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
