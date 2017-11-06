@@ -17,14 +17,13 @@ spawn enemy at 5 seconds in at the top middle of the screen
 */
 
 MASTER.addEvent(5000, function(MASTER) {
-	let enemy = new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5);
-	enemy.addEvent(2000, function(enemy) {
+	new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5).addEvent(2000, function(enemy) {
 		let projectiles = [
 			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x - 16, 8, 1),
 			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x + 16, 8, 1)
 		];
 		for (var k = 0; k < 2; k++) {
-			projectiles[k].addEvent(80, function(self) {
+			projectiles[k].addEvent(0, function(self) {
 				self.handle.y += 4;
 				return 80;
 			});
@@ -33,9 +32,7 @@ MASTER.addEvent(5000, function(MASTER) {
 			projectiles[k].dispatch();
 		}
 		return REMOVE_EVENT;
-	});
-	//addSmoothMovementEvents(3000, enemy, enemy.handle.x, app.renderer.height / 2, 2000);
-	enemy.dispatch();
+	}).dispatch();
 });
 
 MASTER.dispatch();

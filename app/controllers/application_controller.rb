@@ -1,7 +1,7 @@
 
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  
+
   def redirect_if_logged_in
     user = current_user
     if !user.nil? then
@@ -25,5 +25,4 @@ class ApplicationController < ActionController::Base
       @current_user = user
     end
   end
-
 end
