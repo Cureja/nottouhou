@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<title>Not Touhou</title>
+	<style>
+		h1 {
+			width: 100%;
+			text-align: center;
+		}
+
+		div.center {
+			//display: flex;
+			//flex-direction: column;
+			justify-content: center;
+			text-align: center;
+		}
+
+		button.login {
+			width: 100px;
+			margin-bottom: 10px;
+		}
+
+		input.login {
+			background-color: #FF69B4; /* pink */
+			border: 2px solid #fefefe; /*white */
+			color: white;
+			padding: 15px 32px;
+			width: 200px;
+			margin-bottom: 10px;
+		}
+
+		div.spacing{
+			margin-top: 575px;
+		}
+
+		.background{
+			background: url("../assets/weeb.jpg") no-repeat center fixed;
+			background-size: cover;
+		}
+	</style>
+</head>
+<body class="background">
+	<div class="spacing">
+	<div><form action="./login/">
+		<div class="center"><input class="login" type="submit" value="Log in"</div>
+	</form></div>
+	<div><form action="./register/">
+		<div class="center"><input class="login" type="submit" value="Register"</div>
+	</form></div>
+</body>
+</html>

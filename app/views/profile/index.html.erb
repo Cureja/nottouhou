@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+	<title>Profile - <%=@user.username%></title>
+	<style>
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color: #2956B2;
+			position: fixed;
+			top: 10px;
+			width: 65%;
+			border-radius: 10px;
+		}
+
+		p {
+			font-family: sans-serif;
+			color: #FC466B;
+			font-weight: bold;
+		}
+		li {
+			float:left;
+		}
+
+		li a {
+			display: block;
+			color: #659CEF;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+
+		li a:hover {
+			background-color: #DCF600;
+		}
+
+		.background {
+			background-image: url("../../assets/SpaceBackground.jpg");
+			height: 100%;
+			background position: center;
+			background-repeat:  no-repeat;
+			background-size: cover;
+		}
+
+		.userProfile {
+			border-radius: 50%;
+			float: left;
+			width: 100px;
+			height: 100px;
+
+			background-image: url('/../../assets/QuestionMark.png');
+			background-repeat: no-repeat;
+ 			background-position: center center;
+ 			background-size: cover;
+		}
+
+		.currentUser {
+			border: 2px solid black;
+			width: 30%;
+			height: auto;
+			text-align: center;
+			float: right;
+			border-radius: 10px;
+			margin: auto;
+		}
+	</style>
+</head>
+<body class="background">
+	<div>
+		<ul>
+			<li><a>Campaign</a></li>
+			<li><a>Replays</a></li>
+			<li><a>Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a>Message Board</a></li>
+			<li><a href="../logout">Log Out</a></li>
+		<ul>
+	</div>
+	<div class="currentUser">
+		<div class="userProfile"></div>
+		<p><%=@user.username%></p><div>
+	</div>
+</body>
+</html>
