@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   
   get '/profile' => 'profile#index'
 
+  get '/logout' => 'logout#index'
+
   root 'front#index'
   
   #match ':controller(/:action(/:id))', :via => :get
