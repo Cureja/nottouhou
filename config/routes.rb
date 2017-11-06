@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-<<<<<<< HEAD
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-=======
   get '/login' => 'login#index'
   post '/login' => 'login#create'
 
@@ -18,5 +15,4 @@ Rails.application.routes.draw do
 
   #match ':controller(/:action(/:id))', :via => :get
   #match ':controller(/:action(/:id))', :via => :post
->>>>>>> frontpage
 end
