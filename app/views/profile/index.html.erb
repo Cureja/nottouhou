@@ -68,14 +68,16 @@
 	</style>
 </head>
 <body class="background">
-	<ul>
-		<li><a>Campaign</a></li>
-		<li><a>Replays</a></li>
-		<li><a>Hi-Scores</a></li>
-		<li><a>Coop</a></li>
-		<li><a>Message Board</a></li>
-		<li><a href="../logout">Log Out</a></li>
-	</ul>
+	<div>
+		<ul>
+			<li><a>Campaign</a></li>
+			<li><a>Replays</a></li>
+			<li><a>Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a>Message Board</a></li>
+			<li><a href="/logout">Log Out</a></li>
+		<ul>
+	</div>
 	<div class="currentUser">
 		<div class="userProfile"></div>
 		<p><%= @user.username %></p>

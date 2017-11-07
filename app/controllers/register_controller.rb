@@ -38,7 +38,7 @@ class RegisterController < ApplicationController
     else
       user = User.create(username: @username, password: @password, password_confirmation: @password)
       session[:user_id] ||= user.id
-      remember user #uses login_helper
+      remember user #uses application controller
       redirect_if_logged_in
     end
   end
