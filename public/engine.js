@@ -175,10 +175,7 @@ class Entity {
 			"offset": offset,
 			"fn": fn
 		});
-		//this.events.push({
-		//	"offset": offset,
-		//	"fn": fn
-		//});
+		return this;
 	}
 }
 
@@ -215,7 +212,6 @@ class BoundedProjectile extends Projectile {
 	onUpdate(_) {
 		if (this.handle.x < 0 || this.handle.x > app.renderer.width ||
 			this.handle.y < 0 || this.handle.y > app.renderer.height) {
-			console.log("gc");
 			this.destroy();
 		} else {
 			super.onUpdate(_);
@@ -276,28 +272,26 @@ class Player {
 		} else {
 			player.shootCooldown = 0;
 			if (focus) {
-				let single = new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3);
-				single.addEvent(102, function(self) {
-					self.handle.y -= 3;
-					return 102;
-				});
-				single.dispatch();
+				new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
+					self.handle.y -= 4;
+					return true;
+				}).dispatch();
 			} else {
 				let trio = [
 					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
 					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x, this.handle.y, 1),
 					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x + 10, this.handle.y, 1)
 				];
-				trio[0].addEvent(80, function(self) {
+				trio[0].addEvent(0, function(self) {
 					self.handle.x -= 1;
 					self.handle.y -= 3;
 					return 80;
 				});
-				trio[1].addEvent(80, function(self) {
+				trio[1].addEvent(0, function(self) {
 					self.handle.y -= 4;
 					return 80;
 				});
-				trio[2].addEvent(80, function(self) {
+				trio[2].addEvent(0, function(self) {
 					self.handle.x += 1;
 					self.handle.y -= 3;
 					return 80;
@@ -326,9 +320,11 @@ let keys = {};
 
 window.addEventListener("keydown", (e) => {
 	keys[e.keyCode] = true;
+	keys[VK_SHIFT] = e.shiftKey;
 });
 window.addEventListener("keyup", (e) => {
 	keys[e.keyCode] = false;
+	keys[VK_SHIFT] = e.shiftKey;
 });
 
 animations.execute();
@@ -352,6 +348,7 @@ PIXI.loader.onComplete.add(() => {
 			ydir = 1;
 		}
 		if (keys[VK_Z]) {
+			console.log(keys[VK_SHIFT]);
 			player.shoot(keys[VK_SHIFT]);
 		}
 

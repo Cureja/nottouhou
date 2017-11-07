@@ -14,7 +14,7 @@ class User < ApplicationRecord
   #  format: { with: /[a-zA-Z0-9]/ }
   before_save :default_values
   has_secure_password
-  
+
   private
     def default_values
       self.level = 1 if self.level.nil?
@@ -33,7 +33,7 @@ class User < ApplicationRecord
   public
     def User.digest(string)
       cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST : BCrypt::Engine.cost
-      BCrypt::Password.create(string,cost: cost)
+      BCrypt::Password.create(string, cost: cost)
     end
 
     def remember
