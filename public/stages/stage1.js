@@ -24,12 +24,12 @@ MASTER.addEvent(5000, function(MASTER) {
 		];
 		for (var k = 0; k < 2; k++) {
 			projectiles[k].addEvent(0, function(self) {
-				self.handle.y += 4;
+				self.handle.y += 2;
 				return 80;
 			});
 		}
 		for (var k = 0; k < 2; k++) {
-			projectiles[k].dispatch();
+			projectiles[k].dispatch(enemyProjectiles);
 		}
 		return REMOVE_EVENT;
 	}).dispatch();

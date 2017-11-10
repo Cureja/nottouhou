@@ -99,6 +99,9 @@ class GarbageCollector {
 	}
 }
 
+let playerProjectiles = new GarbageCollector();
+let enemyProjectiles = new GarbageCollector();
+
 class Entity {
 	/**
 	 * @param parent Parent Entity object.
@@ -187,6 +190,7 @@ class Enemy extends Entity {
 
 	onCollide(projectile) {
 		this.health -= projectile.damage;
+		projectile.destroy();
 		if (this.health <= 0) {
 			this.destroy();
 		}
@@ -197,6 +201,17 @@ class Projectile extends Entity {
 	constructor(parent, frames, x, y, damage) {
 		super(parent, frames, x, y);
 		this.damage = damage;
+	}
+
+	dispatch(who) {
+		this.who = who
+		who.track(this)
+		super.dispatch()
+	}
+
+	destroy() {
+		super.destroy()
+		this.who.untrack(this);
 	}
 }
 
@@ -275,7 +290,7 @@ class Player {
 				new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
 					self.handle.y -= 4;
 					return true;
-				}).dispatch();
+				}).dispatch(playerProjectiles);
 			} else {
 				let trio = [
 					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
@@ -297,9 +312,17 @@ class Player {
 					return 80;
 				});
 				for (var k = 0; k < 3; k++) {
-					trio[k].dispatch();
+					trio[k].dispatch(playerProjectiles);
 				}
 			}
+		}
+	}
+
+	onCollide(projectile) {
+		this.health -= projectile.damage;
+		projectile.destroy();
+		if (this.health <= 0) {
+			console.log("You died.");
 		}
 	}
 }
@@ -348,7 +371,6 @@ PIXI.loader.onComplete.add(() => {
 			ydir = 1;
 		}
 		if (keys[VK_Z]) {
-			console.log(keys[VK_SHIFT]);
 			player.shoot(keys[VK_SHIFT]);
 		}
 
@@ -360,5 +382,25 @@ PIXI.loader.onComplete.add(() => {
 			player.runAnimation("playerIdle");
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
+
+		//console.log(enemyProjectiles.tracking.length);
+		for (var k = 0; k < playerProjectiles.tracking.length; k++) {
+
+		}
+		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
+			let projectile = enemyProjectiles.tracking[0];
+			if (projectile != null) {
+				/*
+				FIXME:
+					- change 10 to something like 2 when done fixing. 10 is a huge radius and we want the hitbox to be relatively small
+					- x/y values of the player/projectiles don't seem to be lining up properly. they'll be intersecting but 20px apart according to this
+				*/
+				console.log(projectile.handle.x + " " + projectile.handle.y + " " + player.handle.x + " " + player.handle.y);
+				if (projectile.handle.x >= player.handle.x - 10 && projectile.handle.x <= player.handle.x + 10 &&
+					projectile.handle.y >= player.handle.y - 10 && projectile.handle.y <= player.handle.y + 10) {
+					player.onCollide(projectile);
+				}
+			}
+		}
 	});
 });
