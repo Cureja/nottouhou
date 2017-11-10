@@ -17,7 +17,7 @@ $(document).ready(() => {
 
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
-const PLAYER_COOLDOWN_READY = 5;
+const PLAYER_COOLDOWN_READY = 15;
 
 class Animations {
 	constructor() {
@@ -266,6 +266,30 @@ class Player {
 		}
 	}
 
+	/**
+ 	* nowhere close to working yet but calculation should be right
+ 	* http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/ would be a good start to learn how Bezier curves work
+ 	* @param cx @param cy the coordinates of the "curve point"
+ 	* @param dx @param dy the coordinates of the destination
+	*/
+	arcPattern(n, cx, cy, dx, dy, time) {
+		let pattern = [];
+		let nframes = 60 * PIXI.ticker.shared.speed * time;
+		let percent;
+		for(var i = 0; i < n; i++) {
+			pattern.push(new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1));
+			for(var j = 0; j < nframes; j++) {
+				percent = (j + 1)/nframes;
+				pattern[i].addEvent(0, function(self) {
+					self.handle.x -= (1 - percent) ** 2 *self.handle.x + 2 * (1 - percent) * percent * cx + percent ** 2 * dx;
+					self.handle.y -= (1 - percent) ** 2 *self.handle.y + 2 * (1 - percent) * percent * cy + percent ** 2 * dy;
+					return 80;
+				});
+			}
+			pattern[i].dispatch();
+		}
+	}
+
 	shoot(focus) {
 		if (this.shootCooldown < PLAYER_COOLDOWN_READY) {
 			player.shootCooldown++;
@@ -273,7 +297,7 @@ class Player {
 			player.shootCooldown = 0;
 			if (focus) {
 				new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
-					self.handle.y -= 4;
+					self.handle.y -= 3;
 					return true;
 				}).dispatch();
 			} else {
@@ -350,6 +374,9 @@ PIXI.loader.onComplete.add(() => {
 		if (keys[VK_Z]) {
 			console.log(keys[VK_SHIFT]);
 			player.shoot(keys[VK_SHIFT]);
+		}
+		if (keys[VK_X]) {
+			player.arcPattern(1, 50, 100, 100, 100, 80);
 		}
 
 		if (xdir < 0) {
