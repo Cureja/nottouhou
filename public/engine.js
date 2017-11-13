@@ -17,7 +17,8 @@ $(document).ready(() => {
 
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
-const PLAYER_COOLDOWN_READY = 15;
+
+let PLAYER_COOLDOWN_READY = 15;
 
 class Animations {
 	constructor() {
@@ -275,55 +276,58 @@ class Player {
 	arcPattern(n, cx, cy, dx, dy, time) {
 		let pattern = [];
 		let nframes = 60 * PIXI.ticker.shared.speed * time;
+
 		let percent;
 		for(var i = 0; i < n; i++) {
 			pattern.push(new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1));
-			for(var j = 0; j < nframes; j++) {
-				percent = (j + 1)/nframes;
+		}
+
+		for(var p = 0; p < nframes; p++) {
+			percent = (p + 1)/nframes;
+			for(var i = 0; i < n; i++) {
 				pattern[i].addEvent(0, function(self) {
-					self.handle.x -= (1 - percent) ** 2 *self.handle.x + 2 * (1 - percent) * percent * cx + percent ** 2 * dx;
-					self.handle.y -= (1 - percent) ** 2 *self.handle.y + 2 * (1 - percent) * percent * cy + percent ** 2 * dy;
-					return 80;
+					self.handle.x -= (1 - percent) ** 2 * self.handle.x + 2 * (1 - percent) * percent * cx + percent ** 2 * dx;
+					self.handle.y -= (1 - percent) ** 2 * self.handle.y + 2 * (1 - percent) * percent * cy + percent ** 2 * dy;
+					return 1;
 				});
+				pattern[i].dispatch();
 			}
-			pattern[i].dispatch();
 		}
 	}
 
 	shoot(focus) {
-		if (this.shootCooldown < PLAYER_COOLDOWN_READY) {
-			player.shootCooldown++;
+		if (focus) {
+			new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
+				self.handle.y -= 3;
+				return true;
+			}).dispatch();
+
+			PLAYER_COOLDOWN_READY = 25;
 		} else {
-			player.shootCooldown = 0;
-			if (focus) {
-				new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
-					self.handle.y -= 3;
-					return true;
-				}).dispatch();
-			} else {
-				let trio = [
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x + 10, this.handle.y, 1)
-				];
-				trio[0].addEvent(0, function(self) {
-					self.handle.x -= 1;
-					self.handle.y -= 3;
-					return 80;
-				});
-				trio[1].addEvent(0, function(self) {
-					self.handle.y -= 4;
-					return 80;
-				});
-				trio[2].addEvent(0, function(self) {
-					self.handle.x += 1;
-					self.handle.y -= 3;
-					return 80;
-				});
-				for (var k = 0; k < 3; k++) {
-					trio[k].dispatch();
-				}
+			let trio = [
+				new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
+				new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x, this.handle.y, 1),
+				new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x + 10, this.handle.y, 1)
+			];
+			trio[0].addEvent(0, function(self) {
+				self.handle.x -= 1;
+				self.handle.y -= 3;
+				return 80;
+			});
+			trio[1].addEvent(0, function(self) {
+				self.handle.y -= 4;
+				return 80;
+			});
+			trio[2].addEvent(0, function(self) {
+				self.handle.x += 1;
+				self.handle.y -= 3;
+				return 80;
+			});
+			for (var k = 0; k < 3; k++) {
+				trio[k].dispatch();
 			}
+
+			PLAYER_COOLDOWN_READY = 15;
 		}
 	}
 }
@@ -371,9 +375,14 @@ PIXI.loader.onComplete.add(() => {
 		if ((keys[VK_DOWN] || keys[VK_S]) && ydir == 0) {
 			ydir = 1;
 		}
-		if (keys[VK_Z]) {
-			console.log(keys[VK_SHIFT]);
-			player.shoot(keys[VK_SHIFT]);
+		if(PLAYER_COOLDOWN_READY <= 0) {
+			if (keys[VK_Z]) {
+				console.log(keys[VK_SHIFT]);
+				player.shoot(keys[VK_SHIFT]);
+			}
+		}
+		else {
+			PLAYER_COOLDOWN_READY--;
 		}
 		if (keys[VK_X]) {
 			player.arcPattern(1, 50, 100, 100, 100, 80);
