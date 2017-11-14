@@ -188,13 +188,7 @@ class Enemy extends Entity {
 		this.health = health;
 	}
 
-	onCollide(projectile) {
-		this.health -= projectile.damage;
-		projectile.destroy();
-		if (this.health <= 0) {
-			this.destroy();
-		}
-	}
+
 }
 
 class Projectile extends Entity {
@@ -385,10 +379,22 @@ PIXI.loader.onComplete.add(() => {
 
 		//console.log(enemyProjectiles.tracking.length);
 		for (var k = 0; k < playerProjectiles.tracking.length; k++) {
+			/*
 
+			- Enemy.handle is undefined. I'm not sure where the placement of enemy position is held
+
+
+			let projectile = playerProjectiles.tracking[k];
+			 if (projectile != null){
+				 if (projectile.handle.x >= Enemy.handle.x - 10 && projectile.handle.x <= Enemy.handle.x + 10 &&
+		 			projectile.handle.y >= Enemy.handle.y - 10 && projectile.handle.y <= Enemy.handle.y + 10) {
+		 			Enemy.onCollide(projectile);
+			}
 		}
+		*/
+	}
 		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
-			let projectile = enemyProjectiles.tracking[0];
+			let projectile = enemyProjectiles.tracking[k];
 			if (projectile != null) {
 				/*
 				FIXME:
