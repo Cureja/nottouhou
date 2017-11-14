@@ -7,6 +7,7 @@ enemy projectiles need to check if they intersect with player
 let app;
 let animations;
 let player;
+let allowGameLoop = true;
 
 $(document).ready(() => {
 	app = new PIXI.Application();
@@ -18,6 +19,7 @@ $(document).ready(() => {
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
 const PLAYER_COOLDOWN_READY = 5;
+const PLAYER_HITBOX = 4;
 
 class Animations {
 	constructor() {
@@ -90,12 +92,26 @@ class GarbageCollector {
 		}
 		this.tracking[index] = item;
 		item._tracking_id = index;
+		//if (item._tracking_id == undefined) {
+		//	item._tracking_id = [];
+		//}
+		//item._tracking_id.push({
+		//	"gc": this,
+		//	"id": index
+		//});
 	}
 
 	untrack(item) {
 		let index = item._tracking_id;
 		this.tracking[index] = null;
 		this.empty.push(index);
+		//for (var k = 0; k < item._tracking_id.length; k++) {
+		//	let index = item._tracking_id;
+		//	if (index.gc == this) {
+		//		this.tracking[index.id] = null;
+		//		this.empty.push(index.id);
+		//	}
+		//}
 	}
 }
 
@@ -119,17 +135,26 @@ class Entity {
 			this.handle.animationSpeed = 0.5;
 
 			this.parent = parent;
-			this.parent.gc.track(this);
+			this._stubTrack();
 		}
+	}
+
+	_stubTrack() {
+		this.parent.gc.track(this);
+	}
+
+	_stubUntrack() {
+		this.parent.gc.untrack(this);
 	}
 
 	destroy() {
 		if (this.handle != null) {
+			app.stage.removeChild(this.handle);
 			this.handle.destroy();
 		}
 		PIXI.ticker.shared.remove(this.onUpdate, this);
 		if (this.parent != null) {
-			this.parent.gc.untrack(this);
+			this._stubUntrack();
 		}
 	}
 
@@ -146,7 +171,6 @@ class Entity {
 					let newtime = e.fn(this);
 					if (newtime == REMOVE_EVENT) {
 						this.events.untrack(e);
-						//this.events = this.events.splice(k, 1);
 						k--;
 					} else {
 						e.offset = newtime;
@@ -187,15 +211,14 @@ class Enemy extends Entity {
 		super(parent, frames, x, y);
 		this.health = health;
 	}
+
 	onCollide(projectile) {
-	this.health -= projectile.damage;
-	projectile.destroy();
-	if (this.health <= 0) {
-		this.destroy();
+		this.health -= projectile.damage;
+		projectile.destroy();
+		if (this.health <= 0) {
+			this.destroy();
+		}
 	}
-}
-
-
 }
 
 class Projectile extends Entity {
@@ -203,6 +226,9 @@ class Projectile extends Entity {
 		super(parent, frames, x, y);
 		this.damage = damage;
 	}
+
+	_stubTrack() {}
+	_stubUntrack() {}
 
 	dispatch(who) {
 		this.who = who
@@ -239,6 +265,7 @@ class BoundedProjectile extends Projectile {
 
 class Player {
 	constructor() {
+		this.health = 1;
 		this.shootCooldown = 0;
 		this.gc = new GarbageCollector();
 
@@ -324,6 +351,7 @@ class Player {
 		projectile.destroy();
 		if (this.health <= 0) {
 			console.log("You died.");
+			allowGameLoop = false;
 		}
 	}
 }
@@ -356,9 +384,12 @@ PIXI.loader.onComplete.add(() => {
 	player = new Player();
 
 	app.ticker.add(() => {
+		if (!allowGameLoop) {
+			return;
+		}
+
 		let xdir = 0;
 		let ydir = 0;
-
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
 		}
@@ -371,10 +402,6 @@ PIXI.loader.onComplete.add(() => {
 		if ((keys[VK_DOWN] || keys[VK_S]) && ydir == 0) {
 			ydir = 1;
 		}
-		if (keys[VK_Z]) {
-			player.shoot(keys[VK_SHIFT]);
-		}
-
 		if (xdir < 0) {
 			player.runAnimation("playerIdleLeft");
 		} else if (xdir > 0) {
@@ -384,34 +411,32 @@ PIXI.loader.onComplete.add(() => {
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
 
-		//console.log(enemyProjectiles.tracking.length);
+		if (keys[VK_Z]) {
+			player.shoot(keys[VK_SHIFT]);
+		}
+
 		for (var k = 0; k < playerProjectiles.tracking.length; k++) {
-			/*
-
-			- Enemy.handle is undefined. I'm not sure where the placement of enemy position is held
-
-
 			let projectile = playerProjectiles.tracking[k];
-			 if (projectile != null){
-				 if (projectile.handle.x >= Enemy.handle.x - 10 && projectile.handle.x <= Enemy.handle.x + 10 &&
-		 			projectile.handle.y >= Enemy.handle.y - 10 && projectile.handle.y <= Enemy.handle.y + 10) {
-		 			Enemy.onCollide(projectile);
+			if (projectile != null) {
+				for (var h = 0; h < MASTER.gc.tracking.length; h++) {
+					if (MASTER.gc.tracking[h] != null && MASTER.gc.tracking[h] instanceof Enemy) {
+						let enemy = MASTER.gc.tracking[h];
+						if (projectile.handle.x >= enemy.handle.x - 10 && projectile.handle.x <= enemy.handle.x + 10 &&
+							projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
+								enemy.onCollide(projectile);
+								break;
+						}
+					}
+				}
 			}
 		}
-		*/
-	}
 		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
 			let projectile = enemyProjectiles.tracking[k];
 			if (projectile != null) {
-				/*
-				FIXME:
-					- change 10 to something like 2 when done fixing. 10 is a huge radius and we want the hitbox to be relatively small
-					- x/y values of the player/projectiles don't seem to be lining up properly. they'll be intersecting but 20px apart according to this
-				*/
-				console.log(projectile.handle.x + " " + projectile.handle.y + " " + player.handle.x + " " + player.handle.y);
-				if (projectile.handle.x >= player.handle.x - 10 && projectile.handle.x <= player.handle.x + 10 &&
-					projectile.handle.y >= player.handle.y - 10 && projectile.handle.y <= player.handle.y + 10) {
+				if (projectile.handle.x >= player.handle.x - PLAYER_HITBOX && projectile.handle.x <= player.handle.x + PLAYER_HITBOX &&
+					projectile.handle.y >= player.handle.y - PLAYER_HITBOX && projectile.handle.y <= player.handle.y + PLAYER_HITBOX) {
 					player.onCollide(projectile);
+					break;
 				}
 			}
 		}
