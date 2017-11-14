@@ -8,6 +8,9 @@ let app;
 let animations;
 let player;
 
+let arcArray = [];
+let p = 0;
+
 $(document).ready(() => {
 	app = new PIXI.Application();
 	$("#game-container").append(app.view);
@@ -64,6 +67,7 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 });
 animations.load("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
+animations.load("projectileArcIdle", 1, false, null);
 
 //stage definition framework--------------------------------------------------
 
@@ -218,6 +222,22 @@ class BoundedProjectile extends Projectile {
 			super.onUpdate(_);
 		}
 	}
+
+	/**
+	* Math is based on the 3-point example found at http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/
+	* with P0 = (startx,starty)
+	*			 P1 = (startx - 100, starty), 100 units above P0
+	*			 P2 = (startx - 100, starty + 100), 100 units to the right of P1
+	*/
+	move(startx, starty, cFrame, nFrames) {
+		let percent = cFrame/nFrames;
+		let x =(1 - percent) ** 2 * startx + 2 * (1 - percent) * percent * startx + percent ** 2 * (startx + 100);
+		let y = (1 - percent) ** 2 * starty + 2 * (1 - percent) * percent * (starty - 100) + percent ** 2 * (starty - 100);
+
+		self.x = x;
+		self.y = y;
+		console.log(self.x, self.y);
+	}
 }
 
 //end stage definition framework----------------------------------------------
@@ -267,34 +287,6 @@ class Player {
 		}
 	}
 
-	/**
- 	* nowhere close to working yet but calculation should be right
- 	* http://devmag.org.za/2011/04/05/bzier-curves-a-tutorial/ would be a good start to learn how Bezier curves work
- 	* @param cx @param cy the coordinates of the "curve point"
- 	* @param dx @param dy the coordinates of the destination
-	*/
-	arcPattern(n, cx, cy, dx, dy, time) {
-		let pattern = [];
-		let nframes = 60 * PIXI.ticker.shared.speed * time;
-
-		let percent;
-		for(var i = 0; i < n; i++) {
-			pattern.push(new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1));
-		}
-
-		for(var p = 0; p < nframes; p++) {
-			percent = (p + 1)/nframes;
-			for(var i = 0; i < n; i++) {
-				pattern[i].addEvent(0, function(self) {
-					self.handle.x -= (1 - percent) ** 2 * self.handle.x + 2 * (1 - percent) * percent * cx + percent ** 2 * dx;
-					self.handle.y -= (1 - percent) ** 2 * self.handle.y + 2 * (1 - percent) * percent * cy + percent ** 2 * dy;
-					return 1;
-				});
-				pattern[i].dispatch();
-			}
-		}
-	}
-
 	shoot(focus) {
 		if (focus) {
 			new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
@@ -329,6 +321,14 @@ class Player {
 
 			PLAYER_COOLDOWN_READY = 15;
 		}
+	}
+
+	shootArc(n) {
+		for(var i = 0; i < n; i++){
+			arcArray.push(new BoundedProjectile(MASTER, "projectileArcIdle", this.handle.x - 10, this.handle.y, 1));
+			arcArray[arcArray.length - 1].dispatch();
+		}
+		PLAYER_COOLDOWN_READY = 15;
 	}
 }
 
@@ -380,13 +380,14 @@ PIXI.loader.onComplete.add(() => {
 				console.log(keys[VK_SHIFT]);
 				player.shoot(keys[VK_SHIFT]);
 			}
+			else if (keys[VK_X]) {
+				player.shootArc(3);
+			}
 		}
 		else {
 			PLAYER_COOLDOWN_READY--;
 		}
-		if (keys[VK_X]) {
-			player.arcPattern(1, 50, 100, 100, 100, 80);
-		}
+
 
 		if (xdir < 0) {
 			player.runAnimation("playerIdleLeft");
@@ -396,5 +397,10 @@ PIXI.loader.onComplete.add(() => {
 			player.runAnimation("playerIdle");
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
+
+		for(var i = 0; i < arcArray.length; i++) {
+			arcArray[i].move(app.renderer.width / 2, app.renderer.height / 2, ++p, 20);
+			//for test purposes this will start at the middle of the screen
+		}
 	});
 });

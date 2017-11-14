@@ -1,0 +1,1 @@
+{"frames": {"projectileArcIdle0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 14, "h": 14}, "rotated": false, "sourceSize": {"h": 14, "w": 14}, "spriteSourceSize": {"y": 0, "x": 0, "w": 14, "h": 14}}}, "meta": {"image": "src/arc.png", "format": "RGBA8888"}}
