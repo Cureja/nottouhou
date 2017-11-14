@@ -16,20 +16,39 @@ spawn enemy at 5 seconds in at the top middle of the screen
 1 seconds later, enemy moves to center of screen (over 2 seconds)
 */
 
-MASTER.addEvent(5000, function(MASTER) {
-	new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5).addEvent(2000, function(enemy) {
+MASTER.addEvent(1000, function(MASTER) {
+	new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5).addEvent(1000, function(enemy) {
 		let projectiles = [
-			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x - 16, 8, 1),
-			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x + 16, 8, 1)
+			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x - 10, 8, 1),
+			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x + 10, 8, 1)
 		];
 		for (var k = 0; k < 2; k++) {
 			projectiles[k].addEvent(0, function(self) {
-				self.handle.y += 4;
+				self.handle.y += 2;
 				return 80;
 			});
 		}
 		for (var k = 0; k < 2; k++) {
-			projectiles[k].dispatch();
+			projectiles[k].dispatch(enemyProjectiles);
+		}
+		return REMOVE_EVENT;
+	}).dispatch();
+});
+
+MASTER.addEvent(2000, function(MASTER) {
+	new Enemy(MASTER, "playerIdle", app.renderer.width / 3, 48, 5).addEvent(1000, function(enemy) {
+		let projectiles = [
+			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x - 10, 8, 1),
+			new BoundedProjectile(MASTER, "projectileKnifeIdle", enemy.handle.x + 10, 8, 1)
+		];
+		for (var k = 0; k < 2; k++) {
+			projectiles[k].addEvent(0, function(self) {
+				self.handle.y += 2;
+				return 80;
+			});
+		}
+		for (var k = 0; k < 2; k++) {
+			projectiles[k].dispatch(enemyProjectiles);
 		}
 		return REMOVE_EVENT;
 	}).dispatch();
