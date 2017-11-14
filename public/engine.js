@@ -187,6 +187,13 @@ class Enemy extends Entity {
 		super(parent, frames, x, y);
 		this.health = health;
 	}
+	onCollide(projectile) {
+	this.health -= projectile.damage;
+	projectile.destroy();
+	if (this.health <= 0) {
+		this.destroy();
+	}
+}
 
 
 }
@@ -391,7 +398,6 @@ PIXI.loader.onComplete.add(() => {
 		 			Enemy.onCollide(projectile);
 			}
 		}
-		*/
 	}
 		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
 			let projectile = enemyProjectiles.tracking[k];
