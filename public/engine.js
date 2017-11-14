@@ -398,6 +398,7 @@ PIXI.loader.onComplete.add(() => {
 		 			Enemy.onCollide(projectile);
 			}
 		}
+		*/
 	}
 		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
 			let projectile = enemyProjectiles.tracking[k];
