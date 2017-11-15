@@ -1,0 +1,1 @@
+{"frames": {"projectileKnifeIdle00": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 9, "h": 24}, "rotated": false, "sourceSize": {"h": 24, "w": 9}, "spriteSourceSize": {"y": 0, "x": 0, "w": 9, "h": 24}}}, "meta": {"image": "src/projectile.png", "format": "RGBA8888"}}

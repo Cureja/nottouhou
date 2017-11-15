@@ -21,6 +21,18 @@ const MOVEMENT_SPEED = 4;
 const PLAYER_COOLDOWN_READY = 5;
 const PLAYER_HITBOX = 4;
 
+//http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=texture-rotate.js&title=Texture%20Rotate
+const ROTATE_FLIP_VERTICAL = 12;
+const ROTATE_FLIP_HORIZONTAL = 8;
+
+//0, 45, 90, ..., 315
+const rotations = [
+	0, 7, 6, 5, 4, 3, 2, 1
+];
+function rotation(rotation) {
+	return rotations[Math.floor(rotation / 45)];
+}
+
 class Animations {
 	constructor() {
 		Animations.self = this;
@@ -35,6 +47,22 @@ class Animations {
 			"custom": custom != null ? custom : (_) => {}
 		});
 		PIXI.loader.add("./res/frames/" + name + ".json", {crossOrigin: ''});
+	}
+
+	/**
+	 * Delegate to load() for all prefix$k, k being a multiple of 45 in [0,360)
+	 */
+	loadAllRotations(prefix, nframes, loop, custom) {
+		if (custom == null) {
+			custom = (_) => {};
+		}
+		for (var k = 0; k < 360; k += 45) {
+			let rotate = rotation(k);
+			this.load(prefix + k, nframes, loop, (frame) => {
+				custom(frame);
+				frame.rotate = rotate;
+			});
+		}
 	}
 
 	execute() {
@@ -61,9 +89,9 @@ animations = new Animations();
 animations.load("playerIdle", 4, true, null);
 animations.load("playerIdleLeft", 7, false, null);
 animations.load("playerIdleRight", 7, false, (frame) => {
-	frame.rotate = 12;
+	frame.rotate = ROTATE_FLIP_VERTICAL;
 });
-animations.load("projectileKnifeIdle", 1, false, null);
+animations.loadAllRotations("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
 
 //stage definition framework--------------------------------------------------
@@ -92,26 +120,12 @@ class GarbageCollector {
 		}
 		this.tracking[index] = item;
 		item._tracking_id = index;
-		//if (item._tracking_id == undefined) {
-		//	item._tracking_id = [];
-		//}
-		//item._tracking_id.push({
-		//	"gc": this,
-		//	"id": index
-		//});
 	}
 
 	untrack(item) {
 		let index = item._tracking_id;
 		this.tracking[index] = null;
 		this.empty.push(index);
-		//for (var k = 0; k < item._tracking_id.length; k++) {
-		//	let index = item._tracking_id;
-		//	if (index.gc == this) {
-		//		this.tracking[index.id] = null;
-		//		this.empty.push(index.id);
-		//	}
-		//}
 	}
 }
 
@@ -156,6 +170,10 @@ class Entity {
 		if (this.parent != null) {
 			this._stubUntrack();
 		}
+	}
+
+	setRotation(rotation) {
+		this.handle.rotate
 	}
 
 	/**
@@ -323,9 +341,9 @@ class Player {
 				}).dispatch(playerProjectiles);
 			} else {
 				let trio = [
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x - 10, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle", this.handle.x + 10, this.handle.y, 1)
+					new BoundedProjectile(MASTER, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1),
+					new BoundedProjectile(MASTER, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1),
+					new BoundedProjectile(MASTER, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1)
 				];
 				trio[0].addEvent(0, function(self) {
 					self.handle.x -= 1;
