@@ -65,6 +65,18 @@
 			border-radius: 10px;
 			margin: auto;
 		}
+    .container {
+      border: 2px solid black;
+      background-color: black;
+      width: 90%;
+			height: 65%;
+			margin: auto;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+    }
 	</style>
 </head>
 <body class="background">
@@ -82,8 +94,6 @@
 		<div class="userProfile"></div>
 		<p><%= @user.username %></p>
 	</div>
-	<br>
-	<a style="position: absolute; top: 200px; left: 200px; background: white;" href="../game">Temporary button. Click here to go to the proof-of-concept game demo.</a>
-	<p style="position: absolute; top: 230px; left: 200px; background: white;">(WASD or Arrow Keys to move, Z to shoot, hold SHIFT while shooting for focus fire)</p>
+  <div class="container"></div>
 </body>
 </html>

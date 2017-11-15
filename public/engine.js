@@ -217,6 +217,7 @@ class Enemy extends Entity {
 		projectile.destroy();
 		if (this.health <= 0) {
 			this.destroy();
+		player.score +=5;
 		}
 	}
 }
@@ -268,6 +269,7 @@ class Player {
 		this.health = 1;
 		this.shootCooldown = 0;
 		this.gc = new GarbageCollector();
+		this.score = 0;
 
 		this.handle = new PIXI.extras.AnimatedSprite(animations["playerIdle"].frames);
 		this.handle.loop = animations["playerIdle"].loop;
@@ -351,6 +353,7 @@ class Player {
 		projectile.destroy();
 		if (this.health <= 0) {
 			console.log("You died.");
+			console.log("You scored",player.score,"points!");
 			allowGameLoop = false;
 		}
 	}
