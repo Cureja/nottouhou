@@ -96,15 +96,11 @@ animations.load("projectileFocusIdle", 1, false, null);
 
 //stage definition framework--------------------------------------------------
 
-function getTimeDiff() {
-	return PIXI.ticker.shared.elapsedMS;
-}
-
 /**
  * Only accurate when called during a frame tick.
  */
 function getTimeNow() {
-	return PIXI.ticker.shared.lastTime + getTimeDiff();
+	return PIXI.ticker.shared.lastTime;
 }
 
 class GarbageCollector {
@@ -139,6 +135,7 @@ class Entity {
 	constructor(parent, frames, x, y) {
 		this.events = new GarbageCollector();
 		this.gc = new GarbageCollector();
+		this.destroyed = false;
 		this.frames = frames;
 		if (parent != null) {
 			this.handle = new PIXI.extras.AnimatedSprite(animations[frames].frames);
@@ -170,6 +167,7 @@ class Entity {
 		if (this.parent != null) {
 			this._stubUntrack();
 		}
+		this.destroyed = true;
 	}
 
 	setRotation(rotation) {
@@ -461,5 +459,6 @@ PIXI.loader.onComplete.add(() => {
 				}
 			}
 		}
+		//TODO add player colliding with enemies. 1 damage
 	});
 });

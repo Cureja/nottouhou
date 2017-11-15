@@ -1,57 +1,35 @@
 
-/*
- - Every entity creation should have a respective dispatch() call.
- - All events for a level should be added between the master entity creation and dispatch calls.
- - There should (generally, not a rule) be one master.addEvent() call per enemy spawned.
- - Projectiles should (again, generally) be spawned by an enemy, but their parent set to master.
-   Not doing the former will cause them to spawn even after the entity that spawns them dies (among other things).
-   Not doing the latter will cause them to be (improperly!) garbage collected when their spawner dies.
-*/
+//subterranean animism, stage 1, normal
 
 let MASTER = new Entity(null, "MASTER", 0, 0);
 
-/*
-spawn enemy at 5 seconds in at the top middle of the screen
-2 seconds later, enemy shoots 2 projectiles straight down, spawning on either side of the enemy
-1 seconds later, enemy moves to center of screen (over 2 seconds)
-*/
-
-MASTER.addEvent(1000, function(MASTER) {
-	new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5).addEvent(1000, function(enemy) {
-		let projectiles = [
-			new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x - 10, 8, 1),
-			new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x + 10, 8, 1)
+for (var k = 0; k < 3; k++) {
+	let off = 32 * (k + 1);
+	MASTER.addEvent(2000 + k * 500, (MASTER) => {
+		let enemies = [
+			new Enemy(MASTER, "playerIdle", -32, app.renderer.height + 48, 5).addEvent(0, (enemy) => {
+				enemy.addEvent(0, createLinearMovement(enemy.handle.x, enemy.handle.y, off, 32, 1000));
+				return REMOVE_EVENT;
+			}).addEvent(1000, (enemy) => {
+				new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x, enemy.handle.y, 1).addEvent(0, (self) => {
+					self.addEvent(0, createLinearProjection(self.handle.x, self.handle.y, player.handle.x, player.handle.y, 1000));
+				}).dispatch(enemyProjectiles);
+				return REMOVE_EVENT;
+			}),
+			new Enemy(MASTER, "playerIdle", app.renderer.width + 32, app.renderer.height + 48, 5).addEvent(0, (enemy) => {
+				enemy.addEvent(0, createLinearMovement(enemy.handle.x, enemy.handle.y, app.renderer.width - off, 32, 1000));
+				return REMOVE_EVENT;
+			}).addEvent(1000, (enemy) => {
+				new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x, enemy.handle.y, 1).addEvent(0, (self) => {
+					self.addEvent(0, createLinearProjection(self.handle.x, self.handle.y, player.handle.x, player.handle.y, 1000));
+				}).dispatch(enemyProjectiles);
+				return REMOVE_EVENT;
+			})
 		];
-		for (var k = 0; k < 2; k++) {
-			projectiles[k].addEvent(0, function(self) {
-				self.handle.y += 2;
-				return 80;
-			});
+		for (var h = 0; h < enemies.length; h++) {
+			enemies[h].dispatch();
 		}
-		for (var k = 0; k < 2; k++) {
-			projectiles[k].dispatch(enemyProjectiles);
-		}
-		return REMOVE_EVENT;
-	}).dispatch();
-});
-
-MASTER.addEvent(2000, function(MASTER) {
-	new Enemy(MASTER, "playerIdle", app.renderer.width / 3, 48, 5).addEvent(1000, function(enemy) {
-		let projectiles = [
-			new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x - 10, 8, 1),
-			new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x + 10, 8, 1)
-		];
-		for (var k = 0; k < 2; k++) {
-			projectiles[k].addEvent(0, function(self) {
-				self.handle.y += 2;
-				return 80;
-			});
-		}
-		for (var k = 0; k < 2; k++) {
-			projectiles[k].dispatch(enemyProjectiles);
-		}
-		return REMOVE_EVENT;
-	}).dispatch();
-});
+	});
+}
 
 MASTER.dispatch();
