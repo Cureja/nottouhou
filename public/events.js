@@ -1,4 +1,6 @@
 
+// NOTE THAT YOU CANNOT USE THE SAME EVENT WITH MULTIPLE ENTITIES AT ONCE
+
 /**
  * Creates a movement event that moves an entity in a line.
  */
@@ -27,5 +29,12 @@ function createLinearProjection(fromX, fromY, midX, midY, overMS) {
 		entity.handle.x = fromX + (midX - fromX) * (diff / overMS);
 		entity.handle.y = fromY + (midY - fromY) * (diff / overMS);
 		return 10;
+	};
+}
+
+function createDestructor() {
+	return (entity) => {
+		entity.destroy();
+		return REMOVE_EVENT;
 	};
 }

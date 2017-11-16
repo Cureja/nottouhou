@@ -105,8 +105,7 @@ function getTimeNow() {
 
 class GarbageCollector {
 	constructor() {
-		this.tracking = [];
-		this.empty = [];
+		this.clear();
 	}
 
 	track(item) {
@@ -122,6 +121,11 @@ class GarbageCollector {
 		let index = item._tracking_id;
 		this.tracking[index] = null;
 		this.empty.push(index);
+	}
+
+	clear() {
+		this.tracking = [];
+		this.empty = [];
 	}
 }
 
@@ -159,6 +163,8 @@ class Entity {
 	}
 
 	destroy() {
+		this.destroyed = true; //this must be first to resolve async issues
+		this.events.clear();
 		if (this.handle != null) {
 			app.stage.removeChild(this.handle);
 			this.handle.destroy();
@@ -167,11 +173,6 @@ class Entity {
 		if (this.parent != null) {
 			this._stubUntrack();
 		}
-		this.destroyed = true;
-	}
-
-	setRotation(rotation) {
-		this.handle.rotate
 	}
 
 	/**
@@ -184,6 +185,10 @@ class Entity {
 			e = this.events.tracking[k];
 			if (e != null) {
 				if (e.offset <= delta) {
+					if (this.destroyed) {
+						return;
+					}
+					console.log(delta - e.offset);
 					let newtime = e.fn(this);
 					if (newtime == REMOVE_EVENT) {
 						this.events.untrack(e);
