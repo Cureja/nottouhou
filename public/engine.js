@@ -91,9 +91,11 @@ animations.load("playerIdleLeft", 7, false, null);
 animations.load("playerIdleRight", 7, false, (frame) => {
 	frame.rotate = ROTATE_FLIP_VERTICAL;
 });
+
 animations.loadAllRotations("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
 
+animations.load("cirno", 6, true, null);
 //stage definition framework--------------------------------------------------
 
 /**
