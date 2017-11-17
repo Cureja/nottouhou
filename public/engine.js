@@ -257,7 +257,7 @@ class Entity {
 				if (newtime === REMOVE_EVENT) {
 					this.events.untrack(e);
 				} else {
-					e[EVENT_TIME] = newtime;
+					e[EVENT_TIME] = delta + newtime;
 				}
 			}
 		}
@@ -419,7 +419,7 @@ class Player {
 		this.handle = new PIXI.extras.AnimatedSprite(animations["playerIdle"].frames);
 		this.handle.loop = animations["playerIdle"].loop;
 		this.handle.x = app.renderer.width / 2;
-		this.handle.y = app.renderer.height / 2;
+		this.handle.y = app.renderer.height - 64;
 		this.handle.anchor.set(0.5);
 		this.handle.animationSpeed = 0.5;
 		this.handle.play();

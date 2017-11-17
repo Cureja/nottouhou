@@ -36,8 +36,9 @@ function createLinearMovement(toX, toY, overMS) {
 	return (entity) => {
 		let fromX = entity.handle.x;
 		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
 		let event = (entity) => {
-			let diff = getTimeNow() - entity.spawnTime;
+			let diff = getTimeNow() - startTime;
 			if (diff >= overMS) {
 				entity.handle.x = toX;
 				entity.handle.y = toY;
@@ -61,8 +62,9 @@ function createLinearProjection(midX, midY, overMS) {
 	return (entity) => {
 		let fromX = entity.handle.x;
 		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
 		let event = (entity) => {
-			let diff = getTimeNow() - entity.spawnTime;
+			let diff = getTimeNow() - startTime;
 			entity.handle.x = fromX + (midX - fromX) * (diff / overMS);
 			entity.handle.y = fromY + (midY - fromY) * (diff / overMS);
 			return 10;

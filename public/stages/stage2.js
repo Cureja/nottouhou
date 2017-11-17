@@ -5,9 +5,13 @@ function initializeStage() {
 	for (var k = 0; k < 3; ++k) {
 		let off = 32 * (k + 1);
 		let left = new Enemy(enemies, "playerIdle", -32, app.renderer.height + 48, 5)
-			.addEvent(0, createLinearMovement(off, 32, 1000));
+			.addEvent(0, createLinearMovement(off, 32, 1000))
+			.addEvent(4500 + k * 250, createLinearProjection(app.renderer.width + 32, app.renderer.height / 2, 1000))
+			.addEvent(5500 + k * 250, createDestructor());
 		let right = new Enemy(enemies, "playerIdle", app.renderer.width + 32, app.renderer.height + 48, 5)
-			.addEvent(0, createLinearMovement(app.renderer.width - off, 32, 1000));
+			.addEvent(0, createLinearMovement(app.renderer.width - off, 32, 1000))
+			.addEvent(4500 + k * 250, createLinearProjection(-32, app.renderer.height / 2, 1000))
+			.addEvent(5500 + k * 250, createDestructor());;
 		new BoundedProjectile(enemyProjectiles, "projectileKnifeIdle180", 0, 0, 1)
 			.dependOn(dependsEnemyAlive(left._gc))
 			.setRelativeTo(left, 0, 0)
@@ -26,6 +30,5 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 	}
-
 	master.fragment();
 }
