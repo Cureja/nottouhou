@@ -295,21 +295,30 @@ class Entity {
 class Master extends Entity {
 	constructor() {
 		super(null, null, 0, 0);
-		this.unusedFragmentTime = 0;
 		this.fragmentTime = 0;
 	}
 
 	destroy() {
 		PIXI.ticker.shared.remove(this.onUpdate, this);
 		super.destroy();
+		let e;
 		for (var k = 0, length = enemyProjectiles.length; k < length; ++k) {
-			enemyProjectiles.get(k).destroy();
+			e = enemyProjectiles.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
 		}
 		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
-			playerProjectiles.get(k).destroy();
+			e = playerProjectiles.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
 		}
 		for (var k = 0, length = enemies.length; k < length; ++k) {
-			enemies.get(k).destroy();
+			e = enemies.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
 		}
 		enemyProjectiles.clear();
 		playerProjectiles.clear();
@@ -322,13 +331,12 @@ class Master extends Entity {
 	}
 
 	addEvent(offset, fn) {
-		this.unusedFragmentTime += offset;
 		super.addEvent(offset + this.fragmentTime, fn);
 	}
 
-	fragment() {
-		this.fragmentTime += this.unusedFragmentTime;
-		this.unusedFragmentTime = 0;
+	fragment(time) {
+		this.fragmentTime += time;
+		console.log("fragment at " + this.fragmentTime);
 	}
 
 	onUpdate(_) {
@@ -374,6 +382,10 @@ class Enemy extends Entity {
 			this.destroy();
 			player.score += 5;
 		}
+	}
+
+	destroy() {
+		super.destroy();
 	}
 }
 
@@ -463,24 +475,24 @@ class Player {
 			player.shootCooldown = 0;
 			if (focus) {
 				new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
-					self.handle.y -= 5;
-					return 80;
+					self.handle.y -= 4;
+					return 10;
 				}).dispatch(playerProjectiles);
 			} else {
 				let trio = [
 					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1).addEvent(0, (self) => {
 						self.handle.x -= 1;
 						self.handle.y -= 3;
-						return 80;
+						return 10;
 					}),
 					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1).addEvent(0, (self) => {
-						self.handle.y -= 4;
-						return 80;
+						self.handle.y -= 3;
+						return 10;
 					}),
 					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1).addEvent(0, (self) => {
 						self.handle.x += 1;
 						self.handle.y -= 3;
-						return 80;
+						return 10;
 					})
 				];
 				for (var k = 0; k < 3; k++) {
@@ -497,6 +509,7 @@ class Player {
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
 			allowGameLoop = false;
+			master.destroy();
 		}
 	}
 }

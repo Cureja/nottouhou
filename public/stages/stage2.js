@@ -30,5 +30,39 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 	}
-	master.fragment();
+	master.fragment(4500);
+
+	let halfWidth = app.renderer.width / 2;
+
+	for (var k = 0, index = 5, dir = 1; k < 20; k++) {
+		let enemy = new Enemy(enemies, "playerIdle", app.renderer.width / 2, -48, 5)
+			.addEvent(0, (self) => {
+				let startX = self.handle.x;
+				let startY = self.handle.y;
+				let event = (self) => {
+					self.handle.y += 4;
+					//TODO pull app.renderer.height * 10 out to a constant (on line ~36)
+					self.handle.x = startX + halfWidth * Math.sin((self.handle.y - startY) / app.renderer.height * 10);
+					if (self.handle.y > app.renderer.height) {
+						self.mutateEvent(createDestructor());
+						return 0;
+					}
+					return 20;
+				};
+				self.mutateEvent(event);
+				return event(self);
+			});
+
+		master.addEvent(k * 500, (_) => {
+			enemies.dispatch(1);
+		});
+
+		if (index == 9) {
+			dir = -1;
+		} else if (index == 0) {
+			dir = 1;
+		}
+		index += dir;
+	}
+	master.fragment(10000);
 }
