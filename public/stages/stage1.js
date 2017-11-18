@@ -15,6 +15,9 @@ for (var k = 0; k < 3; k++) {
 					self.addEvent(0, createLinearProjection(self.handle.x, self.handle.y, player.handle.x, player.handle.y, 1000));
 				}).dispatch(enemyProjectiles);
 				return REMOVE_EVENT;
+			}).addEvent(2000, (enemy) => {
+				enemy.addEvent(0, createLinearMovement(enemy.handle.x, enemy.handle.y, app.renderer.width - 30, app.renderer.height / 2, 1000));
+				return REMOVE_EVENT;
 			}),
 			new Enemy(MASTER, "playerIdle", app.renderer.width + 32, app.renderer.height + 48, 5).addEvent(0, (enemy) => {
 				enemy.addEvent(0, createLinearMovement(enemy.handle.x, enemy.handle.y, app.renderer.width - off, 32, 1000));
