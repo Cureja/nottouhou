@@ -74,6 +74,27 @@ function createLinearProjection(midX, midY, overMS) {
 	};
 }
 
+function createArcingMovement(curveX, curveY, toX, toY, overMS) {
+	return (entity) => {
+		let fromX = entity.handle.x;
+		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
+		let event = (entity) => {
+			let diff = getTimeNow() - startTime;
+			if (diff >= overMS) {
+				entity.handle.x = toX;
+				entity.handle.y = toY;
+				return REMOVE_EVENT;
+			}
+			entity.handle.x = (1 - (diff / overMS))**2 * fromX + 2*(1 - (diff / overMS))*(diff / overMS) * curveX + (diff / overMS)**2 * toX;
+			entity.handle.y = (1 - (diff / overMS))**2 * fromY + 2*(1 - (diff / overMS))*(diff / overMS) * curveY + (diff / overMS)**2 * toY;
+			return 10;
+		};
+		entity.mutateEvent(event);
+		return event(entity);
+	}
+}
+
 function createProjectionToPlayer(overMS) {
 	return (entity) => {
 		return createLinearProjection(player.handle.x, player.handle.y, overMS)(entity);

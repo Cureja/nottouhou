@@ -17,6 +17,10 @@ function initializeStage() {
 			.setRelativeTo(left, 0, 0)
 			.addEvent(0, createProjectionToPlayer(1000));
 		new BoundedProjectile(enemyProjectiles, "projectileKnifeIdle180", 0, 0, 1)
+			.dependOn(dependsEnemyAlive(left._gc))
+			.setRelativeTo(left, 0, 0)
+			.addEvent(0, createArcingMovement(0,100,450,450,1000));
+		new BoundedProjectile(enemyProjectiles, "projectileKnifeIdle180", 0, 0, 1)
 			.dependOn(dependsEnemyAlive(right._gc))
 			.setRelativeTo(right, 0, 0)
 			.addEvent(0, createProjectionToPlayer(1000));
