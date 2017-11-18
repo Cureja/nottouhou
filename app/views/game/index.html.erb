@@ -6,13 +6,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
 	<script src="engine.js"></script>
 	<script src="events.js"></script>
-	<script src="stages/stage1.js"></script>
+	<script src="stages/stage<%=@stage%>.js"></script>
 	<style>
-
-	  .background {
-		   background: url("/game.jpg") no-repeat center fixed;
-		   background-size: cover;
-	 }
+		.background {
+			background: url("/game.jpg") no-repeat center fixed;
+			background-size: cover;
+	 	}
 
 		div.game_container {
 			width: 800px;

@@ -1,8 +1,5 @@
 
-/*
-player projectiles need to check if they intersect with enemies
-enemy projectiles need to check if they intersect with player
-*/
+//https://github.com/google/closure-compiler
 
 let app;
 let animations;
@@ -14,7 +11,7 @@ $(document).ready(() => {
 	$("#game-container").append(app.view);
 	app.renderer.backgroundColor = 0x222222;
 	app.renderer.resize(600, 600);
-});
+})
 
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
@@ -94,142 +91,287 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 animations.loadAllRotations("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
 
-//stage definition framework--------------------------------------------------
-
-/**
- * Only accurate when called during a frame tick.
- */
 function getTimeNow() {
-	return PIXI.ticker.shared.lastTime;
+	return Date.now();
 }
 
-class GarbageCollector {
+class List {
+	constructor(capacity) {
+		if (typeof(capacity) === "undefined") {
+			capacity = 0;
+		}
+		this.length = 0;
+		this.capacity = capacity;
+		this.self = new Array(capacity);
+		for (var k = 0; k < capacity; ++k) {
+			this.self[k] = null;
+		}
+	}
+
+	get(index) {
+		return this.self[index];
+	}
+
+	set(index, value) {
+		this.self[index] = value;
+	}
+
+	push(value) {
+		if (this.length === this.capacity) {
+			this.self = this.self.concat(new Array(this.capacity));
+		}
+		this.self[this.length] = value;
+		this.capacity *= 2;
+		return this.length++;
+	}
+
+	pop(value) {
+		if (this.length == 0) {
+			return null;
+		}
+		let ret = this.self[--this.length];
+		this.self[this.length] = null;
+		return ret;
+	}
+
+	clear() {
+		for (var k = 0, length = this.length; k < length; ++k) {
+			this.self[k] = null;
+		}
+	}
+}
+
+class GarbageCollector extends List {
 	constructor() {
-		this.clear();
+		super();
+		this.empty = new List();
 	}
 
 	track(item) {
 		let index = this.empty.pop();
-		if (index == undefined) {
-			index = this.tracking.length;
+		if (index === null) {
+			index = this.push(item);
+		} else {
+			this.set(index, item);
 		}
-		this.tracking[index] = item;
-		item._tracking_id = index;
+		item._gc = index;
 	}
 
 	untrack(item) {
-		let index = item._tracking_id;
-		this.tracking[index] = null;
+		let index = item._gc;
+		this.set(index, null);
 		this.empty.push(index);
 	}
 
 	clear() {
-		this.tracking = [];
-		this.empty = [];
+		super.clear();
+		this.empty.clear();
 	}
 }
 
-let playerProjectiles = new GarbageCollector();
-let enemyProjectiles = new GarbageCollector();
+let TRUE_PREDICATE = (_) => { return true; };
+let FALSE_PREDICATE = (_) => { return false; };
+
+class Dispatcher extends GarbageCollector {
+	constructor(capacity) {
+		super(capacity);
+		this.index = 0;
+	}
+
+	/**
+	 * Dispatches `count` entities.
+	 */
+	dispatch(count) {
+		for (var length = this.index + count; this.index < length; ++this.index) {
+			this.get(this.index).dispatch();
+		}
+	}
+
+	/**
+	 * Adjusts the index by `count`.
+	 */
+	seek(count) {
+		this.index += count;
+	}
+
+	/**
+	 * Dispatches `count` entities with false dependencies,
+	 * causing them to destroy themselves.
+	 */
+	ignore(count) {
+		for (var length = this.index + count; this.index < length; ++this.index) {
+			this.get(this.index).dependOn(FALSE_PREDICATE).dispatch();
+		}
+	}
+}
+
+let playerProjectiles = new Dispatcher();
+let enemyProjectiles = new Dispatcher();
+let enemies = new Dispatcher();
+
+const EVENT_TIME = 0;
+const EVENT_FN = 1;
 
 class Entity {
-	/**
-	 * @param parent Parent Entity object.
-	 */
-	constructor(parent, frames, x, y) {
-		this.events = new GarbageCollector();
-		this.gc = new GarbageCollector();
-		this.destroyed = false;
-		this.frames = frames;
-		if (parent != null) {
-			this.handle = new PIXI.extras.AnimatedSprite(animations[frames].frames);
-			this.handle.loop = animations[frames].loop;
+	constructor(tracker, frames, x, y) {
+		this.tracker = tracker;
+		this.dependency = TRUE_PREDICATE;
+		this.currentEvent = null;
+		if (tracker !== null) { //if not master
+			this.tracker.track(this);
+			this.frames = frames;
+
+			let anim = animations[frames];
+			this.handle = new PIXI.extras.AnimatedSprite(anim.frames);
+			this.handle.loop = anim.loop;
 			this.handle.x = x;
 			this.handle.y = y;
 			this.handle.anchor.set(0.5);
 			this.handle.animationSpeed = 0.5;
-
-			this.parent = parent;
-			this._stubTrack();
 		}
-	}
-
-	_stubTrack() {
-		this.parent.gc.track(this);
-	}
-
-	_stubUntrack() {
-		this.parent.gc.untrack(this);
+		this.events = new GarbageCollector();
+		this.destroyed = false;
+		this.dispatched = false;
 	}
 
 	destroy() {
-		this.destroyed = true; //this must be first to resolve async issues
-		this.events.clear();
-		if (this.handle != null) {
+		this.destroyed = true;
+		if (this.tracker != null) { //if not master
+			this.tracker.untrack(this);
 			app.stage.removeChild(this.handle);
 			this.handle.destroy();
 		}
-		PIXI.ticker.shared.remove(this.onUpdate, this);
-		if (this.parent != null) {
-			this._stubUntrack();
-		}
 	}
 
-	/**
-	 * @param _ Unused delta parameter required by the ticker.
-	 */
 	onUpdate(_) {
+		if (this.destroyed) {
+			return;
+		}
 		let delta = getTimeNow() - this.spawnTime;
 		let e;
-		for (var k = 0; k < this.events.tracking.length; k++) {
-			e = this.events.tracking[k];
-			if (e != null) {
-				if (e.offset <= delta) {
-					if (this.destroyed) {
-						return;
-					}
-					console.log(delta - e.offset);
-					let newtime = e.fn(this);
-					if (newtime == REMOVE_EVENT) {
-						this.events.untrack(e);
-						k--;
-					} else {
-						e.offset = newtime;
-					}
+		for (var k = 0, length = this.events.length; k < length; ++k) {
+			e = this.events.get(k);
+			if (e !== null && e[EVENT_TIME] <= delta) {
+				this.currentEvent = e;
+				let newtime = e[EVENT_FN](this);
+				if (newtime === REMOVE_EVENT) {
+					this.events.untrack(e);
+				} else {
+					e[EVENT_TIME] = delta + newtime;
 				}
 			}
 		}
 	}
 
-	/**
-	 * Causes the entity to begin animating and processing events.
-	 * The current time is measured here and used as the spawn time.
-	 */
+	mutateEvent(fn) {
+		this.currentEvent[EVENT_FN] = fn;
+		return this;
+	}
+
 	dispatch() {
-		this.spawnTime = getTimeNow();
-		if (this.handle != null) {
+		if (!this.dependency(this)) {
+			//no checking for master as it can't fail the dependency test
+			this.handle.destroy();
+			return;
+		}
+		if (this.tracker != null) {
 			this.handle.play();
 			app.stage.addChild(this.handle);
 		}
-		PIXI.ticker.shared.add(this.onUpdate, this);
+		this.spawnTime = getTimeNow();
 	}
 
-	/**
-	 * @param offset How long (in MS) to delay this event for after spawning the entity
-	 * @param fn Event function, taking one argument (will be supplied `this`)
-	 */
 	addEvent(offset, fn) {
-		this.events.track({
-			"offset": offset,
-			"fn": fn
-		});
+		this.events.track([offset, fn]);
+		return this;
+	}
+
+	dependOn(dependency) {
+		this.dependency = dependency;
 		return this;
 	}
 }
 
+class Master extends Entity {
+	constructor() {
+		super(null, null, 0, 0);
+		this.fragmentTime = 0;
+	}
+
+	destroy() {
+		PIXI.ticker.shared.remove(this.onUpdate, this);
+		super.destroy();
+		let e;
+		for (var k = 0, length = enemyProjectiles.length; k < length; ++k) {
+			e = enemyProjectiles.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
+		}
+		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
+			e = playerProjectiles.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
+		}
+		for (var k = 0, length = enemies.length; k < length; ++k) {
+			e = enemies.get(k);
+			if (e !== null) {
+				e.destroy();
+			}
+		}
+		enemyProjectiles.clear();
+		playerProjectiles.clear();
+		enemies.clear();
+	}
+
+	dispatch() {
+		super.dispatch();
+		PIXI.ticker.shared.add(this.onUpdate, this);
+	}
+
+	addEvent(offset, fn) {
+		super.addEvent(offset + this.fragmentTime, fn);
+	}
+
+	fragment(time) {
+		this.fragmentTime += time;
+		console.log("fragment at " + this.fragmentTime);
+	}
+
+	onUpdate(_) {
+		super.onUpdate(_);
+		if (this.destroyed) {
+			return;
+		}
+		let e;
+		for (var k = 0, length = enemies.length; k < length; ++k) {
+			e = enemies.get(k);
+			if (e !== null) {
+				e.onUpdate(_);
+			}
+		}
+		for (var k = 0, length = enemyProjectiles.length; k < length; ++k) {
+			e = enemyProjectiles.get(k);
+			if (e !== null) {
+				e.onUpdate(_);
+			}
+		}
+		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
+			e = playerProjectiles.get(k);
+			if (e !== null) {
+				e.onUpdate(_);
+			}
+		}
+	}
+}
+
+let master = new Master();
+
+//enemies should generally have their parents set to the master
 class Enemy extends Entity {
-	constructor(parent, frames, x, y, health) {
-		super(parent, frames, x, y);
+	constructor(tracker, frames, x, y, health) {
+		super(tracker, frames, x, y);
 		this.health = health;
 	}
 
@@ -238,52 +380,46 @@ class Enemy extends Entity {
 		projectile.destroy();
 		if (this.health <= 0) {
 			this.destroy();
-		player.score +=5;
+			player.score += 5;
 		}
-	}
-}
-
-class Projectile extends Entity {
-	constructor(parent, frames, x, y, damage) {
-		super(parent, frames, x, y);
-		this.damage = damage;
-	}
-
-	_stubTrack() {}
-	_stubUntrack() {}
-
-	dispatch(who) {
-		this.who = who
-		who.track(this)
-		super.dispatch()
 	}
 
 	destroy() {
-		super.destroy()
-		this.who.untrack(this);
+		super.destroy();
 	}
 }
 
-/**
- * A Projectile that destroys itself once it goes outside the game area.
- */
-class BoundedProjectile extends Projectile {
-	constructor(parent, frames, x, y, damage) {
-		super(parent, frames, x, y);
+//projectiles have their parents set to either enemyProjectiles or playerProjectiles
+class Projectile extends Entity {
+	constructor(tracker, frames, x, y, damage) {
+		super(tracker, frames, x, y);
 		this.damage = damage;
 	}
 
+	setRelativeTo(entity, xoff, yoff) {
+		this.addEvent(0, (self) => {
+			self.handle.x = entity.handle.x + xoff;
+			self.handle.y = entity.handle.y + yoff;
+			return REMOVE_EVENT;
+		});
+		return this;
+	}
+}
+
+class BoundedProjectile extends Projectile {
+	constructor(tracker, frames, x, y, damage) {
+		super(tracker, frames, x, y, damage);
+	}
+
 	onUpdate(_) {
-		if (this.handle.x < 0 || this.handle.x > app.renderer.width ||
-			this.handle.y < 0 || this.handle.y > app.renderer.height) {
+		if (!this.destroyed && (this.handle.x < 0 || this.handle.x > app.renderer.width ||
+			this.handle.y < 0 || this.handle.y > app.renderer.height)) {
 			this.destroy();
 		} else {
 			super.onUpdate(_);
 		}
 	}
 }
-
-//end stage definition framework----------------------------------------------
 
 class Player {
 	constructor() {
@@ -295,7 +431,7 @@ class Player {
 		this.handle = new PIXI.extras.AnimatedSprite(animations["playerIdle"].frames);
 		this.handle.loop = animations["playerIdle"].loop;
 		this.handle.x = app.renderer.width / 2;
-		this.handle.y = app.renderer.height / 2;
+		this.handle.y = app.renderer.height - 64;
 		this.handle.anchor.set(0.5);
 		this.handle.animationSpeed = 0.5;
 		this.handle.play();
@@ -338,30 +474,27 @@ class Player {
 		} else {
 			player.shootCooldown = 0;
 			if (focus) {
-				new BoundedProjectile(MASTER, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, function(self) {
+				new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
 					self.handle.y -= 4;
-					return true;
+					return 10;
 				}).dispatch(playerProjectiles);
 			} else {
 				let trio = [
-					new BoundedProjectile(MASTER, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1),
-					new BoundedProjectile(MASTER, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1)
+					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1).addEvent(0, (self) => {
+						self.handle.x -= 1;
+						self.handle.y -= 3;
+						return 10;
+					}),
+					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1).addEvent(0, (self) => {
+						self.handle.y -= 3;
+						return 10;
+					}),
+					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1).addEvent(0, (self) => {
+						self.handle.x += 1;
+						self.handle.y -= 3;
+						return 10;
+					})
 				];
-				trio[0].addEvent(0, function(self) {
-					self.handle.x -= 1;
-					self.handle.y -= 3;
-					return 80;
-				});
-				trio[1].addEvent(0, function(self) {
-					self.handle.y -= 4;
-					return 80;
-				});
-				trio[2].addEvent(0, function(self) {
-					self.handle.x += 1;
-					self.handle.y -= 3;
-					return 80;
-				});
 				for (var k = 0; k < 3; k++) {
 					trio[k].dispatch(playerProjectiles);
 				}
@@ -374,8 +507,9 @@ class Player {
 		projectile.destroy();
 		if (this.health <= 0) {
 			console.log("You died.");
-			console.log("You scored",player.score,"points!");
+			console.log("You scored", player.score, "points!");
 			allowGameLoop = false;
+			master.destroy();
 		}
 	}
 }
@@ -439,24 +573,25 @@ PIXI.loader.onComplete.add(() => {
 			player.shoot(keys[VK_SHIFT]);
 		}
 
-		for (var k = 0; k < playerProjectiles.tracking.length; k++) {
-			let projectile = playerProjectiles.tracking[k];
-			if (projectile != null) {
-				for (var h = 0; h < MASTER.gc.tracking.length; h++) {
-					if (MASTER.gc.tracking[h] != null && MASTER.gc.tracking[h] instanceof Enemy) {
-						let enemy = MASTER.gc.tracking[h];
+		let projectile, enemy;
+		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
+			projectile = playerProjectiles.get(k);
+			if (projectile !== null) {
+				for (var h = 0, length2 = enemies.length; h < length2; ++h) {
+					enemy = enemies.get(h);
+					if (enemy !== null) {
 						if (projectile.handle.x >= enemy.handle.x - 10 && projectile.handle.x <= enemy.handle.x + 10 &&
 							projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
-								enemy.onCollide(projectile);
-								break;
+							enemy.onCollide(projectile);
+							break;
 						}
 					}
 				}
 			}
 		}
-		for (var k = 0; k < enemyProjectiles.tracking.length; k++) {
-			let projectile = enemyProjectiles.tracking[k];
-			if (projectile != null) {
+		for (var k = 0, length = enemyProjectiles.length; k < length; ++k) {
+			let projectile = enemyProjectiles.get(k);
+			if (projectile !== null) {
 				if (projectile.handle.x >= player.handle.x - PLAYER_HITBOX && projectile.handle.x <= player.handle.x + PLAYER_HITBOX &&
 					projectile.handle.y >= player.handle.y - PLAYER_HITBOX && projectile.handle.y <= player.handle.y + PLAYER_HITBOX) {
 					player.onCollide(projectile);
@@ -466,4 +601,6 @@ PIXI.loader.onComplete.add(() => {
 		}
 		//TODO add player colliding with enemies. 1 damage
 	});
+	initializeStage();
+	master.dispatch();
 });
