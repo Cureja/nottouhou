@@ -1,49 +1,66 @@
-let MASTER = new Entity(null, "MASTER", 0, 0);
-
-MASTER.addEvent(1000, function(MASTER) {
-	new Enemy(MASTER, "playerIdle", app.renderer.width / 2, 48, 5).addEvent(1000, function(enemy) {
-		let coneProjectiles =  [];
-		//Fires 30 projectiles
-		for (var i = 0; i < 3; i++) {
-			coneProjectiles.push(new BoundedProjectile(MASTER, "projectileKnifeIdle45", enemy.handle.x - 10, 8, 1))
-      		coneProjectiles.push(new BoundedProjectile(MASTER, "projectileKnifeIdle135", enemy.handle.x + 10, 8, 1))
-      		coneProjectiles.push(new BoundedProjectile(MASTER, "projectileKnifeIdle180", enemy.handle.x, 8, 1))
+function initializeStage() {
+	for (var k = 0; k < 3; ++k) {
+		let off = 150 * (k + 1);
+		let middle = new Enemy(enemies, "cirno", -32, app.renderer.height + 48, 2)
+			.addEvent(0, createLinearMovement(off, 32, 1000))
+			.addEvent(5500 + k * 250, createLinearProjection(app.renderer.width + 32, 0, 1000))
+			.addEvent(6500 + k * 250, createDestructor());
+    
+      
+		for (var h = 0; h < 3; h++) {
+			new BoundedProjectile(enemyProjectiles, "projectileKnifeIdle180", off, 32, 0)
+				.dependOn(dependsEnemyAlive(h))
+				.setRelativeTo(middle, 0, 0)
+				.addEvent(0, createProjectionToPlayer(750));
 		}
-		var counter = 0;
-		for (var i = 0; i < 3; i++) {
-			for (var j = 0; j < 3; j++) {
-				//This is for the 45 degrees so curve left
-				if (j == 0) {
-					coneProjectiles[counter].addEvent(100, function(self) {
-					self.handle.y += 2;
-					self.handle.x -= 0.5;
-					return 80;
-					});
-		    	}
-		      	//This is for the 135 degree so curve right
-		      	else if (j == 1) {
-					coneProjectiles[counter].addEvent(100, function(self) {
-					self.handle.y += 2;
-					self.handle.x += 0.5;
-					return 80;
-		        	});
-		    	}
-		      	//This shoots straight down
-				else if (j == 2) {
-					coneProjectiles[counter].addEvent(100, function(self) {
-					self.handle.y += 2;
-					return 80;
-					});
-				}
-				counter = counter + 1;
-			}
-		}
-    for (var k = 0; k < 9; k++) {
-    	  coneProjectiles[k].dispatch(enemyProjectiles);
-    }
+			
+		master.addEvent(2000 + k * 500, (_) => {
+			enemies.dispatch(1);
+			return REMOVE_EVENT;
+		});
+	}
+  
+	//Lane's Shot Sequence Algorithm
+	for (var k = 0; k < 3; k++) {
+	master.addEvent(k * 1750, (_) => {
+	  enemyProjectiles.dispatch(1);
+	  enemyProjectiles.seek(2);
+	  return REMOVE_EVENT;
+	});
+	master.addEvent(k * 1750 + 500, (_) => {
+	  enemyProjectiles.dispatch(1);
+	  enemyProjectiles.seek(2);
+	  return REMOVE_EVENT;
+	});
+	master.addEvent(k * 1750 + 1000, (_) => {
+	  enemyProjectiles.dispatch(1);
+	  enemyProjectiles.seek(-6);
+	  return REMOVE_EVENT;
+	});
+	}
 
-	}).dispatch();
-	return 10000;
-});
+   master.fragment(6500);
 
-MASTER.dispatch();
+  for (var k = 0; k < 4; k++){
+		let sideOffSet = 25 * (k + 1);
+		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 3)
+			.addEvent(0, createLinearMovement(sideOffSet, 32, 1000))
+			.addEvent(5000 + k * 200, createLinearProjection(app.renderer.width + 30, 2 * app.renderer.height / 3, 750))
+			.addEvent(6000 + k * 200, createDestructor());
+		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 3)
+			.addEvent(0, createLinearMovement(app.renderer.width - sideOffSet, 32, 1000))
+			.addEvent(5000 + k * 200, createLinearProjection(-30, 2 * (app.renderer.width / 3), 750))
+			.addEvent(6000 + k * 200, createDestructor());
+		let midSide = new Enemy(enemies, "cirno", 300, -20, 3)
+			.addEvent(0, createLinearMovement(250 + sideOffSet, 32, 1000))
+			.addEvent(5500, createProjectionToPlayer(750));
+
+		master.addEvent(500 + k * 500, (_) => {
+			enemies.dispatch(3);
+			return REMOVE_EVENT;
+		});
+  }
+
+  master.fragment(6800);
+
+}
