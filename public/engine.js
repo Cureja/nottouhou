@@ -471,36 +471,33 @@ class Player {
 	}
 
 	shoot(focus) {
-		if (this.shootCooldown < PLAYER_COOLDOWN_READY) {
-			player.shootCooldown++;
+		if (focus) {
+			new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
+				self.handle.y -= 4;
+				return 10;
+			}).dispatch(playerProjectiles);
+			player.shootCooldown = PLAYER_COOLDOWN_READY;
 		} else {
-			player.shootCooldown = 0;
-			if (focus) {
-				new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
-					self.handle.y -= 4;
+			let trio = [
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1).addEvent(0, (self) => {
+					self.handle.x -= 1;
+					self.handle.y -= 3;
 					return 10;
-				}).dispatch(playerProjectiles);
-			} else {
-				let trio = [
-					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1).addEvent(0, (self) => {
-						self.handle.x -= 1;
-						self.handle.y -= 3;
-						return 10;
-					}),
-					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1).addEvent(0, (self) => {
-						self.handle.y -= 3;
-						return 10;
-					}),
-					new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1).addEvent(0, (self) => {
-						self.handle.x += 1;
-						self.handle.y -= 3;
-						return 10;
-					})
-				];
-				for (var k = 0; k < 3; k++) {
-					trio[k].dispatch(playerProjectiles);
-				}
+				}),
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1).addEvent(0, (self) => {
+					self.handle.y -= 3;
+					return 10;
+				}),
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1).addEvent(0, (self) => {
+					self.handle.x += 1;
+					self.handle.y -= 3;
+					return 10;
+				})
+			];
+			for (var k = 0; k < 3; k++) {
+				trio[k].dispatch(playerProjectiles);
 			}
+			player.shootCooldown = PLAYER_COOLDOWN_READY;
 		}
 	}
 
@@ -571,8 +568,12 @@ PIXI.loader.onComplete.add(() => {
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
 
-		if (keys[VK_Z]) {
-			player.shoot(keys[VK_SHIFT]);
+		if(player.shootCooldown == 0) {
+			if (keys[VK_Z]) {
+				player.shoot(keys[VK_SHIFT]);
+			}
+		}else {
+			player.shootCooldown--;
 		}
 
 		let projectile, enemy;

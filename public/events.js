@@ -55,7 +55,7 @@ function createLinearMovement(toX, toY, overMS) {
 
 /**
  * Creates a movement event that moves an entity in a line.
- * The line begins at the entities location, passes through midX,midY, and has no end.
+ * The line begins at the entity's location, passes through midX,midY, and has no end.
  * This event should be wrapped by another that checks bounds (or applied to a BoundedProjectile).
  */
 function createLinearProjection(midX, midY, overMS) {
@@ -74,6 +74,10 @@ function createLinearProjection(midX, midY, overMS) {
 	};
 }
 
+/**
+* Creates a movement that moves an entity in an arc.
+* The line will be a Bezier Curve with curveX,curveY as a secondary point
+*/
 function createArcingMovement(curveX, curveY, toX, toY, overMS) {
 	return (entity) => {
 		let fromX = entity.handle.x;
