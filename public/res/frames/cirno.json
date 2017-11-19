@@ -1,0 +1,5 @@
+{"frames": {"cirno0": {"trimmed": false, "frame": {"y": 0, "x": 56, "w": 26, "h": 50}, "rotated": false, "sourceSize": {"h": 50, "w": 32}, "spriteSourceSize": {"y": 0, "x": 0, "w": 32, "h": 50}},
+            "cirno1": {"trimmed": false, "frame": {"y": 0, "x": 82, "w": 26, "h": 50}, "rotated": false, "sourceSize": {"h": 50, "w": 32}, "spriteSourceSize": {"y": 0, "x": 0, "w": 32, "h": 50}},
+            "cirno2": {"trimmed": false, "frame": {"y": 0, "x": 108, "w": 26, "h": 50}, "rotated": false, "sourceSize": {"h": 50, "w": 32}, "spriteSourceSize": {"y": 0, "x": 0, "w": 32, "h": 50}},
+            "cirno3": {"trimmed": false, "frame": {"y": 0, "x": 134, "w": 26, "h": 50}, "rotated": false, "sourceSize": {"h": 50, "w": 32}, "spriteSourceSize": {"y": 0, "x": 0, "w": 32, "h": 50}}},
+            "meta": {"image": "src/cirno.png", "format": "RGBA8888"}}

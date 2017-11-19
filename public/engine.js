@@ -88,8 +88,10 @@ animations.load("playerIdleLeft", 7, false, null);
 animations.load("playerIdleRight", 7, false, (frame) => {
 	frame.rotate = ROTATE_FLIP_VERTICAL;
 });
+animations.load("cirno", 4, true, null);
 animations.loadAllRotations("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
+animations.loadAllRotations("projectileIce", 1, false, null);
 
 function getTimeNow() {
 	return Date.now();
