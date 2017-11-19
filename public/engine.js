@@ -237,9 +237,8 @@ class Entity {
 	}
 
 	ensureAlive() {
-		if (this.transform === null) {
+		if (this.tracker !== null && this.handle.transform === null) {
 			this.destroy();
-			console.log("very broken " + this._gc);
 			return false;
 		}
 		return true;
