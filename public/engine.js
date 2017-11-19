@@ -400,6 +400,10 @@ class Projectile extends Entity {
 
 	setRelativeTo(entity, xoff, yoff) {
 		this.addEvent(0, (self) => {
+			if (entity.destroyed) {
+				self.mutateEvent(createDestructor());
+				return 0;
+			}
 			self.handle.x = entity.handle.x + xoff;
 			self.handle.y = entity.handle.y + yoff;
 			return REMOVE_EVENT;
