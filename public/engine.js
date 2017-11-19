@@ -236,6 +236,15 @@ class Entity {
 		this.dispatched = false;
 	}
 
+	ensureAlive() {
+		if (this.transform === null) {
+			this.destroy();
+			console.log("very broken " + this._gc);
+			return false;
+		}
+		return true;
+	}
+
 	destroy() {
 		this.destroyed = true;
 		if (this.tracker != null) { //if not master
@@ -246,7 +255,7 @@ class Entity {
 	}
 
 	onUpdate(_) {
-		if (this.destroyed) {
+		if (this.destroyed || !this.ensureAlive()) {
 			return;
 		}
 		let delta = getTimeNow() - this.spawnTime;
@@ -418,7 +427,7 @@ class BoundedProjectile extends Projectile {
 	}
 
 	onUpdate(_) {
-		if (!this.destroyed && (this.handle.x < 0 || this.handle.x > app.renderer.width ||
+		if (!this.destroyed && this.ensureAlive() && (this.handle.x < 0 || this.handle.x > app.renderer.width ||
 			this.handle.y < 0 || this.handle.y > app.renderer.height)) {
 			this.destroy();
 		} else {
