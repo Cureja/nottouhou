@@ -7,4 +7,10 @@ class HighscoresController< ApplicationController
       redirect_to :controller => "login", :action => "index"
     end
   end
+
+  def create
+    @score = params[:score]
+    highscore = Highscore.create(username: current_user.username, score: @score)
+  end
+
 end

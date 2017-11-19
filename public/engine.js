@@ -507,6 +507,7 @@ class Player {
 		if (this.health <= 0) {
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
+			$.post("/highscores",{score: player.score});
 			allowGameLoop = false;
 			master.destroy();
 		}

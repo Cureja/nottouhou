@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get '/game' => 'game#index'
 
   get '/highscores' => 'highscores#index'
+  post '/highscores' => 'highscores#create'
 
   root 'front#index'
 
