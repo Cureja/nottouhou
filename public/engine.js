@@ -519,9 +519,14 @@ class Player {
 		if (this.health <= 0) {
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
+			console.log()
 			$.post("/highscores",{score: player.score});
 			allowGameLoop = false;
 			master.destroy();
+			master = new Master();
+			initializeStage();
+				
+			master.dispatch();
 		}
 	}
 }
@@ -552,8 +557,12 @@ window.addEventListener("keyup", (e) => {
 animations.execute();
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
-	let replay = new List(1000);
-	let pastAct = [];
+	
+	let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right 
+	for(i=0; i<7; i++) {
+		pastAct[i] = false;
+	}
+	let startTime = getTimeNow();
 	app.ticker.add(() => {
 		if (!allowGameLoop) {
 			return;
@@ -561,6 +570,20 @@ PIXI.loader.onComplete.add(() => {
 
 		let xdir = 0;
 		let ydir = 0;
+
+		//replays
+		let replay = List(1000);
+		let currAct = {keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
+					   keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]};
+
+		for(n=0; n<currAct.length; n++) {
+			if(pastAct[n] != currAct[n]) {
+				replay.push(n,getTimeNow()-startTime);
+				pastAct[n] = currAct[n];
+			}
+		}
+		//replays end
+
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
 		}
@@ -618,6 +641,6 @@ PIXI.loader.onComplete.add(() => {
 		}
 		//TODO add player colliding with enemies. 1 damage
 	});
-	initializeStage();
+	initializeStage();	
 	master.dispatch();
 });
