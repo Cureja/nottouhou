@@ -1,2 +1,2 @@
-{"frames": {"orbMagenta": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 24, "h": 8}, "rotated": false, "sourceSize": {"h": 8, "w": 8}, "spriteSourceSize": {"y": 0, "x": 0, "w": 8, "h": 8}},
+{"frames": {"orbMagenta0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 24, "h": 8}, "rotated": false, "sourceSize": {"h": 8, "w": 8}, "spriteSourceSize": {"y": 0, "x": 0, "w": 8, "h": 8}}},
             "meta": {"image": "src/orbs.png", "format": "RGBA8888"}}

@@ -109,7 +109,6 @@ animations.load("orbLightRed", 1, false, null);
 animations.load("orbLightYellow", 1, false, null);
 animations.load("orbMagenta", 1, false, null);
 animations.load("orbOrange", 1, false, null);
-animations.load("orbOrange", 1, false, null);
 animations.load("orbPink", 1, false, null);
 animations.load("orbPurple", 1, false, null);
 animations.load("orbRed", 1, false, null);

@@ -12,11 +12,11 @@ function initializeStage() {
 			.addEvent(0, createLinearMovement(app.renderer.width - off, 28, 1000))
 			.addEvent(4500 + k * 250, createLinearProjection(-32, app.renderer.height / 2, 1000))
 			.addEvent(5500 + k * 250, createDestructor());;
-		new BoundedProjectile(enemyProjectiles, "projectileIce180", 0, 0, 1)
+		new BoundedProjectile(enemyProjectiles, "orbGrey", 0, 0, 1)
 			.dependOn(dependsEnemyAlive(left._gc))
 			.setRelativeTo(left, 0, 0)
 			.addEvent(0, createProjectionToPlayer(3000));
-		new BoundedProjectile(enemyProjectiles, "projectileIce180", 0, 0, 1)
+		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1)
 			.dependOn(dependsEnemyAlive(right._gc))
 			.setRelativeTo(right, 0, 0)
 			.addEvent(0, createProjectionToPlayer(3000));
@@ -35,7 +35,7 @@ function initializeStage() {
 	let halfWidth = app.renderer.width / 2;
 
 	for (var k = 0, index = 5, dir = 1; k < 20; k++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, -50, 5)
+		let enemy = new Enemy(enemies, "fairyBlue", app.renderer.width / 2, -50, 5)
 			.addEvent(0, (self) => {
 				let startX = self.handle.x;
 				let startY = self.handle.y;
@@ -68,17 +68,17 @@ function initializeStage() {
 
 	for(var k = 0; k < 4; k++) {
 		let off = 28 * (k + 1);
-		let left = new Enemy(enemies, "cirno", -28, -50, 5)
+		let left = new Enemy(enemies, "fairyRed", -28, -50, 5)
 			.addEvent(300 + 1800 * k, createProjectionToPlayer(2500));
-		let lMiddle1 = new Enemy(enemies, "cirno", app.renderer.width / 2 - 28, -50, 5)
+		let lMiddle1 = new Enemy(enemies, "fairyGreen", app.renderer.width / 2 - 28, -50, 5)
 			.addEvent(600 + 1800 * k, createProjectionToPlayer(2500));
-		let rMiddle1 = new Enemy(enemies, "cirno", app.renderer.width / 2 + 28, -50, 5)
+		let rMiddle1 = new Enemy(enemies, "fairyBlue", app.renderer.width / 2 + 28, -50, 5)
 			.addEvent(900 + 1800 * k, createProjectionToPlayer(2500));
-		let right = new Enemy(enemies, "cirno", app.renderer.width + 28, -50, 5)
+		let right = new Enemy(enemies, "fairyGreen", app.renderer.width + 28, -50, 5)
 			.addEvent(1200 + 1800 * k, createProjectionToPlayer(2500));
-		let rMiddle2 = new Enemy(enemies, "cirno", app.renderer.width / 2 + 28, -50, 5)
+		let rMiddle2 = new Enemy(enemies, "fairyBlue", app.renderer.width / 2 + 28, -50, 5)
 			.addEvent(1500 + 1800 * k, createProjectionToPlayer(2500));
-		let lMiddle2 = new Enemy(enemies, "cirno", app.renderer.width / 2 - 28, -50, 5)
+		let lMiddle2 = new Enemy(enemies, "fairyRed", app.renderer.width / 2 - 28, -50, 5)
 			.addEvent(1800 + 1800 * k, createProjectionToPlayer(2500));
 
 		for(var i = 1; i <= 6; i++) {
