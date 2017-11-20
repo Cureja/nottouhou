@@ -80,6 +80,10 @@ class Animations {
 			}
 		});
 	}
+
+	clear() {
+		this.loading = [];
+	}
 }
 
 animations = new Animations();
@@ -112,6 +116,10 @@ class List {
 
 	get(index) {
 		return this.self[index];
+	}
+
+	size() {
+		return this.length;
 	}
 
 	set(index, value) {
@@ -330,6 +338,7 @@ class Master extends Entity {
 				e.destroy();
 			}
 		}
+		player.destroy();
 		enemyProjectiles.clear();
 		playerProjectiles.clear();
 		enemies.clear();
@@ -521,12 +530,43 @@ class Player {
 			console.log("You scored", player.score, "points!");
 			console.log()
 			$.post("/highscores",{score: player.score});
-			allowGameLoop = false;
+			//allowGameLoop = false;
 			master.destroy();
-			master = new Master();
-			initializeStage();
-				
-			master.dispatch();
+			if(!deathReplay) {
+				deathReplay = true;
+				master = new Master();
+				animations.clear();
+				playerProjectiles = new Dispatcher();
+				enemyProjectiles = new Dispatcher();
+				enemies = new Dispatcher();
+				player = new Player()
+				PIXI.ticker.shared.add(this.onUpdate, this);
+				startTime = getTimeNow();
+				for(i=0; i<7; i++) {
+					pastAct[i] = false;
+				}
+				let index = 0;
+				window.removeEventListener("keydown", (e) => {
+					keys[e.keyCode] = true;
+					keys[VK_SHIFT] = e.shiftKey;
+				});
+				window.removeEventListener("keyup", (e) => {
+					keys[e.keyCode] = false;
+					keys[VK_SHIFT] = e.shiftKey;
+				});
+				initializeStage();
+				master.dispatch();
+			}
+		}
+	}
+
+	destroy() {
+		//PIXI.ticker.shared.remove(this.onUpdate, this);
+		this.destroyed = true;
+		if (this.tracker != null) { //if not master
+			this.tracker.untrack(this);
+			app.stage.removeChild(this.handle);
+			this.handle.destroy();
 		}
 	}
 }
@@ -543,7 +583,13 @@ const VK_W = 87;
 const VK_A = 65;
 const VK_S = 83;
 const VK_D = 68;
+let keysUsed = [88,90,27,16,38,40,37,39,87,65,83,68];
 let keys = {};
+for(x in keysUsed) {
+	keys[keysUsed[x]] = false;
+}
+let deathReplay = false;
+let startTime;
 
 window.addEventListener("keydown", (e) => {
 	keys[e.keyCode] = true;
@@ -555,14 +601,16 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
+let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right 
+for(i=0; i<7; i++) {
+	pastAct[i] = false;
+}
+let index = 0;
+let replay = new List(1000);
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
 	
-	let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right 
-	for(i=0; i<7; i++) {
-		pastAct[i] = false;
-	}
-	let startTime = getTimeNow();
+	startTime = getTimeNow();
 	app.ticker.add(() => {
 		if (!allowGameLoop) {
 			return;
@@ -572,17 +620,34 @@ PIXI.loader.onComplete.add(() => {
 		let ydir = 0;
 
 		//replays
-		let replay = List(1000);
-		let currAct = {keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
-					   keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]};
+		if(!deathReplay) {
+			var currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
+						    keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]];
 
-		for(n=0; n<currAct.length; n++) {
-			if(pastAct[n] != currAct[n]) {
-				replay.push(n,getTimeNow()-startTime);
-				pastAct[n] = currAct[n];
+			for(n=0; n<currAct.length; n++) {
+				if(pastAct[n] != currAct[n]) {
+					//console.log(pastAct[n]+" and "+currAct[n]);
+					replay.push({key:n,time:getTimeNow()-startTime});
+					pastAct[n] = currAct[n];
+
+				}
 			}
+		} else {
+			//console.log(replay.get(0)+" and "+replay.get(0));
+			while(index < replay.size() && replay.get(index).time < getTimeNow()-startTime) {
+				console.log(replay.get(index).time+" and "+getTimeNow()-startTime);
+				pastAct[replay.get(index).key] = !pastAct[replay.get(index).key];
+				index++;
+			}
+			keys[VK_X] = pastAct[0];
+			keys[VK_Z] = pastAct[1];
+			keys[VK_SHIFT] = pastAct[2];
+			keys[VK_UP] = pastAct[3];
+			keys[VK_DOWN] = pastAct[4];
+			keys[VK_LEFT] = pastAct[5];
+			keys[VK_RIGHT] = pastAct[6];
 		}
-		//replays end
+		// replays end
 
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
@@ -640,7 +705,7 @@ PIXI.loader.onComplete.add(() => {
 			}
 		}
 		//TODO add player colliding with enemies. 1 damage
-	});
+	});	
 	initializeStage();	
 	master.dispatch();
 });
