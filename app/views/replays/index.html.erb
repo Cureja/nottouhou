@@ -18,7 +18,7 @@
 
 		p {
 			font-family: sans-serif;
-			color: #FC466B; //bluetext
+			color: #FC466B;//bluetext
 			font-weight: bold;
 		}
 
@@ -73,45 +73,22 @@
 			border-radius: 10px;
 			margin: auto;
 		}
-    	.container {
-      		border: 2px solid black;
-      		background-color: pink;
-     		width: 90%;
-			height: 65%;
-			margin: auto;
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-    	}
 	</style>
 </head>
 <body class="background">
 	<div class = "paddingForNavigation">
-	 <div>
-		 <ul>
-			 <li><a>Campaign</a></li>
-			 <li><a href="/replays"> Replays</a></li>
-			 <li><a href="/highscores"> Hi-Scores</a></li>
-			 <li><a>Coop</a></li>
-			 <li><a>Message Board</a></li>
-			 <li><a href="/logout">Log Out</a></li>
-		 <ul>
-	 </div>
-	 <div class="currentUser">
-		 <div class="userProfile"></div>
-		 <p><%= @user.username %></p>
-	 </div>
-   <div class="container">
-		 <p>  Highscores <p>
-			 <% for i in 1..@count do %>
-			   <% if i <= 20 %>
-				 	 <p> <%=i %>. <%= put_entry(i) %> </p>
-				 <% end %>
-       <% end %>
-	  <div class="spacing"></div>
-	 </div>
- </div>
+		<ul>
+			<li><a>Campaign</a></li>
+			<li><a href="/replays"> Replays</a></li>
+			<li><a href="/highscores"> Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a>Message Board</a></li>
+			<li><a href="/logout">Log Out</a></li>
+		</ul>
+	</div>
+	<div class="currentUser">
+		<div class="userProfile"></div>
+		<p><%= @user.username %></p>
+	</div>
 </body>
 </html>
