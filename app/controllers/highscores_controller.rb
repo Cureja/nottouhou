@@ -16,7 +16,7 @@ class HighscoresController< ApplicationController
   end
 
   def put_entry(value)
-      Highscore.order(score: :desc).first(value).last(1)
+      Highscore.order('score DESC, created_at').first(value).last(1)
   end
 
 end

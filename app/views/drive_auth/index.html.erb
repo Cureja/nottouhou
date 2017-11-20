@@ -1,0 +1,35 @@
+
+<!doctype html>
+<html>
+<head>
+	<title>Nottouhou - Drive Authorization</title>
+	<meta name="authenticity-token" id="authenticity-token" content="<%= form_authenticity_token %>" />
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+	<script>
+		function start() {
+			gapi.load("auth2", () => {
+				let auth2 = gapi.auth2.init({
+					client_id: "520788856982-o79jg4d27s9ogvs358unqnntiv7k52ah.apps.googleusercontent.com",
+					scope: "https://www.googleapis.com/auth/drive.file"
+				});
+				auth2.grantOfflineAccess().then((authResult) => {
+					if (authResult.code) {
+						console.log("got auth code: " + authResult.code);
+						$.post(window.location, {
+							authcode: authResult.code,
+							authenticity_token: $("#authenticity-token").attr("content")
+						}, (postResult) => {
+							console.log("post result: " + postResult);
+						});
+					} else {
+						$("#body").html("Auth request failed.");
+					}
+				});
+			});
+		}
+	</script>
+</head>
+<body>
+</body>
+</html>
