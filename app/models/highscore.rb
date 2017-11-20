@@ -1,5 +1,5 @@
 class Highscore < ApplicationRecord
   def score
-    self[:price]
+    self[:score]
   end
 end

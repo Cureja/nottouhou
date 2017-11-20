@@ -5,6 +5,7 @@ class HighscoresController< ApplicationController
   def index
     @user = current_user
     @count = Highscore.count
+    @score = Highscore.order(score: :desc).find([2])
     if @user.nil? then
       redirect_to :controller => "login", :action => "index"
     end
@@ -16,7 +17,7 @@ class HighscoresController< ApplicationController
   end
 
   def put_entry(value)
-      Highscore.order(score: :desc).first(value).last(1)
+      Highscore.order('score DESC, created_at').first(value).last(1)
   end
 
 end
