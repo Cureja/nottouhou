@@ -1,11 +1,14 @@
 
 class AuthRedirectController < ApplicationController
-  def create
-    p "posting"
-  end
+  skip_before_action :verify_authenticity_token
 
   def index
-    p "indexing"
-    p params
+    p "redirect get"
+    puts params.inspect
+  end
+
+  def create
+    p "redirect post"
+    puts params.inspect
   end
 end

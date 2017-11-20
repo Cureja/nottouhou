@@ -11,7 +11,9 @@ class DriveAuthController < ApplicationController
     redirect_if_not_logged_in
     user = current_user
     authcode = params[:authcode]
+    p "to auth"
     auth_client = $client_secrets.to_authorization
+    p "update"
     auth_client.update!(
       :scope => "https://www.googleapis.com/auth/drive.file",
       :redirect_uri => get_redirect_uri,
@@ -20,15 +22,16 @@ class DriveAuthController < ApplicationController
         "include_granted_scopes" => "true"
       }
     )
-    auth_uri = auth_client.authorization.to_s
-    p auth_uri
+    p "fetch"
+    result = auth_client.fetch_access_token!
+    p result
   end
 
   private
     def get_redirect_uri
       domain = request.domain
       if domain == "localhost" then
-        domain += ":5000"
+        domain = "127.0.0.1:5000"
       end
       return "http://" + domain + "/authredirect"
     end

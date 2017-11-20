@@ -17,8 +17,7 @@ module Nottouhou
     config.load_defaults 5.1
 
     config.after_initialize do
-      $client_secrets = File.join(Rails.root, 'config', 'drive_api_secret.json')
-      #$drive_client_id = Google::Auth::ClientId.from_file(drive_secret)
+      $client_secrets = Google::Auth::ClientId.from_file(File.join(Rails.root, 'config', 'drive_api_secret.json'))
     end
 
     # Settings in config/environments/* take precedence over those specified here.

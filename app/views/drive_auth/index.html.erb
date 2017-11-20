@@ -1,9 +1,11 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html>
 <head>
-    <title>Nottouhou - Drive Authorization</title>
+	<title>Nottouhou - Drive Authorization</title>
+	<meta name="authenticity-token" id="authenticity-token" content="<%= form_authenticity_token %>" />
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+	<script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
 	<script>
 		function start() {
 			gapi.load("auth2", () => {
@@ -13,10 +15,12 @@
 				});
 				auth2.grantOfflineAccess().then((authResult) => {
 					if (authResult.code) {
+						console.log("got auth code: " + authResult.code);
 						$.post(window.location, {
-							authcode: authResult.code
+							authcode: authResult.code,
+							authenticity_token: $("#authenticity-token").attr("content")
 						}, (postResult) => {
-							
+							console.log("post result: " + postResult);
 						});
 					} else {
 						$("#body").html("Auth request failed.");
@@ -27,6 +31,5 @@
 	</script>
 </head>
 <body>
-
 </body>
 </html>

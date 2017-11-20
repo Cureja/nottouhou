@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post '/driveauth' => 'drive_auth#create'
 
   get '/authredirect' => 'auth_redirect#index'
+  post '/authredirect' => 'auth_redirect#create'
 
   get '/highscores' => 'highscores#index'
   post '/highscores' => 'highscores#create'
