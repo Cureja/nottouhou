@@ -88,10 +88,33 @@ animations.load("playerIdleLeft", 7, false, null);
 animations.load("playerIdleRight", 7, false, (frame) => {
 	frame.rotate = ROTATE_FLIP_VERTICAL;
 });
+
 animations.load("cirno", 4, true, null);
+animations.load("fairyBlue", 8, true, null);
+animations.load("fairyRed", 8, true, null);
+animations.load("fairyGreen", 8, true, null);
+
 animations.loadAllRotations("projectileKnifeIdle", 1, false, null);
 animations.load("projectileFocusIdle", 1, false, null);
 animations.loadAllRotations("projectileIce", 1, false, null);
+
+animations.load("orbBlack", 1, false, null);
+animations.load("orbBlue", 1, false, null);
+animations.load("orbGreen", 1, false, null);
+animations.load("orbGrey", 1, false, null);
+animations.load("orbLightBlue", 1, false, null);
+animations.load("orbLightGreen", 1, false, null);
+animations.load("orbLightPurple", 1, false, null);
+animations.load("orbLightRed", 1, false, null);
+animations.load("orbLightYellow", 1, false, null);
+animations.load("orbMagenta", 1, false, null);
+animations.load("orbOrange", 1, false, null);
+animations.load("orbOrange", 1, false, null);
+animations.load("orbPink", 1, false, null);
+animations.load("orbPurple", 1, false, null);
+animations.load("orbRed", 1, false, null);
+animations.load("orbYellow", 1, false, null);
+animations.load("orbYellowGreen", 1, false, null);
 
 function getTimeNow() {
 	return Date.now();
