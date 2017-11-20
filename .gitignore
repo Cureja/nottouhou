@@ -5,6 +5,8 @@
 #   git config --global core.excludesfile '~/.gitignore_global'
 config/drive_api_secret.json
 
+config/drive_api_secret.json
+
 # Ignore bundler config.
 /.bundle
 

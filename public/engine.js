@@ -574,7 +574,8 @@ window.addEventListener("keyup", (e) => {
 animations.execute();
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
-
+	let replay = new List(1000);
+	let pastAct = [];
 	app.ticker.add(() => {
 		if (!allowGameLoop) {
 			return;
