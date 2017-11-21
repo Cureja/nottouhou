@@ -2,7 +2,7 @@
 //subterranean animism, stage 1, normal
 
 function initializeStage() {
-	/*
+	
 	for (var k = 0; k < 3; ++k) {
 		let off = 28 * (k + 1);
 		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 5)
@@ -169,7 +169,7 @@ function initializeStage() {
   	});
 
 	master.fragment(9800);
-	*/
+	
 	var xmod = -1;
 	for(var k = 0; k < 9; k++) {
 		let xSpawn = app.renderer.width / 2 + 350 * xmod;
@@ -177,12 +177,12 @@ function initializeStage() {
 		let xGenerate = app.renderer.width / 2 + 250 * xmod; 
 		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset)
 			.addEvent(0, createLinearMovement(xGenerate, yOffset, 500))
-			.addEvent(8000, createLinearProjection(app.renderer.width/2 + 350 * xmod, yOffset, 500))
+			.addEvent(8000, createLinearProjection(app.renderer.width / 2 + 350 * xmod, yOffset, 500))
 			.addEvent(9000, createDestructor());
 		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1)
 			.dependOn(dependsEnemyAlive(leftAndRight._gc))
 			.setRelativeTo(leftAndRight, 0, 0)
-			.addEvent(0, (self) =>  {self.handle.x += 8 * xmod; return 10; })
+			.addEvent(0, createLinearProjection(app.renderer.width / 2 - 150 * xmod,  yOffset, 1000));
 		master.addEvent(500 + k * 50, (_) => {
 			enemies.dispatch(1);
 			return REMOVE_EVENT;
@@ -192,29 +192,29 @@ function initializeStage() {
 	}
 	for(var i = 0; i < 5; i++){
 		master.addEvent(2000, (_) => {
-			enemyProjectiles.dispatch(1)
-			enemyProjectiles.seek(1);
 			console.log(enemyProjectiles.index);
+			enemyProjectiles.dispatch(1)
+			enemyProjectiles.seek(1)
+			return REMOVE_EVENT;
 		});
 		
 	}
+	
 	master.addEvent(2500, (_) => {
 			enemyProjectiles.seek(-9);
 			console.log(enemyProjectiles.index);
 	});
 	
 	for(var i = 0; i < 4; i++){
-		master.addEvent(3000, (_) => {
-			enemyProjectiles.dispatch(1)
-			enemyProjectiles.seek(2);
-			console.log(enemyProjectiles.index);
+		master.addEvent(3750, (_) => {
+			console.log(enemyProjectiles.index)
+			enemyProjectiles.dispatch(1);
+			enemyProjectiles.seek(1);
+			return REMOVE_EVENT;
 		});		
 	}
 
-
 	master.fragment(9000);
-
-
 }
 
 
