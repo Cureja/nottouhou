@@ -5,6 +5,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+gem 'google_drive'
 gem 'dotenv-rails'
 gem 'google-api-client', '~> 0.11'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

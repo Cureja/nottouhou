@@ -10,21 +10,21 @@ class DriveAuthController < ApplicationController
   def create
     redirect_if_not_logged_in
     user = current_user
-    authcode = params[:authcode]
-    p "to auth"
     auth_client = $client_secrets.to_authorization
-    p "update"
     auth_client.update!(
       :scope => "https://www.googleapis.com/auth/drive.file",
-      :redirect_uri => get_redirect_uri,
-      :additional_parameters => {
-        "access_type" => "offline",
-        "include_granted_scopes" => "true"
-      }
+      :redirect_uri => "postmessage",
     )
-    p "fetch"
-    result = auth_client.fetch_access_token!
-    p result
+    auth_client.code = params[:authcode]
+    auth_client.fetch_access_token!
+    auth_client.client_secret = nil
+    user.drive_cred = auth_client.to_json
+    user.save
+    p "successfully got drive cred for user #{user.id}"
+    DriveState.init_for_session(session)
+    render :json => {
+      :success => true
+    }
   end
 
   private
