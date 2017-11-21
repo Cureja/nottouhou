@@ -66,18 +66,57 @@ function initializeStage() {
 	}
 	master.fragment(14000);
 
+	for (var k = 0; k < 1; k ++) {
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, - 50, 30)
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 4, 750));
+
+		master.addEvent(0, (_) => {
+			enemies.dispatch(1);
+			return REMOVE_EVENT;
+		});
+
+		for(var i = 0; i < 30; i++) {
+			new BoundedProjectile(enemyProjectiles, "orbOrange", 0, 0, 1)
+				.dependOn(dependsEnemyAlive(enemy._gc))
+				.setRelativeTo(enemy, 0, 0)
+				.addEvent(100 * i, createArcingMovement(app.renderer.width / 2 + 100, app.renderer.height / 2, app.renderer.width / 2, app.renderer.height + 1, 1500));
+			new BoundedProjectile(enemyProjectiles, "orbOrange", 0, 0, 1)
+				.dependOn(dependsEnemyAlive(enemy._gc))
+				.setRelativeTo(enemy, 0, 0)
+				.addEvent(100 * i, createArcingMovement(app.renderer.width / 2 - 100, app.renderer.height / 2, app.renderer.width / 2, app.renderer.height + 1, 1500));
+
+			master.addEvent(750 + i * 100, (_) => {
+				enemyProjectiles.dispatch(2);
+				return REMOVE_EVENT;
+			});
+		}
+
+		for(var i = 0; i < 10; i++) {
+			new BoundedProjectile(enemyProjectiles, "orbLightBlue", 0, 0, 1)
+				.dependOn(dependsEnemyAlive(enemy._gc))
+				.setRelativeTo(enemy, 0, 0)
+				.addEvent(100 * i, createLinearProjection(app.renderer.width / 2, 500, 1500));
+
+			master.addEvent(2750 + i * 200, (_) => {
+				enemyProjectiles.dispatch(1);
+				return REMOVE_EVENT;
+			});
+		}
+
+	}
+	master.fragment(1000);
+
 	for(var k = 0; k < 4; k++) {
-		let off = 28 * (k + 1);
 		let left = new Enemy(enemies, "fairyRed", -28, -50, 5)
-			.addEvent(300 + 1800 * k, createProjectionToPlayer(2500));
+			.addEvent(300 + 1800 * k, createLinearProjection(app.renderer.width / 2 - 14 * k, 450, 2500));
 		let lMiddle1 = new Enemy(enemies, "fairyGreen", app.renderer.width / 2 - 28, -50, 5)
-			.addEvent(600 + 1800 * k, createProjectionToPlayer(2500));
+			.addEvent(600 + 1800 * k, createProjectionToPlayer(2500 - 100 * k));
 		let rMiddle1 = new Enemy(enemies, "fairyBlue", app.renderer.width / 2 + 28, -50, 5)
-			.addEvent(900 + 1800 * k, createProjectionToPlayer(2500));
+			.addEvent(900 + 1800 * k, createLinearProjection(app.renderer.width - 150, app.renderer.height / 2 + 50 * k, 2500));
 		let right = new Enemy(enemies, "fairyGreen", app.renderer.width + 28, -50, 5)
 			.addEvent(1200 + 1800 * k, createProjectionToPlayer(2500));
 		let rMiddle2 = new Enemy(enemies, "fairyBlue", app.renderer.width / 2 + 28, -50, 5)
-			.addEvent(1500 + 1800 * k, createProjectionToPlayer(2500));
+			.addEvent(1500 + 1800 * k, createProjectionToPlayer(2500 + 150 * k));
 		let lMiddle2 = new Enemy(enemies, "fairyRed", app.renderer.width / 2 - 28, -50, 5)
 			.addEvent(1800 + 1800 * k, createProjectionToPlayer(2500));
 
@@ -88,6 +127,7 @@ function initializeStage() {
 			});
 		}
 	}
-
 	master.fragment(6000);
+
+	
 }
