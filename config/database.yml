@@ -25,6 +25,12 @@ development:
   <<: *default
   database: nottouhou_development
 
+  # # CSIL database
+  # database: cmpt276
+  # username: cmpt276
+  # password: thecmpt276Passw0rd
+  # host: localhost
+
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
   # When left blank, postgres will use the default role. This is
@@ -58,6 +64,12 @@ development:
 test:
   <<: *default
   database: nottouhou_test
+
+  # # CSIL database
+  # database: cmpt276_test
+  # username: cmpt276
+  # password: thecmpt276Passw0rd
+  # host: localhost 
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

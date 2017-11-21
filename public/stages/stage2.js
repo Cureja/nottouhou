@@ -175,7 +175,7 @@ function initializeStage() {
 		let xSpawn = app.renderer.width / 2 + 350 * xmod;
 		let yOffset = 60 + 60 * k;
 		let xGenerate = app.renderer.width / 2 + 250 * xmod; 
-		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset)
+		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset, 3)
 			.addEvent(0, createLinearMovement(xGenerate, yOffset, 500))
 			.addEvent(8000, createLinearProjection(app.renderer.width / 2 + 350 * xmod, yOffset, 500))
 			.addEvent(9000, createDestructor());
@@ -192,7 +192,6 @@ function initializeStage() {
 	}
 	for(var i = 0; i < 5; i++){
 		master.addEvent(2000, (_) => {
-			console.log(enemyProjectiles.index);
 			enemyProjectiles.dispatch(1)
 			enemyProjectiles.seek(1)
 			return REMOVE_EVENT;
@@ -202,12 +201,10 @@ function initializeStage() {
 	
 	master.addEvent(2500, (_) => {
 			enemyProjectiles.seek(-9);
-			console.log(enemyProjectiles.index);
 	});
 	
 	for(var i = 0; i < 4; i++){
 		master.addEvent(3750, (_) => {
-			console.log(enemyProjectiles.index)
 			enemyProjectiles.dispatch(1);
 			enemyProjectiles.seek(1);
 			return REMOVE_EVENT;
@@ -215,6 +212,13 @@ function initializeStage() {
 	}
 
 	master.fragment(9000);
+
+	//Kills immediately after fragment
+	new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1).setRelativeTo(player, 0, 0);
+  	master.addEvent(0, (_) => {
+      enemyProjectiles.dispatch(1);
+      return REMOVE_EVENT;
+    });
 }
 
 
