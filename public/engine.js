@@ -338,7 +338,6 @@ class Master extends Entity {
 				e.destroy();
 			}
 		}
-		player.destroy();
 		enemyProjectiles.clear();
 		playerProjectiles.clear();
 		enemies.clear();
@@ -450,6 +449,7 @@ class Player {
 		this.shootCooldown = 0;
 		this.gc = new GarbageCollector();
 		this.score = 0;
+		this.destroyed = false;
 
 		this.handle = new PIXI.extras.AnimatedSprite(animations["playerIdle"].frames);
 		this.handle.loop = animations["playerIdle"].loop;
@@ -462,7 +462,7 @@ class Player {
 	}
 
 	runAnimation(name) {
-		if (this.currentAnim != name) {
+		 if (!this.destroyed && this.currentAnim != name) {
 			this.currentAnim = name;
 			this.handle.textures = animations[name].frames;
 			this.handle.loop = animations[name].loop;
@@ -530,12 +530,13 @@ class Player {
 			console.log("You scored", player.score, "points!");
 			console.log()
 			$.post("/highscores",{score: player.score});
-			//allowGameLoop = false;
+			this.destroyed = true;
 			master.destroy();
 			if(!deathReplay) {
 				deathReplay = true;
 				master = new Master();
 				animations.clear();
+				app.stage.removeChild(player.handle)
 				playerProjectiles = new Dispatcher();
 				enemyProjectiles = new Dispatcher();
 				enemies = new Dispatcher();
@@ -544,6 +545,9 @@ class Player {
 				startTime = getTimeNow();
 				for(i=0; i<7; i++) {
 					pastAct[i] = false;
+				}
+				for(x in keysUsed) {
+					keys[keysUsed[x]] = false;
 				}
 				let index = 0;
 				window.removeEventListener("keydown", (e) => {
@@ -557,18 +561,13 @@ class Player {
 				initializeStage();
 				master.dispatch();
 			}
+			else {
+				allowGameLoop = false;
+			}
 		}
 	}
 
-	destroy() {
-		//PIXI.ticker.shared.remove(this.onUpdate, this);
-		this.destroyed = true;
-		if (this.tracker != null) { //if not master
-			this.tracker.untrack(this);
-			app.stage.removeChild(this.handle);
-			this.handle.destroy();
-		}
-	}
+
 }
 
 const VK_X = 88; //bomb
