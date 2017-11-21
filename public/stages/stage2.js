@@ -194,20 +194,21 @@ function initializeStage() {
 		master.addEvent(2000, (_) => {
 			enemyProjectiles.dispatch(1)
 			enemyProjectiles.seek(1);
+			console.log(enemyProjectiles.index);
 		});
-		console.log(enemyProjectiles.index);
+		
 	}
-	console.log(enemyProjectiles.index);
 	master.addEvent(2500, (_) => {
 			enemyProjectiles.seek(-9);
+			console.log(enemyProjectiles.index);
 	});
-	console.log(enemyProjectiles.index);
+	
 	for(var i = 0; i < 4; i++){
 		master.addEvent(3000, (_) => {
 			enemyProjectiles.dispatch(1)
-			enemyProjectiles.seek(-1);
+			enemyProjectiles.seek(2);
+			console.log(enemyProjectiles.index);
 		});		
-		console.log(enemyProjectiles.index);
 	}
 
 
