@@ -2,6 +2,7 @@
 //subterranean animism, stage 1, normal
 
 function initializeStage() {
+	/*
 	for (var k = 0; k < 3; ++k) {
 		let off = 28 * (k + 1);
 		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 5)
@@ -127,7 +128,92 @@ function initializeStage() {
 			});
 		}
 	}
-	master.fragment(6000);
+	master.fragment(12000);
 
-	
+	for (var k = 0; k < 4; k++) {
+		let sideOffSet = 25 * (k + 1);
+		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 3)
+			.addEvent(0, createLinearMovement(sideOffSet, 32, 1000))
+			.addEvent(8000 + k * 200, createLinearProjection(app.renderer.width + 30, 2 * app.renderer.height / 3, 750))
+			.addEvent(9000 + k * 200, createDestructor());
+		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 3)
+			.addEvent(0, createLinearMovement(app.renderer.width - sideOffSet, 32, 1000))
+			.addEvent(8000 + k * 200, createLinearProjection(-30, 2 * (app.renderer.width / 3), 750))
+			.addEvent(9000 + k * 200, createDestructor());
+		let midSide = new Enemy(enemies, "cirno", 30, -20, 3)
+			.addEvent(0, createLinearMovement(250 + sideOffSet, 32, 1000))
+			.addEvent(8000, createProjectionToPlayer(500));
+
+		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1)
+			.dependOn(dependsEnemyAlive(leftSide._gc))
+			.setRelativeTo(leftSide, 0, 0)
+			.addEvent(0, (self) => { self.handle.y += 8; return 10; });
+		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1)
+			.dependOn(dependsEnemyAlive(rightSide._gc))
+			.setRelativeTo(rightSide, 0, 0)
+			.addEvent(0, (self) => { self.handle.y += 8; return 10; });
+		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0 ,0, 1)
+			.dependOn(dependsEnemyAlive(midSide._gc))
+			.setRelativeTo(midSide, 0, 0)
+			.addEvent(0, (self) => { self.handle.y += 8; return 10; });
+
+		master.addEvent(500 + k * 500, (_) => {
+			enemies.dispatch(3);
+			return REMOVE_EVENT;
+		});
+	}
+	master.addEvent(3000, (_) => {
+		console.log(enemyProjectiles.index);
+		enemyProjectiles.dispatch(12);
+		return REMOVE_EVENT;
+  	});
+
+	master.fragment(9800);
+	*/
+	var xmod = -1;
+	for(var k = 0; k < 9; k++) {
+		let xSpawn = app.renderer.width / 2 + 350 * xmod;
+		let yOffset = 60 + 60 * k;
+		let xGenerate = app.renderer.width / 2 + 250 * xmod; 
+		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset)
+			.addEvent(0, createLinearMovement(xGenerate, yOffset, 500))
+			.addEvent(8000, createLinearProjection(app.renderer.width/2 + 350 * xmod, yOffset, 500))
+			.addEvent(9000, createDestructor());
+		new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1)
+			.dependOn(dependsEnemyAlive(leftAndRight._gc))
+			.setRelativeTo(leftAndRight, 0, 0)
+			.addEvent(0, (self) =>  {self.handle.x += 8 * xmod; return 10; })
+		master.addEvent(500 + k * 50, (_) => {
+			enemies.dispatch(1);
+			return REMOVE_EVENT;
+		});
+
+		xmod *= -1;
+	}
+	for(var i = 0; i < 5; i++){
+		master.addEvent(2000, (_) => {
+			enemyProjectiles.dispatch(1)
+			enemyProjectiles.seek(1);
+		});
+		console.log(enemyProjectiles.index);
+	}
+	console.log(enemyProjectiles.index);
+	master.addEvent(2500, (_) => {
+			enemyProjectiles.seek(-9);
+	});
+	console.log(enemyProjectiles.index);
+	for(var i = 0; i < 4; i++){
+		master.addEvent(3000, (_) => {
+			enemyProjectiles.dispatch(1)
+			enemyProjectiles.seek(-1);
+		});		
+		console.log(enemyProjectiles.index);
+	}
+
+
+	master.fragment(9000);
+
+
 }
+
+
