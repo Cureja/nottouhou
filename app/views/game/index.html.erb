@@ -8,6 +8,69 @@
 	<script src="events.js"></script>
 	<script src="stages/stage<%=@stage%>.js"></script>
 	<style>
+	 ul {
+		 list-style-type: none;
+		 margin: 0;
+		 padding: 0;
+		 overflow: hidden;
+		 background-color: #FF69B4; //pink
+		 position: fixed;
+		 top: 10px;
+		 border-radius: 10px;
+		 float: left;
+		 border: 2px solid #fefefe; //white
+ 	 }
+
+	 p {
+		 font-family: sans-serif;
+		 color: #FC466B;//bluetext
+		 font-weight: bold;
+	 }
+
+	 li {
+		 float:left;
+	 }
+
+	 li a {
+		 display: block;
+		 color: white;
+		 text-align: center;
+		 padding: 14px 16px;
+		 text-decoration: none;
+	 }
+
+	 li a:hover {
+		 background-color: #e68db9; //hover light pink
+	 }
+
+	 .paddingForNavigation{
+		 padding-left: 10%;
+		 padding-top: 20px;
+
+	 }
+	  .userProfile {
+		  border-radius: 50%;
+		  float: left;
+		  width: 100px;
+		  height: 100px;
+
+		  background-image: url("/QuestionMark.png");
+		  background-repeat: no-repeat;
+		  background-position: center center;
+		  background-size: cover;
+	  }
+
+	  .currentUser {
+		  border: 2px solid black;
+			background-color: pink;
+		  width: 30%;
+		  height: auto;
+		  text-align: center;
+		  float: right;
+		  border-radius: 10px;
+		  margin: auto;
+	  }
+
 		.background {
 			background: url("/game.jpg") no-repeat center fixed;
 			background-size: cover;
@@ -23,12 +86,26 @@
 			left: 0;
 			right: 0;
 		}
+
 	</style>
 </head>
-<body>
- <body class="background">
-	 <div class="game_container" id="game-container">
-
-	 </div>
+<body class="background">
+	<div class = "paddingForNavigation">
+		<ul>
+			<li><a href="/profile" >Campaign</a></li>
+			<li><a href="/replays"> Replays</a></li>
+			<li><a href="/highscores"> Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a>Message Board</a></li>
+			<li><a href="/logout">Log Out</a></li>
+			<li><a href="/driveauth">Connect Drive</a></li>
+		</ul>
+	</div>
+	<div class="currentUser">
+		<div class="userProfile"></div>
+		<p><%= @user.username %></p>
+	</div>
+	<div class="game_container" id="game-container">
+	</div>
 </body>
 </html>
