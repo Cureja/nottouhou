@@ -2,6 +2,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  def redirect_if_not_logged_in
+    user = current_user
+    if user.nil? then
+      redirect_to :controller => "login", :action => "index"
+    end
+  end
+
   def redirect_if_logged_in
     user = current_user
     if !user.nil? then

@@ -1,0 +1,9 @@
+{"frames": {"fairyRed0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 23, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 23}, "spriteSourceSize": {"y": 0, "x": 0, "w": 23, "h": 25}},
+            "fairyRed1": {"trimmed": false, "frame": {"y": 0, "x": 31, "w": 25, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 25}, "spriteSourceSize": {"y": 0, "x": 0, "w": 25, "h": 25}},
+            "fairyRed2": {"trimmed": false, "frame": {"y": 0, "x": 61, "w": 29, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 29}, "spriteSourceSize": {"y": 0, "x": 0, "w": 29, "h": 25}},
+            "fairyRed3": {"trimmed": false, "frame": {"y": 0, "x": 95, "w": 28, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 25}},
+            "fairyRed4": {"trimmed": false, "frame": {"y": 0, "x": 126, "w": 28, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 25}},
+            "fairyRed5": {"trimmed": false, "frame": {"y": 0, "x": 160, "w": 25, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 25}, "spriteSourceSize": {"y": 0, "x": 0, "w": 26, "h": 25}},
+            "fairyRed6": {"trimmed": false, "frame": {"y": 0, "x": 190, "w": 29, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 29}, "spriteSourceSize": {"y": 0, "x": 0, "w": 29, "h": 25}},
+            "fairyRed7": {"trimmed": false, "frame": {"y": 0, "x": 222, "w": 28, "h": 25}, "rotated": false, "sourceSize": {"h": 25, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 25}}},
+            "meta": {"image": "src/enemy1.png", "format": "RGBA8888"}}
