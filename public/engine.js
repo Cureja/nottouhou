@@ -551,11 +551,11 @@ class Player {
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
 			console.log()
-			$.post("/highscores",{score: player.score});
 			this.destroyed = true;
 			master.destroy();
 			if(!deathReplay) {
 				deathReplay = true;
+				$.post("/highscores",{score: player.score});
 				master = new Master();
 				animations.clear();
 				app.stage.removeChild(player.handle)
