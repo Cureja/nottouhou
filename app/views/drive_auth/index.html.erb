@@ -16,7 +16,6 @@
 				auth2.grantOfflineAccess().then((authResult) => {
 					let code = authResult["code"];
 					if (code) {
-						console.log("got auth code: " + code);
 						$.post(window.location, {
 							authcode: code,
 							authenticity_token: $("#authenticity-token").attr("content")
