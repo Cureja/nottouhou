@@ -14,16 +14,24 @@
 					scope: "https://www.googleapis.com/auth/drive.file"
 				});
 				auth2.grantOfflineAccess().then((authResult) => {
-					if (authResult.code) {
-						console.log("got auth code: " + authResult.code);
+					let code = authResult["code"];
+					if (code) {
 						$.post(window.location, {
-							authcode: authResult.code,
+							authcode: code,
 							authenticity_token: $("#authenticity-token").attr("content")
 						}, (postResult) => {
-							console.log("post result: " + postResult);
+							if (postResult["success"]) {
+								$("body").html("Success. Returning to profile.");
+								setTimeout(() => {
+									window.location.replace(window.location + "/../profile");
+								}, 2000);
+							} else {
+								$("body").html("Server-side authentication failed.");
+							}
+							
 						});
 					} else {
-						$("#body").html("Auth request failed.");
+						$("body").html("Auth request failed.");
 					}
 				});
 			});
@@ -31,5 +39,6 @@
 	</script>
 </head>
 <body>
+	Your browser will likely prevent the sign-in popup. If so, allow the popup and reload the page.
 </body>
 </html>

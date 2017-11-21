@@ -6,6 +6,7 @@ require 'rails/all'
 require 'google/apis/drive_v3'
 require 'googleauth'
 require 'googleauth/stores/file_token_store'
+require 'google/api_client/client_secrets'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -17,7 +18,7 @@ module Nottouhou
     config.load_defaults 5.1
 
     config.after_initialize do
-      $client_secrets = Google::Auth::ClientId.from_file(File.join(Rails.root, 'config', 'drive_api_secret.json'))
+      $client_secrets = Google::APIClient::ClientSecrets.load(File.join(Rails.root, 'config', 'drive_api_secret.json'))
     end
 
     # Settings in config/environments/* take precedence over those specified here.

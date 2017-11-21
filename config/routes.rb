@@ -21,11 +21,9 @@ Rails.application.routes.draw do
   get '/highscores' => 'highscores#index'
   post '/highscores' => 'highscores#create'
 
-    get '/replays' => 'replays#index'
+  get '/replays' => 'replays#index'
 
+  post '/postreplay' => 'post_replay#create'
 
   root 'front#index'
-
-  #match ':controller(/:action(/:id))', :via => :get
-  #match ':controller(/:action(/:id))', :via => :post
 end
