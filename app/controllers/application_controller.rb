@@ -6,14 +6,18 @@ class ApplicationController < ActionController::Base
     user = current_user
     if user.nil? then
       redirect_to :controller => "login", :action => "index"
+      return true
     end
+    return false
   end
 
   def redirect_if_logged_in
     user = current_user
     if !user.nil? then
       redirect_to :controller => "profile", :action => "index"
+      return true
     end
+    return false
   end
 
   def remember(user)

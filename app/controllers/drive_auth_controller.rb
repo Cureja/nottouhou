@@ -1,5 +1,7 @@
 
 require "googleauth"
+require "drive_state"
+require "replay_wrap"
 
 class DriveAuthController < ApplicationController
   def index
@@ -7,19 +9,24 @@ class DriveAuthController < ApplicationController
   end
 
   def create
-    redirect_if_not_logged_in
     user = current_user
-    if !user.refresh_token.nil? then
-      redirect_if_logged_in
+    if user.nil? then
+      p "authcode was posted to /driveauth but no user is in session"
+      return
     end
 
-    drivestate = Replay::DriveState.new(user)
-    drivestate.create_new(params[:authcode])
+    drivestate = DriveState.new(user)
+    if user.drive_refresh_token.nil? then
+      drivestate.create_new(params[:authcode])
+    else
+      drivestate.recreate
+    end
 
-    replay = Replay.new
+    replay = ReplayWrap.new(user: user)
     replay.service = drivestate.service
     replay.events = [1,2,3]
     replay.store
+    replay.retrieve
 
     render :json => {
       :success => true
