@@ -7,7 +7,8 @@ class CreateUsers < ActiveRecord::Migration[5.1]
       t.integer :level
       t.integer :exp
       t.integer :campaign_progress
-      t.string :drive_cred
+      t.string :drive_refresh_token
+      t.string :drive_access_token
 
       t.timestamps
     end

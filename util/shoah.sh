@@ -1,2 +1,2 @@
 #!/bin/bash
-cd .. && rake db:drop db:create db:reset db:migrate
+cd .. && rake db:drop db:create db:migrate db:seed

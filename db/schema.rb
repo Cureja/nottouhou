@@ -31,14 +31,14 @@ ActiveRecord::Schema.define(version: 20171120180059) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.string "password"
+    t.string "password_digest"
     t.integer "level"
     t.integer "exp"
     t.integer "campaign_progress"
-    t.string "drive_cred"
+    t.string "drive_refresh_token"
+    t.string "drive_access_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "password_digest"
     t.string "remember_digest"
     t.index ["username"], name: "index_users_on_username", unique: true
   end
