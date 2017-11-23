@@ -492,6 +492,15 @@ class Player {
 		}
 	}
 
+	getLocation() {
+		return {x:this.handle.x, y:this.handle.y};
+	}
+
+	setLocation(loc) {
+		this.handle.x = loc.x;
+		this.handle.y = loc.y;
+	}
+
 	move(x, y) {
 		let minx = this.handle.width / 2;
 		let maxx = app.renderer.width - minx;
@@ -545,8 +554,10 @@ class Player {
 	}
 
 	onCollide(projectile) {
-		this.health -= projectile.damage;
-		projectile.destroy();
+		if(!deathReplay) {
+			this.health -= projectile.damage;
+			projectile.destroy();
+		}
 		if (this.health <= 0) {
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
@@ -564,14 +575,12 @@ class Player {
 				enemies = new Dispatcher();
 				player = new Player()
 				PIXI.ticker.shared.add(this.onUpdate, this);
-				startTime = getTimeNow();
 				for(i=0; i<7; i++) {
 					pastAct[i] = false;
 				}
 				for(x in keysUsed) {
 					keys[keysUsed[x]] = false;
 				}
-				let index = 0;
 				window.removeEventListener("keydown", (e) => {
 					keys[e.keyCode] = true;
 					keys[VK_SHIFT] = e.shiftKey;
@@ -581,6 +590,7 @@ class Player {
 					keys[VK_SHIFT] = e.shiftKey;
 				});
 				initializeStage();
+				startTime = getTimeNow();
 				master.dispatch();
 			}
 			else {
@@ -626,12 +636,10 @@ let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right
 for(i=0; i<7; i++) {
 	pastAct[i] = false;
 }
-let index = 0;
+let replayIndex = 0;
 let replay = new List(1000);
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
-	
-	startTime = getTimeNow();
 	app.ticker.add(() => {
 		if (!allowGameLoop) {
 			return;
@@ -642,23 +650,28 @@ PIXI.loader.onComplete.add(() => {
 
 		//replays
 		if(!deathReplay) {
-			var currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
+			let currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
 						    keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]];
 
 			for(n=0; n<currAct.length; n++) {
 				if(pastAct[n] != currAct[n]) {
-					//console.log(pastAct[n]+" and "+currAct[n]);
-					replay.push({key:n,time:getTimeNow()-startTime});
+					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
 					pastAct[n] = currAct[n];
-
-				}
+				} 
 			}
 		} else {
-			//console.log(replay.get(0)+" and "+replay.get(0));
-			while(index < replay.size() && replay.get(index).time < getTimeNow()-startTime) {
-				console.log(replay.get(index).time+" and "+getTimeNow()-startTime);
-				pastAct[replay.get(index).key] = !pastAct[replay.get(index).key];
-				index++;
+			if(getTimeNow()-startTime > deathTime) {
+				allowGameLoop = false;
+			}
+			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime) {
+				// Commented out: Accuracy check, with super button mash gets at most 6 pixels off?
+				// if(replay.get(replayIndex).location.x  != player.getLocation().x || replay.get(replayIndex).location.y != player.getLocation().y) {
+				// 	console.log(replayIndex+"-Location: "+replay.get(replayIndex).location.x+" , "+replay.get(replayIndex).location.y);
+				// 	console.log(replayIndex+"-Guess Location: "+player.getLocation().x+" , "+player.getLocation().y);
+				// }
+				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
+				player.setLocation(replay.get(replayIndex).location);
+				replayIndex++;
 			}
 			keys[VK_X] = pastAct[0];
 			keys[VK_Z] = pastAct[1];
@@ -728,5 +741,6 @@ PIXI.loader.onComplete.add(() => {
 		//TODO add player colliding with enemies. 1 damage
 	});	
 	initializeStage();	
+	startTime = getTimeNow();
 	master.dispatch();
 });
