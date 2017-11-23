@@ -559,43 +559,47 @@ class Player {
 			projectile.destroy();
 		}
 		if (this.health <= 0) {
+			this.die();
+		}
+	}
+
+	die() {
+		deathTime = getTimeNow() - startTime;
+		master.destroy();
+		if(!deathReplay) {
+			deathReplay = true;
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
 			console.log()
-			this.destroyed = true;
-			master.destroy();
-			if(!deathReplay) {
-				deathReplay = true;
-				$.post("/highscores",{score: player.score});
-				master = new Master();
-				animations.clear();
-				app.stage.removeChild(player.handle)
-				playerProjectiles = new Dispatcher();
-				enemyProjectiles = new Dispatcher();
-				enemies = new Dispatcher();
-				player = new Player()
-				PIXI.ticker.shared.add(this.onUpdate, this);
-				for(i=0; i<7; i++) {
-					pastAct[i] = false;
-				}
-				for(x in keysUsed) {
-					keys[keysUsed[x]] = false;
-				}
-				window.removeEventListener("keydown", (e) => {
-					keys[e.keyCode] = true;
-					keys[VK_SHIFT] = e.shiftKey;
-				});
-				window.removeEventListener("keyup", (e) => {
-					keys[e.keyCode] = false;
-					keys[VK_SHIFT] = e.shiftKey;
-				});
-				initializeStage();
-				startTime = getTimeNow();
-				master.dispatch();
+			$.post("/highscores",{score: player.score});
+			master = new Master();
+			animations.clear();
+			app.stage.removeChild(player.handle)
+			playerProjectiles = new Dispatcher();
+			enemyProjectiles = new Dispatcher();
+			enemies = new Dispatcher();
+			player = new Player()
+			PIXI.ticker.shared.add(this.onUpdate, this);
+			for(i=0; i<7; i++) {
+				pastAct[i] = false;
 			}
-			else {
-				allowGameLoop = false;
+			for(x in keysUsed) {
+				keys[keysUsed[x]] = false;
 			}
+			window.removeEventListener("keydown", (e) => {
+				keys[e.keyCode] = true;
+				keys[VK_SHIFT] = e.shiftKey;
+			});
+			window.removeEventListener("keyup", (e) => {
+				keys[e.keyCode] = false;
+				keys[VK_SHIFT] = e.shiftKey;
+			});
+			initializeStage();
+			startTime = getTimeNow();
+			master.dispatch();
+		}
+		else {
+			allowGameLoop = false;
 		}
 	}
 
@@ -621,6 +625,7 @@ for(x in keysUsed) {
 }
 let deathReplay = false;
 let startTime;
+let deathTime;
 
 window.addEventListener("keydown", (e) => {
 	keys[e.keyCode] = true;
@@ -661,15 +666,15 @@ PIXI.loader.onComplete.add(() => {
 			}
 		} else {
 			if(getTimeNow()-startTime > deathTime) {
-				allowGameLoop = false;
+				player.die();
 			}
 			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime) {
+				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
 				// Commented out: Accuracy check, with super button mash gets at most 6 pixels off?
 				// if(replay.get(replayIndex).location.x  != player.getLocation().x || replay.get(replayIndex).location.y != player.getLocation().y) {
 				// 	console.log(replayIndex+"-Location: "+replay.get(replayIndex).location.x+" , "+replay.get(replayIndex).location.y);
 				// 	console.log(replayIndex+"-Guess Location: "+player.getLocation().x+" , "+player.getLocation().y);
 				// }
-				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
 				player.setLocation(replay.get(replayIndex).location);
 				replayIndex++;
 			}
