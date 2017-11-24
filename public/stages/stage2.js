@@ -267,6 +267,34 @@ function initializeStage() {
 	master.fragment(10000);
 
 	/**
+	* NOT SURE IF THIS WORKS YET
+	*/
+	for(var i = 0; i < 1; i++) {
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1250))
+			.addEvent(4000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
+			.addEvent(5000, createDestructor());
+
+		master.addEvent(1000, (_) => {
+			enemies.dispatch(1);
+			return REMOVE_EVENT;
+		});
+
+		for(var k = 0; k < 30; k++) {
+			new BoundedProjectile(enemyProjectiles, "orbMagenta", 0, 0, 1)
+				.dependOn(dependsEnemyAlive(enemy._gc))
+				.setRelativeTo(enemy, 0, 0)
+				.addEvent(1500, createSpiralProjection(30, 150, 1500));
+
+			master.addEvent(2250 + k * 50, (_) => {
+				enemies.dispatch(1);
+				return REMOVE_EVENT;
+			});
+		}
+	}
+	master.fragment(10000);
+
+	/**
 	* Kills 1 second after last fragment
 	* ALWAYS KEEP AT BOTTOM
 	*/
