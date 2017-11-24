@@ -74,9 +74,15 @@ function createLinearProjection(midX, midY, overMS) {
 	};
 }
 
+function createProjectionToPlayer(overMS) {
+	return (entity) => {
+		return createLinearProjection(player.handle.x, player.handle.y, overMS)(entity);
+	}
+}
+
 /**
-* Creates a movement that moves an entity in an arc.
-* The line will be a Bezier Curve with curveX,curveY as a secondary point
+* Creates a movement event that moves an entity in an arc.
+* The line will be a Bezier Curve with curveX,curveY as a "pull" on your begin and end coordinates
 */
 function createArcingMovement(curveX, curveY, toX, toY, overMS) {
 	return (entity) => {
@@ -99,9 +105,53 @@ function createArcingMovement(curveX, curveY, toX, toY, overMS) {
 	}
 }
 
-function createProjectionToPlayer(overMS) {
+/**
+* NOT SURE IF THIS WORKS YET
+* Creates a movement event that moves an entity in a spiral.
+* The circle begins with a radius of startRadius, and expands by a percentage of midRadius.
+*/
+function createSpiralMovement(curveX, curveY, toX, toY, overMS) {
 	return (entity) => {
-		return createLinearProjection(player.handle.x, player.handle.y, overMS)(entity);
+		let fromX = entity.handle.x;
+		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
+		let event = (entity) => {
+			let diff = getTimeNow() - startTime;
+			let theta = 360 * (diff / overMS);
+			if (diff >= overMS) {
+				entity.handle.x = toX;
+				entity.handle.y = toY;
+				return REMOVE_EVENT;
+			}
+			entity.handle.x = fromY + startRadius * (midRadius * (diff / overMS)) * Math.cos(theta);
+			entity.handle.y = fromX + startRadius * (midRadius * (diff / overMS)) * Math.sin(theta);
+			return 10;
+		};
+		entity.mutateEvent(event);
+		return event(entity);
+	}
+}
+
+/**
+* NOT SURE IF THIS WORKS YET
+* Creates a movement event that moves an entity in a spiral.
+* The circle begins with a radius of startRadius, and expands by a percentage of midRadius with no end.
+* This event should be wrapped by another that checks bounds (or applied to a BoundedProjectile).
+*/
+function createSpiralProjection(startRadius, midRadius, overMS) {
+	return (entity) => {
+		let fromX = entity.handle.x;
+		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
+		let event = (entity) => {
+			let diff = getTimeNow() - startTime;
+			let theta = 360 * (diff / overMS);
+			entity.handle.x = fromY + startRadius * (midRadius * (diff / overMS)) * Math.cos(theta);
+			entity.handle.y = fromX + startRadius * (midRadius * (diff / overMS)) * Math.sin(theta);
+			return 10;
+		}
+		entity.mutateEvent(event);
+		return event(entity);
 	}
 }
 
