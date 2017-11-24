@@ -155,6 +155,57 @@ function createSpiralProjection(startRadius, midRadius, overMS) {
 	}
 }
 
+/**
+* PROBABLY DOESN'T WORK AS INTENDED IF AT ALL
+* Creates a movement event that moves an entity in a circle of set radius.
+* The circle will move to (midX, midY) as it rotates
+* To guarantee that it stays on the same Y axis as before, make sure toX is a multiple of 2 * radius.
+*/
+function createCircularMovement(radius, toX, toY, overMS) {
+	return (entity) => {
+		let fromX = entity.handle.x;
+		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
+		let event = (entity) => {
+			let diff = getTimeNow() - startTime;
+			if (diff >= overMS) {
+				entity.handle.x = toX + radius * Math.cos(theta);
+				entity.handle.y = toY + radius * Math.sin(theta);
+				return REMOVE_EVENT;
+			}
+			entity.handle.x = fromY + radius * Math.cos(theta) + toX * (diff / overMS);
+			entity.handle.y = fromX + radius * Math.sin(theta) + toY * (diff / overMS);
+			return 10;
+		}
+		entity.mutateEvent(event);
+		return event(entity);
+	}
+}
+
+/**
+* PROBABLY DOESN'T WORK AS INTENDED IF AT ALL
+* Creates a movement event that moves an entity in a circle of set radius.
+* The circle will move to (midX, midY) as it rotates
+* This event should be wrapped by another that checks bounds (or applied to a BoundedProjectile).
+*/
+function createCircularProjection(radius, midX, midY, overMS) {
+	return (entity) => {
+		let fromX = entity.handle.x;
+		let fromY = entity.handle.y;
+		let startTime = getTimeNow();
+		let event = (entity) => {
+			let diff = getTimeNow() - startTime;
+			entity.handle.x = fromY + radius * Math.cos(theta) + midX * (diff / overMS);
+			entity.handle.y = fromX + radius * Math.sin(theta) + midY * (diff / overMS);
+			return 10;
+		}
+		entity.mutateEvent(event);
+		return event(entity);
+	}
+}
+
+
+
 function createDestructor() {
 	return (entity) => {
 		entity.destroy();
