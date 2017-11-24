@@ -263,10 +263,8 @@ function initializeStage() {
 				return REMOVE_EVENT;
 			});
 		}
-		master.fragment(10000);
-
-
 	}
+	master.fragment(10000);
 
 	/**
 	* Kills 1 second after last fragment
