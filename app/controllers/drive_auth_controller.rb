@@ -6,27 +6,28 @@ require "replay_wrap"
 class DriveAuthController < ApplicationController
   def index
     redirect_if_not_logged_in
+    @user = current_user
   end
 
   def create
-    user = current_user
-    if user.nil? then
+    @user = current_user
+    if @user.nil? then
       p "authcode was posted to /driveauth but no user is in session"
       return
     end
 
-    drivestate = DriveState.new(user)
-    if user.drive_refresh_token.nil? then
-      drivestate.create_new(params[:authcode])
+    drivestate = DriveState.new(@user)
+    if @user.drive_refresh_token.nil? then
+      if !drivestate.create_new(params[:authcode]) then
+        render :json => {
+          :success => false,
+          :error => "It appears our app already has access to your Google Drive, but we don't appear to have a record of that. Please revoke access under https://myaccount.google.com/security#connectedapps and try again."
+        }
+        return
+      end
     else
       drivestate.recreate
     end
-
-    replay = ReplayWrap.new(user: user)
-    replay.service = drivestate.service
-    replay.events = [1,2,3]
-    replay.store
-    replay.retrieve
 
     render :json => {
       :success => true
