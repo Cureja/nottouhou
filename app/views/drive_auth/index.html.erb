@@ -27,7 +27,11 @@
 									window.location.replace(window.location + "/../profile");
 								}, 2000);
 							} else {
-								$("body").html("Server-side authentication failed.");
+								let error = postResult["error"];
+								if (!error) {
+									error = "Server-side authentication failed.";
+								}
+								$("body").html(error);
 							}
 
 						});

@@ -21,7 +21,7 @@ class DriveAuthController < ApplicationController
       if !drivestate.create_new(params[:authcode]) then
         render :json => {
           :success => false,
-          :error => "It appears our app already has access to your Google Drive, but we don't appear to have a record of that. Please revoke access under https://myaccount.google.com/security#connectedapps and try again."
+          :error => "It appears our app already has access to your Google Drive, but we don't appear to have a record of that. Please revoke access <a href=\"https://myaccount.google.com/security#connectedapps\" target=\"_blank\">here</a> and try again."
         }
         return
       end
