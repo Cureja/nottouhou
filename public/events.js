@@ -106,18 +106,17 @@ function createArcingMovement(curveX, curveY, toX, toY, overMS) {
 }
 
 /**
-* NOT SURE IF THIS WORKS YET
 * Creates a movement event that moves an entity in a spiral.
 * The circle begins with a radius of startRadius, and expands by a percentage of midRadius.
 */
-function createSpiralMovement(curveX, curveY, toX, toY, overMS) {
+function createSpiralMovement(startRadius, midRadius, overMS) {
 	return (entity) => {
 		let fromX = entity.handle.x;
 		let fromY = entity.handle.y;
 		let startTime = getTimeNow();
 		let event = (entity) => {
 			let diff = getTimeNow() - startTime;
-			let theta = 360 * (diff / overMS);
+			let theta = 2 * Math.PI * (diff / overMS);
 			if (diff >= overMS) {
 				entity.handle.x = toX;
 				entity.handle.y = toY;
@@ -133,7 +132,6 @@ function createSpiralMovement(curveX, curveY, toX, toY, overMS) {
 }
 
 /**
-* NOT SURE IF THIS WORKS YET
 * Creates a movement event that moves an entity in a spiral.
 * The circle begins with a radius of startRadius, and expands by a percentage of midRadius with no end.
 * This event should be wrapped by another that checks bounds (or applied to a BoundedProjectile).
@@ -145,9 +143,9 @@ function createSpiralProjection(startRadius, midRadius, overMS) {
 		let startTime = getTimeNow();
 		let event = (entity) => {
 			let diff = getTimeNow() - startTime;
-			let theta = 360 * (diff / overMS);
-			entity.handle.x = fromY + startRadius * (midRadius * (diff / overMS)) * Math.cos(theta);
-			entity.handle.y = fromX + startRadius * (midRadius * (diff / overMS)) * Math.sin(theta);
+			let theta = 2 * Math.PI * (diff / overMS);
+			entity.handle.x = fromY + startRadius * Math.sqrt(midRadius * (diff / overMS)) * Math.cos(theta);
+			entity.handle.y = fromX + startRadius * Math.sqrt(midRadius * (diff / overMS)) * Math.sin(theta);
 			return 10;
 		}
 		entity.mutateEvent(event);
@@ -156,7 +154,6 @@ function createSpiralProjection(startRadius, midRadius, overMS) {
 }
 
 /**
-* PROBABLY DOESN'T WORK AS INTENDED IF AT ALL
 * Creates a movement event that moves an entity in a circle of set radius.
 * The circle will move to (midX, midY) as it rotates
 * To guarantee that it stays on the same Y axis as before, make sure toX is a multiple of 2 * radius.
@@ -168,13 +165,14 @@ function createCircularMovement(radius, toX, toY, overMS) {
 		let startTime = getTimeNow();
 		let event = (entity) => {
 			let diff = getTimeNow() - startTime;
+			let theta = 2 * Math.PI * (diff / overMS);
 			if (diff >= overMS) {
 				entity.handle.x = toX + radius * Math.cos(theta);
 				entity.handle.y = toY + radius * Math.sin(theta);
 				return REMOVE_EVENT;
 			}
-			entity.handle.x = fromY + radius * Math.cos(theta) + toX * (diff / overMS);
-			entity.handle.y = fromX + radius * Math.sin(theta) + toY * (diff / overMS);
+			entity.handle.x = fromX + radius * Math.cos(theta) + toX * (diff / overMS);
+			entity.handle.y = fromY + radius * Math.sin(theta) + toY * (diff / overMS);
 			return 10;
 		}
 		entity.mutateEvent(event);
@@ -183,7 +181,6 @@ function createCircularMovement(radius, toX, toY, overMS) {
 }
 
 /**
-* PROBABLY DOESN'T WORK AS INTENDED IF AT ALL
 * Creates a movement event that moves an entity in a circle of set radius.
 * The circle will move to (midX, midY) as it rotates
 * This event should be wrapped by another that checks bounds (or applied to a BoundedProjectile).
@@ -195,8 +192,9 @@ function createCircularProjection(radius, midX, midY, overMS) {
 		let startTime = getTimeNow();
 		let event = (entity) => {
 			let diff = getTimeNow() - startTime;
-			entity.handle.x = fromY + radius * Math.cos(theta) + midX * (diff / overMS);
-			entity.handle.y = fromX + radius * Math.sin(theta) + midY * (diff / overMS);
+			let theta = 2 * Math.PI * (diff / overMS);
+			entity.handle.x = fromX + radius * Math.cos(theta) + midX * (diff / overMS);
+			entity.handle.y = fromY + radius * Math.sin(theta) + midY * (diff / overMS);
 			return 10;
 		}
 		entity.mutateEvent(event);
