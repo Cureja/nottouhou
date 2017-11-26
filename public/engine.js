@@ -682,9 +682,13 @@ PIXI.loader.onComplete.add(() => {
 			keys[VK_Z] = pastAct[1];
 			keys[VK_SHIFT] = pastAct[2];
 			keys[VK_UP] = pastAct[3];
+			keys[VK_W] = pastAct[3];
 			keys[VK_DOWN] = pastAct[4];
+			keys[VK_S] = pastAct[4];
 			keys[VK_LEFT] = pastAct[5];
+			keys[VK_A] = pastAct[5];
 			keys[VK_RIGHT] = pastAct[6];
+			keys[VK_D] = pastAct[6];
 		}
 		// replays end
 
