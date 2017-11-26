@@ -207,23 +207,21 @@ function initializeStage() {
 	}
 	master.fragment(9000);
 
-
-	/**
-	* NOT SURE IF THIS WORKS YET
-	*/
 	for(var i = 0; i < 1; i++) {
-		let n = 15;
+		let n = 100, theta = 0;
 		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1250))
 			.addEvent(4000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(5000, createDestructor());
 
+
 		//Spawning n projectiles in a circle
-		for(var k = 0; k < 360; k += (360 / n)){
+		for(var k = 0; k < n; k++){
+			theta += 2 * Math.PI / n;
 			new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(enemy._gc))
-				.setRelativeTo(enemy, 15 * Math.cos(k), 15 * Math.sin(k))
-				.addEvent(1500, createLinearProjection(300 * Math.cos(k), 300 * Math.sin(k), 1000));
+				.setRelativeTo(enemy, 15 * Math.cos(theta), 15 * Math.sin(theta))
+				.addEvent(1500, createLinearProjection(app.renderer.width / 2 + 100 * Math.cos(theta), app.renderer.height / 2 + 100 * Math.sin(theta), 500));
 		}
 
 		master.addEvent(1000, (_) => {
@@ -232,15 +230,12 @@ function initializeStage() {
 		});
 
 		master.addEvent(2250, (_) => {
-			enemies.dispatch(n);
+			enemyProjectiles.dispatch(n);
 			return REMOVE_EVENT;
 		});
 	}
 	master.fragment(7000);
 
-	/**
-	* NOT SURE IF THIS WORKS YET
-	*/
 	for(var i = 0; i < 1; i++) {
 		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1250))
@@ -252,23 +247,20 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 
-		for(var k = 0; k < 30; k++) {
+		for(var k = 0; k < 1; k++) {
 			new BoundedProjectile(enemyProjectiles, "orbMagenta", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 0, 0)
-				.addEvent(1500, createSpiralProjection(30, 150, 1500));
+				.addEvent(1500, createSpiralProjection(10, 40, 1500));
 
 			master.addEvent(2250 + k * 50, (_) => {
-				enemies.dispatch(1);
+				enemyProjectiles.dispatch(1);
 				return REMOVE_EVENT;
 			});
 		}
 	}
 	master.fragment(10000);
 
-	/**
-	* NOT SURE IF THIS WORKS YET
-	*/
 	for(var i = 0; i < 1; i++) {
 		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1250))
@@ -280,14 +272,14 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 
-		for(var k = 0; k < 30; k++) {
-			new BoundedProjectile(enemyProjectiles, "orbMagenta", 0, 0, 1)
+		for(var k = 0; k < 1; k++) {
+			new BoundedProjectile(enemyProjectiles, "orbYellow", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 0, 0)
-				.addEvent(1500, createSpiralProjection(30, 150, 1500));
+				.addEvent(1500, createCircularProjection(30, 50, 50, 1500));
 
 			master.addEvent(2250 + k * 50, (_) => {
-				enemies.dispatch(1);
+				enemyProjectiles.dispatch(1);
 				return REMOVE_EVENT;
 			});
 		}
