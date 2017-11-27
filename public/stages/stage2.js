@@ -95,9 +95,10 @@ function initializeStage() {
 	master.fragment(14000);
 
 	for (var k = 0; k < 1; k ++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, - 50, 30)
-			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 4, 750));
-
+		let enemy = new Enemy(enemies, "letty", app.renderer.width / 2, - 50, 30)
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 4, 750))
+			.addEvent(3500, createLinearProjection(app.renderer.width, 0, 1000))
+			.addEvent(4500, createDestructor());
 		master.addEvent(0, (_) => {
 			enemies.dispatch(1);
 			return REMOVE_EVENT;
@@ -112,7 +113,7 @@ function initializeStage() {
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 0, 0)
 				.addEvent(0, createArcingMovement(app.renderer.width / 2 - 100, app.renderer.height / 2, app.renderer.width / 2, app.renderer.height + 1, 1500));
-			master.addEvent(00 + i * 100, (_) => {
+			master.addEvent(i * 100, (_) => {
 				enemyProjectiles.dispatch(2);
 				return REMOVE_EVENT;
 			});
@@ -121,7 +122,7 @@ function initializeStage() {
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 0, 0)
 				.addEvent(0, createLinearProjection(app.renderer.width / 2, app.renderer.height + 1, 1500));
-			master.addEvent(0 + i * 100, (_) => {
+			master.addEvent(i * 100, (_) => {
 				enemyProjectiles.dispatch(1);
 				return REMOVE_EVENT;
 			});
@@ -287,12 +288,12 @@ function initializeStage() {
 	master.fragment(1500);
 
 	for(var i = 0; i < 1; i++) {
-		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(app.renderer.width / 2 - 100, app.renderer.height / 2, 1000))
 			.addEvent(9000, createLinearMovement(0, app.renderer.height / 6, 500))
 			.addEvent(9500, createDestructor());
-		let right = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 			.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(app.renderer.width / 2 + 100, app.renderer.height / 2, 1000))
 			.addEvent(9000, createLinearMovement(app.renderer.width, app.renderer.height / 6, 500))

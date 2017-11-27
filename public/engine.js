@@ -706,7 +706,7 @@ PIXI.loader.onComplete.add(() => {
 		} else if (xdir > 0) {
 			player.runAnimation("playerIdleRight");
 		} else {
-			player.runAnimation("playerIdle")letty.png;
+			player.runAnimation("playerIdle");
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
 
