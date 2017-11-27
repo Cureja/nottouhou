@@ -84,24 +84,26 @@
 			border-radius: 10px;
 			margin: auto;
 		}
-		table {
-			border-spacing: 20px;
-		}
 		.stageTablePadding {
 			position: absolute;
 			top: 350px;
 			left: 200px;
-		}
-		.tableEntryPadding {
+			visibility: hidden;
 			background-color: #FF69B4;
 		}
 	</style>
+	<script>
+		function stageVisible(){
+			var element = document.getElementsByClassName("stageTablePadding");
+			element[0].style.visibility = "visible";
+		}
+	</script>
 </head>
 </head>
 <body class="background">
 	<div class = "paddingForNavigation">
 		<ul>
-			<li><a>Campaign</a></li>
+			<li><a onclick="stageVisible()">Campaign</a></li>
 			<li><a href="/replays"> Replays</a></li>
 			<li><a href="/highscores"> Hi-Scores</a></li>
 			<li><a>Coop</a></li>
@@ -118,10 +120,9 @@
 	<a style="position: absolute; top: 200px; left: 200px; background: white;"> Click on Campaign to Begin. Only Stage 2 is currently avaliable.</a>
 	<p style="position: absolute; top: 230px; left: 200px; background: white;">(WASD or Arrow Keys to move, Z to shoot, hold SHIFT while shooting for focus fire)</p>
 	<div>
-		<table>
-			<tr class ="stageTablePadding">
-				<th class = "tableEntryPadding"><a href="/game?stage=1">Stage 1</a></th>
-				<th class = "tableEntryPadding"><a href="/game?stage=2">Stage 2</a></th>
+		<table class ="stageTablePadding">
+			<tr>
+				<th><a href="/game?stage=2">Stage 2</a></th>
 			</tr>
 		</table>
 	</div>
