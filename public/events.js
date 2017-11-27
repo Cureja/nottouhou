@@ -74,9 +74,9 @@ function createLinearProjection(midX, midY, overMS) {
 	};
 }
 
-function createProjectionToPlayer(overMS) {
+function createProjectionToPlayer(offX, offY, overMS) {
 	return (entity) => {
-		return createLinearProjection(player.handle.x, player.handle.y, overMS)(entity);
+		return createLinearProjection(player.handle.x + offX, player.handle.y + offY, overMS)(entity);
 	}
 }
 
