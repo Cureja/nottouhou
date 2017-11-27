@@ -74,9 +74,9 @@ function createLinearProjection(midX, midY, overMS) {
 	};
 }
 
-function createProjectionToPlayer(overMS) {
+function createProjectionToPlayer(offX, offY, overMS) {
 	return (entity) => {
-		return createLinearProjection(player.handle.x, player.handle.y, overMS)(entity);
+		return createLinearProjection(player.handle.x + offX, player.handle.y + offY, overMS)(entity);
 	}
 }
 
@@ -118,12 +118,12 @@ function createSpiralMovement(startRadius, midRadius, overMS) {
 			let diff = getTimeNow() - startTime;
 			let theta = 2 * Math.PI * (diff / overMS);
 			if (diff >= overMS) {
-				entity.handle.x = toX;
-				entity.handle.y = toY;
+				entity.handle.x = fromX + startRadius * midRadius * Math.cos(theta);
+				entity.handle.y = fromY + startRadius * midRadius * Math.sin(theta);
 				return REMOVE_EVENT;
 			}
-			entity.handle.x = fromY + startRadius * (midRadius * (diff / overMS)) * Math.cos(theta);
-			entity.handle.y = fromX + startRadius * (midRadius * (diff / overMS)) * Math.sin(theta);
+			entity.handle.x = fromX + startRadius * (midRadius * (diff / overMS)) * Math.cos(theta);
+			entity.handle.y = fromY + startRadius * (midRadius * (diff / overMS)) * Math.sin(theta);
 			return 10;
 		};
 		entity.mutateEvent(event);
@@ -201,8 +201,6 @@ function createCircularProjection(radius, midX, midY, overMS) {
 		return event(entity);
 	}
 }
-
-
 
 function createDestructor() {
 	return (entity) => {
