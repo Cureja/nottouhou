@@ -94,6 +94,7 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 });
 
 animations.load("cirno", 4, true, null);
+animations.load("letty", 4, true, null);
 animations.load("fairyBlue", 8, true, null);
 animations.load("fairyRed", 8, true, null);
 animations.load("fairyGreen", 8, true, null);
@@ -637,7 +638,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
-let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right 
+let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right
 for(i=0; i<7; i++) {
 	pastAct[i] = false;
 }
@@ -662,7 +663,7 @@ PIXI.loader.onComplete.add(() => {
 				if(pastAct[n] != currAct[n]) {
 					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
 					pastAct[n] = currAct[n];
-				} 
+				}
 			}
 		} else {
 			if(getTimeNow()-startTime > deathTime) {
@@ -705,7 +706,7 @@ PIXI.loader.onComplete.add(() => {
 		} else if (xdir > 0) {
 			player.runAnimation("playerIdleRight");
 		} else {
-			player.runAnimation("playerIdle");
+			player.runAnimation("playerIdle")letty.png;
 		}
 		player.move(xdir * MOVEMENT_SPEED, ydir * MOVEMENT_SPEED);
 
@@ -744,8 +745,8 @@ PIXI.loader.onComplete.add(() => {
 			}
 		}
 		//TODO add player colliding with enemies. 1 damage
-	});	
-	initializeStage();	
+	});
+	initializeStage();
 	startTime = getTimeNow();
 	master.dispatch();
 });
