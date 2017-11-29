@@ -13,10 +13,14 @@ class HighscoresController< ApplicationController
   def create
     @score = params[:score]
     highscore = Highscore.create(username: current_user.username, score: @score)
+    Highscore.order('score DESC, created_at')
   end
 
   def put_entry(value)
-      Highscore.order('score DESC, created_at').first(value).last(1)
+    highscore = Highscore.offset(value).first
+    if !highscore.nil?
+      return highscore.username + " | Kills: #{highscore.score}"
+    end
   end
 
 end
