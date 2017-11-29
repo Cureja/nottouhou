@@ -43,4 +43,12 @@ ActiveRecord::Schema.define(version: 20171120180059) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
+  create_table "widgets", id: :serial, force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "stock"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
 end

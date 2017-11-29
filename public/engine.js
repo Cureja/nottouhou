@@ -119,6 +119,30 @@ animations.load("orbPurple", 1, false, null);
 animations.load("orbRed", 1, false, null);
 animations.load("orbYellow", 1, false, null);
 animations.load("orbYellowGreen", 1, false, null);
+animations.load("mediumOrbBlack", 1, false, null);
+animations.load("mediumOrbBlue", 1, false, null);
+animations.load("mediumOrbGreen", 1, false, null);
+animations.load("mediumOrbGrey", 1, false, null);
+animations.load("mediumOrbLightBlue", 1, false, null);
+animations.load("mediumOrbLightGreen", 1, false, null);
+animations.load("mediumOrbLightRed", 1, false, null);
+animations.load("mediumOrbLightYellow", 1, false, null);
+animations.load("mediumOrbMagenta", 1, false, null);
+animations.load("mediumOrbOrange", 1, false, null);
+animations.load("mediumOrbPink", 1, false, null);
+animations.load("mediumOrbRed", 1, false, null);
+animations.load("mediumOrbTurquoise", 1, false, null);
+animations.load("mediumOrbViolet", 1, false, null);
+animations.load("mediumOrbYellow", 1, false, null);
+animations.load("mediumOrbYellowGreen", 1, false, null);
+animations.load("bigOrbBlack", 1, false, null);
+animations.load("bigOrbBlue", 1, false, null);
+animations.load("bigOrbGreen", 1, false, null);
+animations.load("bigOrbGrey", 1, false, null);
+animations.load("bigOrbLightBlue", 1, false, null);
+animations.load("bigOrbPink", 1, false, null);
+animations.load("bigOrbRed", 1, false, null);
+animations.load("bigOrbYellow", 1, false, null);
 
 function getTimeNow() {
 	return Date.now();
@@ -414,19 +438,31 @@ class Enemy extends Entity {
 	constructor(tracker, frames, x, y, health) {
 		super(tracker, frames, x, y);
 		this.health = health;
+		this.maxHealth = health;
 	}
 
 	onCollide(projectile) {
 		this.health -= projectile.damage;
 		projectile.destroy();
 		if (this.health <= 0) {
+			player.score += this.maxHealth;
 			this.destroy();
-			player.score += 5;
 		}
 	}
 
 	destroy() {
 		super.destroy();
+	}
+}
+
+class Boss extends Enemy {
+	constructor(tracker, frames, x, y, health) {
+		super(tracker, frames, x, y, health);
+	}
+
+	destroy() {
+		super.destroy();
+		player.die();
 	}
 }
 
@@ -571,7 +607,7 @@ class Player {
 			deathReplay = true;
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
-			console.log()
+			console.log();
 			$.post("/highscores",{score: player.score});
 			master = new Master();
 			animations.clear();
@@ -721,12 +757,13 @@ PIXI.loader.onComplete.add(() => {
 		let projectile, enemy;
 		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
 			projectile = playerProjectiles.get(k);
-			if (projectile !== null) {
+			if (projectile !== null && projectile != undefined) {
 				for (var h = 0, length2 = enemies.length; h < length2; ++h) {
 					enemy = enemies.get(h);
-					if (enemy !== null) {
+					if (enemy !== null && projectile != undefined) {
+						console.log(projectile);
 						if (projectile.handle.x >= enemy.handle.x - 10 && projectile.handle.x <= enemy.handle.x + 10 &&
-							projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
+								projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
 							enemy.onCollide(projectile);
 							break;
 						}

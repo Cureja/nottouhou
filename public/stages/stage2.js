@@ -2,6 +2,7 @@
 //subterranean animism, stage 1, normal
 
 function initializeStage() {
+	/*
 	for (var k = 0; k < 3; ++k) {
 		let off = 28 * (k + 1);
 		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 5)
@@ -151,7 +152,7 @@ function initializeStage() {
 			});
 		}
 	}
-	master.fragment(12000);
+	master.fragment(3000);
 
 	for (var k = 0; k < 4; k++) {
 		let sideOffSet = 25 * (k + 1);
@@ -231,7 +232,7 @@ function initializeStage() {
 	master.fragment(9000);
 
 	for(var i = 0; i < 1; i++) {
-		let n = 100, theta = 0;
+		let n = 50, theta = 0;
 		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1250))
 			.addEvent(4000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
@@ -241,7 +242,7 @@ function initializeStage() {
 		//Spawning n projectiles in a circle
 		for(var k = 0; k < n; k++){
 			theta += 2 * Math.PI / n;
-			new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
+			new BoundedProjectile(enemyProjectiles, "mediumOrbYellowGreen", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 15 * Math.cos(theta), 15 * Math.sin(theta))
 				.addEvent(0, createLinearProjection(app.renderer.width / 2 + 100 * Math.cos(theta), app.renderer.height / 2 + 100 * Math.sin(theta), 500));
@@ -395,16 +396,56 @@ function initializeStage() {
 			});
 		}
 	}
-
 	master.fragment(10000);
+	*/
+	let count = 0;
+	for(var i = 0; i < 1; i++) {
+		let theta = 0;
+		let enemy = new Boss(enemies, "letty", app.renderer.width / 2, -50, 10)
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750));
+		for(var k = 0; k < 100; k++) {
+			if(count%2 == 0) {
+				for(var j = 0; j < 36; j++) {
+					theta += 2 * Math.PI / 36;
+					new BoundedProjectile(enemyProjectiles, "mediumOrbGreen", 0, 0, 1)
+						.dependOn(dependsEnemyAlive(enemy._gc))
+						.setRelativeTo(enemy, 0, 0)
+						.addEvent(0, createLinearProjection(app.renderer.width / 2 + 100 * Math.cos(theta), app.renderer.height / 5 + 100 * Math.sin(theta), 500));
+				}
+				master.addEvent(750 + 1500 * count, (_) => {
+					enemyProjectiles.dispatch(36);
+					return REMOVE_EVENT;
+				});
+			}
+			else {
+				for(var j = 0; j < 18; j++) {
+					theta += 2 * Math.PI / 18;
+					new BoundedProjectile(enemyProjectiles, "bigOrbGreen", 0, 0, 1)
+						.dependOn(dependsEnemyAlive(enemy._gc))
+						.setRelativeTo(enemy, 0, 0)
+						.addEvent(0, createLinearProjection(app.renderer.width / 2 + 100 * Math.cos(theta), app.renderer.height / 5 + 100 * Math.sin(theta), 750));
+				}
+				master.addEvent(750 + 1500 * count, (_) => {
+					enemyProjectiles.dispatch(18);
+					return REMOVE_EVENT;
+				});
+			}
+			count++;
+		}
 
+		master.addEvent(1000, (_) => {
+			enemies.dispatch(1);
+			return REMOVE_EVENT;
+		});
+	}
+	//master.fragment(1500 + 1500 * count);
 	/**
 	* Kills 1 second after last fragment
 	* ALWAYS KEEP AT BOTTOM
 	*/
-	new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1).setRelativeTo(player, 0, 0);
+	/*new BoundedProjectile(enemyProjectiles, "orbLightRed", 0, 0, 1).setRelativeTo(player, 0, 0);
   	master.addEvent(1000, (_) => {
       enemyProjectiles.dispatch(1);
       return REMOVE_EVENT;
-    });
+  });*/
 }
