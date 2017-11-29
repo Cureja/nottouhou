@@ -1,0 +1,5 @@
+{"frames": {"letty0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 28, "h": 55}, "rotated": false, "sourceSize": {"h": 55, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 55}},
+            "letty1": {"trimmed": false, "frame": {"y": 0, "x": 48, "w": 28, "h": 55}, "rotated": false, "sourceSize": {"h": 55, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 55}},
+            "letty2": {"trimmed": false, "frame": {"y": 0, "x": 96, "w": 28, "h": 55}, "rotated": false, "sourceSize": {"h": 55, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 55}},
+            "letty3": {"trimmed": false, "frame": {"y": 0, "x": 144, "w": 28, "h": 55}, "rotated": false, "sourceSize": {"h": 55, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 55}}},
+            "meta": {"image": "src/letty.png", "format": "RGBA8888"}}

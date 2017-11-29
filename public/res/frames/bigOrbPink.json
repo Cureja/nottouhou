@@ -1,0 +1,2 @@
+{"frames": {"bigOrbPink0": {"trimmed": false, "frame": {"y": 0, "x": 64, "w": 28, "h": 28}, "rotated": false, "sourceSize": {"h": 28, "w": 28}, "spriteSourceSize": {"y": 0, "x": 0, "w": 28, "h": 28}}},
+            "meta": {"image": "src/bigorbs.png", "format": "RGBA8888"}}

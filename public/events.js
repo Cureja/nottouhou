@@ -106,6 +106,7 @@ function createArcingMovement(curveX, curveY, toX, toY, overMS) {
 }
 
 /**
+* NOT WORKING AS INTENDED, DO NOT TO USE THIS
 * Creates a movement event that moves an entity in a spiral.
 * The circle begins with a radius of startRadius, and expands by a percentage of midRadius.
 */
@@ -155,7 +156,7 @@ function createSpiralProjection(startRadius, midRadius, overMS) {
 
 /**
 * Creates a movement event that moves an entity in a circle of set radius.
-* The circle will move to (midX, midY) as it rotates
+* The circle will move to (toX, toY) as it rotates
 * To guarantee that it stays on the same Y axis as before, make sure toX is a multiple of 2 * radius.
 */
 function createCircularMovement(radius, toX, toY, overMS) {
@@ -201,6 +202,21 @@ function createCircularProjection(radius, midX, midY, overMS) {
 		return event(entity);
 	}
 }
+
+/*function spawnFairies(n, delay, waves, fromX, fromY, toX, toY, overMS) {
+	for(var i = 1; i <= n; i++) {
+		new Enemy(enemies, "fairyRed", fromX, fromY, 5)
+			.addEvent(delay * i + delay * n * waves, createLinearProjection(toX, toY, overMS));
+
+		for(var k = 0; k < waves; k++)  {
+			master.addEvent(0, (_) => {
+				enemies.dispatch(1);
+				return REMOVE_EVENT;
+			});
+		}
+	}
+	master.fragment(1000);
+}*/
 
 function createDestructor() {
 	return (entity) => {

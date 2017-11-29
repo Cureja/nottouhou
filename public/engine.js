@@ -94,6 +94,7 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 });
 
 animations.load("cirno", 4, true, null);
+animations.load("letty", 4, true, null);
 animations.load("fairyBlue", 8, true, null);
 animations.load("fairyRed", 8, true, null);
 animations.load("fairyGreen", 8, true, null);
@@ -118,6 +119,30 @@ animations.load("orbPurple", 1, false, null);
 animations.load("orbRed", 1, false, null);
 animations.load("orbYellow", 1, false, null);
 animations.load("orbYellowGreen", 1, false, null);
+animations.load("mediumOrbBlack", 1, false, null);
+animations.load("mediumOrbBlue", 1, false, null);
+animations.load("mediumOrbGreen", 1, false, null);
+animations.load("mediumOrbGrey", 1, false, null);
+animations.load("mediumOrbLightBlue", 1, false, null);
+animations.load("mediumOrbLightGreen", 1, false, null);
+animations.load("mediumOrbLightRed", 1, false, null);
+animations.load("mediumOrbLightYellow", 1, false, null);
+animations.load("mediumOrbMagenta", 1, false, null);
+animations.load("mediumOrbOrange", 1, false, null);
+animations.load("mediumOrbPink", 1, false, null);
+animations.load("mediumOrbRed", 1, false, null);
+animations.load("mediumOrbTurquoise", 1, false, null);
+animations.load("mediumOrbViolet", 1, false, null);
+animations.load("mediumOrbYellow", 1, false, null);
+animations.load("mediumOrbYellowGreen", 1, false, null);
+animations.load("bigOrbBlack", 1, false, null);
+animations.load("bigOrbBlue", 1, false, null);
+animations.load("bigOrbGreen", 1, false, null);
+animations.load("bigOrbGrey", 1, false, null);
+animations.load("bigOrbLightBlue", 1, false, null);
+animations.load("bigOrbPink", 1, false, null);
+animations.load("bigOrbRed", 1, false, null);
+animations.load("bigOrbYellow", 1, false, null);
 
 function getTimeNow() {
 	return Date.now();
@@ -413,19 +438,37 @@ class Enemy extends Entity {
 	constructor(tracker, frames, x, y, health) {
 		super(tracker, frames, x, y);
 		this.health = health;
+		this.maxHealth = health;
+		this.damage = 1;
 	}
 
 	onCollide(projectile) {
 		this.health -= projectile.damage;
 		projectile.destroy();
 		if (this.health <= 0) {
+			player.score += this.maxHealth;
 			this.destroy();
-			player.score += 5;
 		}
 	}
 
 	destroy() {
 		super.destroy();
+	}
+}
+
+class Boss extends Enemy {
+	constructor(tracker, frames, x, y, health) {
+		super(tracker, frames, x, y, health);
+	}
+
+	onCollide(projectile) {
+		this.health -= projectile.damage;
+		projectile.destroy();
+		if (this.health <= 0) {
+			player.score += this.maxHealth;
+			this.destroy();
+			player.die();
+		}
 	}
 }
 
@@ -570,7 +613,7 @@ class Player {
 			deathReplay = true;
 			console.log("You died.");
 			console.log("You scored", player.score, "points!");
-			console.log()
+			console.log();
 			$.post("/highscores",{score: player.score});
 			master = new Master();
 			animations.clear();
@@ -602,8 +645,6 @@ class Player {
 			allowGameLoop = false;
 		}
 	}
-
-
 }
 
 const VK_X = 88; //bomb
@@ -637,7 +678,7 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
-let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right 
+let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right
 for(i=0; i<7; i++) {
 	pastAct[i] = false;
 }
@@ -662,7 +703,7 @@ PIXI.loader.onComplete.add(() => {
 				if(pastAct[n] != currAct[n]) {
 					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
 					pastAct[n] = currAct[n];
-				} 
+				}
 			}
 		} else {
 			if(getTimeNow()-startTime > deathTime) {
@@ -724,12 +765,12 @@ PIXI.loader.onComplete.add(() => {
 		let projectile, enemy;
 		for (var k = 0, length = playerProjectiles.length; k < length; ++k) {
 			projectile = playerProjectiles.get(k);
-			if (projectile !== null) {
+			if (projectile !== null && projectile != undefined) {
 				for (var h = 0, length2 = enemies.length; h < length2; ++h) {
 					enemy = enemies.get(h);
-					if (enemy !== null) {
+					if (enemy !== null && projectile != undefined) {
 						if (projectile.handle.x >= enemy.handle.x - 10 && projectile.handle.x <= enemy.handle.x + 10 &&
-							projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
+								projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
 							enemy.onCollide(projectile);
 							break;
 						}
@@ -747,9 +788,18 @@ PIXI.loader.onComplete.add(() => {
 				}
 			}
 		}
-		//TODO add player colliding with enemies. 1 damage
-	});	
-	initializeStage();	
+		for (var k = 0, length = enemies.length; k < length; ++k) {
+			let projectile = enemies.get(k);
+			if (projectile !== null) {
+				if (projectile.handle.x >= player.handle.x - PLAYER_HITBOX && projectile.handle.x <= player.handle.x + PLAYER_HITBOX &&
+					projectile.handle.y >= player.handle.y - PLAYER_HITBOX && projectile.handle.y <= player.handle.y + PLAYER_HITBOX) {
+					player.onCollide(projectile);
+					break;
+				}
+			}
+		}
+	});
+	initializeStage();
 	startTime = getTimeNow();
 	master.dispatch();
 });
