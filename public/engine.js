@@ -439,6 +439,7 @@ class Enemy extends Entity {
 		super(tracker, frames, x, y);
 		this.health = health;
 		this.maxHealth = health;
+		this.damage = 1;
 	}
 
 	onCollide(projectile) {
@@ -460,9 +461,14 @@ class Boss extends Enemy {
 		super(tracker, frames, x, y, health);
 	}
 
-	destroy() {
-		super.destroy();
-		player.die();
+	onCollide(projectile) {
+		this.health -= projectile.damage;
+		projectile.destroy();
+		if (this.health <= 0) {
+			player.score += this.maxHealth;
+			this.destroy();
+			player.die();
+		}
 	}
 }
 
@@ -639,8 +645,6 @@ class Player {
 			allowGameLoop = false;
 		}
 	}
-
-
 }
 
 const VK_X = 88; //bomb
@@ -761,7 +765,6 @@ PIXI.loader.onComplete.add(() => {
 				for (var h = 0, length2 = enemies.length; h < length2; ++h) {
 					enemy = enemies.get(h);
 					if (enemy !== null && projectile != undefined) {
-						console.log(projectile);
 						if (projectile.handle.x >= enemy.handle.x - 10 && projectile.handle.x <= enemy.handle.x + 10 &&
 								projectile.handle.y >= enemy.handle.y - 10 && projectile.handle.y <= enemy.handle.y + 10) {
 							enemy.onCollide(projectile);
@@ -781,7 +784,16 @@ PIXI.loader.onComplete.add(() => {
 				}
 			}
 		}
-		//TODO add player colliding with enemies. 1 damage
+		for (var k = 0, length = enemies.length; k < length; ++k) {
+			let projectile = enemies.get(k);
+			if (projectile !== null) {
+				if (projectile.handle.x >= player.handle.x - PLAYER_HITBOX && projectile.handle.x <= player.handle.x + PLAYER_HITBOX &&
+					projectile.handle.y >= player.handle.y - PLAYER_HITBOX && projectile.handle.y <= player.handle.y + PLAYER_HITBOX) {
+					player.onCollide(projectile);
+					break;
+				}
+			}
+		}
 	});
 	initializeStage();
 	startTime = getTimeNow();
