@@ -203,7 +203,20 @@ function createCircularProjection(radius, midX, midY, overMS) {
 	}
 }
 
+/*function spawnFairies(n, delay, waves, fromX, fromY, toX, toY, overMS) {
+	for(var i = 1; i <= n; i++) {
+		new Enemy(enemies, "fairyRed", fromX, fromY, 5)
+			.addEvent(delay * i + delay * n * waves, createLinearProjection(toX, toY, overMS));
 
+		for(var k = 0; k < waves; k++)  {
+			master.addEvent(0, (_) => {
+				enemies.dispatch(1);
+				return REMOVE_EVENT;
+			});
+		}
+	}
+	master.fragment(1000);
+}*/
 
 function createDestructor() {
 	return (entity) => {
