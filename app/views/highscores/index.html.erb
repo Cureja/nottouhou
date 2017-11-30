@@ -8,7 +8,7 @@
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
-			background-color: #FF69B4; //pink
+			background-color:  #5dade2 ;
 			position: fixed;
 			top: 10px;
 			border-radius: 10px;
@@ -17,8 +17,8 @@
 		}
 
 		p {
-			font-family: sans-serif;
-			color: #FC466B; //bluetext
+			font-family:sans-serif;
+			color: white;
 			font-weight: bold;
 		}
 
@@ -35,7 +35,7 @@
 		}
 
 		li a:hover {
-			background-color: #e68db9; //hover light pink
+			background-color:  #2980b9 ; //hover light pink
 		}
 
 		.paddingForNavigation{
@@ -62,8 +62,8 @@
 		 }
 
 		.currentUser {
-			border: 2px solid black;
-			background-color: pink;
+			border: 2px solid white;
+			background-color:  #5dade2 ;
 			width: 33.3%;
 			height: auto;
 			text-align: center;
@@ -72,10 +72,10 @@
 			margin: auto;
 		 }
     	.container {
-      border: 2px solid black;
-      background-color: pink;
-     	width: 90%;
-			height: 65%;
+      border: 2px solid white;
+      background-color:  #5dade2 ;
+     	width: 70%;
+			height: 60%;
 			margin: auto;
 			position: absolute;
 			top: 0;
@@ -104,7 +104,7 @@
 			 <p><%= @user.username %></p>
 		</div>
 		<div class="container">
-			 <p> Highscores <p>
+			 <p> Highscores </p>
 				 <div style="position: absolute; bottom: 5px; right: 5px">
 					 <% for i in 1 .. @pages do %>
 					   <a href="/highscores?page=<%=i%>"><%=i%> </a>

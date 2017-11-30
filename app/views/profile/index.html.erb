@@ -8,7 +8,7 @@
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
-			background-color: #FF69B4; //pink
+			background-color:  #5dade2 ; //blue
 			position: fixed;
 			top: 10px;
 			border-radius: 10px;
@@ -17,8 +17,8 @@
 		}
 
 		p {
-			font-family: sans-serif;
-			color: #FC466B;//bluetext
+			font-family:sans-serif;
+			color: white;
 			font-weight: bold;
 		}
 
@@ -35,7 +35,7 @@
 		}
 
 		li a:hover {
-			background-color: #e68db9; //hover light pink
+			background-color:  #2980b9 ; //hover dark blue
 		}
 
 		th a {
@@ -47,7 +47,7 @@
 		}
 
 		th a:hover {
-			background-color: #e68db9; //hover light pink
+			background-color:  #2980b9 ; //hover dark blue
 		}
 
 		.paddingForNavigation{
@@ -72,8 +72,8 @@
 		}
 
 		.currentUser {
-			border: 2px solid black;
-			background-color: pink;
+			border: 2px solid white;
+			background-color:  #5dade2 ;
 			width: 30%;
 			height: auto;
 			text-align: center;
@@ -90,7 +90,8 @@
 			left: 200px;
 		}
 		.tableEntryPadding {
-			background-color: #FF69B4;
+			border: 2px solid white;
+			background-color:  #5dade2 ;
 		}
 	</style>
 </head>
@@ -112,13 +113,13 @@
 		<p><%= @user.username %></p>
 	</div>
 	<br>
-	<a style="position: absolute; top: 200px; left: 200px; background: white;"> Click on Campaign to Begin. Only Stage 2 is currently avaliable.</a>
-	<p style="position: absolute; top: 230px; left: 200px; background: white;">(WASD or Arrow Keys to move, Z to shoot, hold SHIFT while shooting for focus fire)</p>
+	<p style="position: absolute; top: 230px; left: 200px; background: #2980b9;">(WASD or Arrow Keys to move, Z to shoot, hold SHIFT while shooting for focus fire)</p>
 	<div>
 		<table>
 			<tr class ="stageTablePadding">
 				<th class = "tableEntryPadding"><a href="/game?stage=1">Stage 1</a></th>
 				<th class = "tableEntryPadding"><a href="/game?stage=2">Stage 2</a></th>
+				<th class = "tableEntryPadding"><a href="/game?stage=3">Stage 3</a></th>
 			</tr>
 		</table>
 	</div>
