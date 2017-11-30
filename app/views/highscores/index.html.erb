@@ -92,7 +92,7 @@
 			 <ul>
 				 <li><a href="/profile" >Campaign</a></li>
 				 <li><a href="/replays"> Replays</a></li>
-				 <li><a href="/highscores"> Hi-Scores</a></li>
+				 <li><a href="/highscores?page=1"> Hi-Scores</a></li>
 				 <li><a>Coop</a></li>
 				 <li><a>Message Board</a></li>
 				 <li><a href="/logout">Log Out</a></li>
@@ -104,10 +104,15 @@
 			 <p><%= @user.username %></p>
 		</div>
 		<div class="container">
-			 <p>  Highscores <p>
+			 <p> Highscores <p>
+				 <div style="position: absolute; bottom: 5px; right: 5px">
+					 <% for i in 1 .. @pages do %>
+					   <a href="/highscores?page=<%=i%>"><%=i%> </a>
+					<% end %>
+				 </div>
 				 <% for i in 1..@count do %>
-				   <% if i <= 20 %>
-					 	 <p> <%=i %>. <%= put_entry(i-1) %> </p>
+				   <% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
+					 	 <p> <%= i + ((get_page-1)*20) %>. <%= put_entry((i + ((get_page-1)*20))-1) %> </p>
 					 <% end %>
 	       <% end %>
 		</div>
