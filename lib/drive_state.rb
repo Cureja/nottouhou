@@ -23,11 +23,13 @@ class DriveState
     credentials.client_secret = nil
     if credentials.refresh_token.nil? then
       p "tried to create new credentials for user {@user.id}, but no refresh token was received. the user needs to manually revoke access first"
+      return false
     end
     @user.drive_refresh_token = credentials.refresh_token
     @user.drive_access_token = credentials.access_token
     @user.save
     @service = GoogleDrive::Session.from_credentials(credentials)
+    return true
   end
 
   def recreate

@@ -8,7 +8,7 @@
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
-			background-color: #FF69B4; //pink
+			background-color:  #5dade2 ;
 			position: fixed;
 			top: 10px;
 			border-radius: 10px;
@@ -17,8 +17,8 @@
 		}
 
 		p {
-			font-family: sans-serif;
-			color: #FC466B; //bluetext
+			font-family:sans-serif;
+			color: white;
 			font-weight: bold;
 		}
 
@@ -35,7 +35,7 @@
 		}
 
 		li a:hover {
-			background-color: #e68db9; //hover light pink
+			background-color:  #2980b9 ; //hover light pink
 		}
 
 		.paddingForNavigation{
@@ -62,8 +62,8 @@
 		 }
 
 		.currentUser {
-			border: 2px solid black;
-			background-color: pink;
+			border: 2px solid white;
+			background-color:  #5dade2 ;
 			width: 33.3%;
 			height: auto;
 			text-align: center;
@@ -72,10 +72,10 @@
 			margin: auto;
 		 }
     	.container {
-      border: 2px solid black;
-      background-color: pink;
-     	width: 90%;
-			height: 65%;
+      border: 2px solid white;
+      background-color:  #5dade2 ;
+     	width: 70%;
+			height: 60%;
 			margin: auto;
 			position: absolute;
 			top: 0;
@@ -88,29 +88,34 @@
 </head>
 <body class="background">
 	<div class = "paddingForNavigation">
-	 <div>
-		 <ul>
-			 <li><a href="/profile" >Campaign</a></li>
-			 <li><a href="/replays"> Replays</a></li>
-			 <li><a href="/highscores"> Hi-Scores</a></li>
-			 <li><a>Coop</a></li>
-			 <li><a>Message Board</a></li>
-			 <li><a href="/logout">Log Out</a></li>
-			 <li><a href="/driveauth">Connect Drive</a></li>
-		 </ul>
-	 </div>
-	 <div class="currentUser">
-		 <div class="userProfile"></div>
-		 <p><%= @user.username %></p>
-	 </div>
-   <div class="container">
-		 <p>  Highscores <p>
-			 <% for i in 1..@count do %>
-			   <% if i <= 20 %>
-				 	 <p> <%=i %>. <%= put_entry(i) %> </p>
-				 <% end %>
-       <% end %>
-	 </div>
- </div>
+		<div>
+			 <ul>
+				 <li><a href="/profile" >Campaign</a></li>
+				 <li><a href="/replays"> Replays</a></li>
+				 <li><a href="/highscores?page=1"> Hi-Scores</a></li>
+				 <li><a>Coop</a></li>
+				 <li><a>Message Board</a></li>
+				 <li><a href="/logout">Log Out</a></li>
+				 <li><a href="/driveauth">Connect Drive</a></li>
+			 </ul>
+		</div>
+		<div class="currentUser">
+			 <div class="userProfile"></div>
+			 <p><%= @user.username %></p>
+		</div>
+		<div class="container">
+			 <p> Highscores </p>
+				 <div style="position: absolute; bottom: 5px; right: 5px">
+					 <% for i in 1 .. @pages do %>
+					   <a href="/highscores?page=<%=i%>"><%=i%> </a>
+					<% end %>
+				 </div>
+				 <% for i in 1..@count do %>
+				   <% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
+					 	 <p> <%= i + ((get_page-1)*20) %>. <%= put_entry((i + ((get_page-1)*20))-1) %> </p>
+					 <% end %>
+	       <% end %>
+		</div>
+ 	</div>
 </body>
 </html>
