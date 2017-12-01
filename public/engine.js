@@ -467,6 +467,12 @@ class Boss extends Enemy {
 		if (this.health <= 0) {
 			player.score += this.maxHealth;
 			this.destroy();
+
+			var winText = new PIXI.Text('You won! ', {fontFamily : "Arial", fontSize :16, fill: '#FFFFFF'});
+			winText.x = app.renderer.width / 2 - 35;
+			winText.y = app.renderer.height / 2;
+			app.stage.addChild(winText);
+
 			player.die();
 		}
 	}
