@@ -15,7 +15,7 @@ $(document).ready(() => {
 
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
-const PLAYER_COOLDOWN_READY = 5;
+const PLAYER_COOLDOWN_READY = 10;
 const PLAYER_HITBOX = 4;
 
 //http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=texture-rotate.js&title=Texture%20Rotate
@@ -573,25 +573,25 @@ class Player {
 
 	shoot(focus) {
 		if (focus) {
-			new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
-				self.handle.y -= 4;
+			new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 5).addEvent(0, (self) => {
+				self.handle.y -= 3;
 				return 10;
 			}).dispatch(playerProjectiles);
 			player.shootCooldown = PLAYER_COOLDOWN_READY;
 		} else {
 			let trio = [
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 1).addEvent(0, (self) => {
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 3).addEvent(0, (self) => {
 					self.handle.x -= 1;
-					self.handle.y -= 3;
+					self.handle.y -= 5;
 					return 10;
 				}),
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 1).addEvent(0, (self) => {
-					self.handle.y -= 3;
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
+					self.handle.y -= 5;
 					return 10;
 				}),
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 1).addEvent(0, (self) => {
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 3).addEvent(0, (self) => {
 					self.handle.x += 1;
-					self.handle.y -= 3;
+					self.handle.y -= 5;
 					return 10;
 				})
 			];
@@ -751,6 +751,10 @@ PIXI.loader.onComplete.add(() => {
 		if ((keys[VK_DOWN] || keys[VK_S]) && ydir == 0) {
 			ydir = 1;
 		}
+		if (keys[VK_SHIFT]) {
+			xdir *= 0.60;
+			ydir *= 0.60;
+		}
 		if (xdir < 0) {
 			player.runAnimation("playerIdleLeft");
 		} else if (xdir > 0) {
@@ -795,11 +799,11 @@ PIXI.loader.onComplete.add(() => {
 			}
 		}
 		for (var k = 0, length = enemies.length; k < length; ++k) {
-			let projectile = enemies.get(k);
-			if (projectile !== null) {
-				if (projectile.handle.x >= player.handle.x - PLAYER_HITBOX && projectile.handle.x <= player.handle.x + PLAYER_HITBOX &&
-					projectile.handle.y >= player.handle.y - PLAYER_HITBOX && projectile.handle.y <= player.handle.y + PLAYER_HITBOX) {
-					player.onCollide(projectile);
+			let currentEnemy = enemies.get(k);
+			if (currentEnemy !== null) {
+				if (currentEnemy.handle.x >= player.handle.x - PLAYER_HITBOX && currentEnemy.handle.x <= player.handle.x + PLAYER_HITBOX &&
+					currentEnemy.handle.y >= player.handle.y - PLAYER_HITBOX && currentEnemy.handle.y <= player.handle.y + PLAYER_HITBOX) {
+					player.onCollide(currentEnemy);
 					break;
 				}
 			}
