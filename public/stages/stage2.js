@@ -4,7 +4,7 @@
 function initializeStage() {
 	var xmod = -1;
 	let halfWidth = app.renderer.width / 2;
-	let halfHeight = app.renderer.height / 2;/*
+	let halfHeight = app.renderer.height / 2;
 	for(var k = 0; k < 3; k++) {
 		let topLeft = new Enemy(enemies, "fairyRed", -28, 100, 5)
 			.addEvent(200 + 600 * k, createArcingMovement(halfWidth, 15, app.renderer.width + 28, 100, 1500));
@@ -628,7 +628,7 @@ function initializeStage() {
 		}
 	}
 	master.fragment(1500);
-*/
+
 	for(var i = 0; i < 1; i++) {
 		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
@@ -648,30 +648,8 @@ function initializeStage() {
 
 		let theta = 0;
 		for(var k = 0; k < 80; k++) {
-			if(k < 20) {
-				theta += 2 * Math.PI / 20;
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(left._gc))
-					.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 + 100 * Math.cos(theta), app.renderer.height / 6, 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(left._gc))
-					.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 - 100 * Math.cos(theta), app.renderer.height / 6, 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(right._gc))
-					.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 + 100 * Math.cos(theta), app.renderer.height / 6, 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(right._gc))
-					.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 - 100 * Math.cos(theta), app.renderer.height / 6, 500));
-
-				master.addEvent(2000 + k * 50, (_) => {
-					enemyProjectiles.dispatch(4);
-					return REMOVE_EVENT;
-				});
-			}else if(k < 40) {
+			theta += 2 * Math.PI / 20;
+			if(k < 40) {
 				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(left._gc))
 					.setRelativeTo(left, 0, 0)
