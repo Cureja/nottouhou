@@ -429,6 +429,20 @@ class Master extends Entity {
 			}
 		}
 	}
+
+	catchUp(time) {
+			if (this.destroyed || !this.ensureAlive()) {
+				return;
+			}
+			let delta = getTimeNow() - time;
+			let e;
+			for (var k = 0, length = this.events.length; k < length; ++k) {
+				e = this.events.get(k);
+				if (e !== null && e[EVENT_TIME] <= delta) {
+					this.events.untrack(e);
+				}
+			}
+	}
 }
 
 let master = new Master();
@@ -617,7 +631,7 @@ class Player {
 		master.destroy();
 		if(!deathReplay) {
 			deathReplay = true;
-			console.log("You died.");
+			//console.log("You died.");
 			console.log("You scored", player.score, "points!");
 			console.log();
 			$.post("/highscores",{score: player.score});
@@ -684,9 +698,14 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
-let pastAct = [7]; //bomb(x), shoot(z), shift, up, down, left, right
-for(i=0; i<7; i++) {
-	pastAct[i] = false;
+let pastAct;
+if(@replay != null) {
+	deathReplay = true;
+	pastAct = @replay;	
+} else {
+	for(i=0; i<7; i++) {
+		pastAct[i] = false;
+	}
 }
 let replayIndex = 0;
 let replay = new List(1000);
@@ -699,6 +718,10 @@ PIXI.loader.onComplete.add(() => {
 
 		let xdir = 0;
 		let ydir = 0;
+
+		if(@spectate) {
+
+		}
 
 		//replays
 		if(!deathReplay) {

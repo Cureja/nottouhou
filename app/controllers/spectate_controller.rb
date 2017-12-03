@@ -10,4 +10,11 @@ class SpectateController < ApplicationController
       redirect_to :controller => "login", :action => "index"
     end
   end
+
+  def create 
+    @@games[@user.id] = JSON.stringify(params[:replay])
+  end
+
+  def delete 
+    @@games[@user.id] = nil;
 end

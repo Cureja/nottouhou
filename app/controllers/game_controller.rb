@@ -6,10 +6,18 @@ class GameController < ApplicationController
     if @user.nil? then
       redirect_to :controller => "login", :action => "index"
     end
+    @replay = params[:replay]
     @stage = params[:stage]
-    if @stage.nil? then
-      # handle errors
+    @spectate = params[:spectate]
+    if @spectate != true then
+      @spectate = nil
     end
-    # also need to check that the user has access to this stage
+    elsif(!@replay.nil?)
+      spectate = nil;
+    end
+
+    if @stage.nil? then
+      @stage = 1;
+    end
   end
 end
