@@ -15,7 +15,7 @@ $(document).ready(() => {
 
 const REMOVE_EVENT = -1;
 const MOVEMENT_SPEED = 4;
-const PLAYER_COOLDOWN_READY = 10;
+const PLAYER_COOLDOWN_READY = 5;
 const PLAYER_HITBOX = 4;
 
 //http://scottmcdonnell.github.io/pixi-examples/index.html?s=demos&f=texture-rotate.js&title=Texture%20Rotate
@@ -435,10 +435,10 @@ let master = new Master();
 
 //enemies should generally have their parents set to the master
 class Enemy extends Entity {
-	constructor(tracker, frames, x, y, health) {
+	constructor(tracker, frames, x, y, health, points = health) {
 		super(tracker, frames, x, y);
 		this.health = health;
-		this.maxHealth = health;
+		this.points = points;
 		this.damage = 1;
 	}
 
@@ -446,7 +446,7 @@ class Enemy extends Entity {
 		this.health -= projectile.damage;
 		projectile.destroy();
 		if (this.health <= 0) {
-			player.score += this.maxHealth;
+			player.score += this.points;
 			this.destroy();
 		}
 	}
@@ -465,7 +465,7 @@ class Boss extends Enemy {
 		this.health -= projectile.damage;
 		projectile.destroy();
 		if (this.health <= 0) {
-			player.score += this.maxHealth;
+			player.score += this.points;
 			this.destroy();
 
 			var winText = new PIXI.Text('You won! ', {fontFamily : "Arial", fontSize :16, fill: '#FFFFFF'});
@@ -573,25 +573,25 @@ class Player {
 
 	shoot(focus) {
 		if (focus) {
-			new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 5).addEvent(0, (self) => {
-				self.handle.y -= 3;
+			new BoundedProjectile(playerProjectiles, "projectileFocusIdle", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
+				self.handle.y -= 7;
 				return 10;
 			}).dispatch(playerProjectiles);
 			player.shootCooldown = PLAYER_COOLDOWN_READY;
 		} else {
 			let trio = [
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 3).addEvent(0, (self) => {
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle315", this.handle.x - 10, this.handle.y, 2).addEvent(0, (self) => {
 					self.handle.x -= 1;
-					self.handle.y -= 5;
+					self.handle.y -= 7;
 					return 10;
 				}),
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 3).addEvent(0, (self) => {
-					self.handle.y -= 5;
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle0", this.handle.x, this.handle.y, 2).addEvent(0, (self) => {
+					self.handle.y -= 7;
 					return 10;
 				}),
-				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 3).addEvent(0, (self) => {
+				new BoundedProjectile(playerProjectiles, "projectileKnifeIdle45", this.handle.x + 10, this.handle.y, 2).addEvent(0, (self) => {
 					self.handle.x += 1;
-					self.handle.y -= 5;
+					self.handle.y -= 7;
 					return 10;
 				})
 			];

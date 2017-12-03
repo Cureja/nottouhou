@@ -56,11 +56,11 @@ function initializeStage() {
 
 	for (var k = 0; k < 3; ++k) {
 		let off = 28 * (k + 1);
-		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 5)
+		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(off, 28, 1000))
 			.addEvent(4500 + k * 250, createLinearProjection(app.renderer.width + 28, halfHeight, 1000))
 			.addEvent(5500 + k * 250, createDestructor());
-		let right = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 50, 5)
+		let right = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - off, 28, 1000))
 			.addEvent(4500 + k * 250, createLinearProjection(-32, halfHeight, 1000))
 			.addEvent(5500 + k * 250, createDestructor());
@@ -111,23 +111,23 @@ function initializeStage() {
 	master.fragment(10000);
 
 	for(var i = 0; i < 1; i++) {
-		let topLeft = new Enemy(enemies, "cirno", -50, -50, 10)
+		let topLeft = new Enemy(enemies, "cirno", -50, -50, 30)
 			.addEvent(0, createLinearMovement(50, 50, 750))
 			.addEvent(3000, createLinearProjection(-50, -50, 750))
 			.addEvent(3750, createDestructor());
-		let topRight = new Enemy(enemies, "cirno", app.renderer.width + 50, -50, 10)
+		let topRight = new Enemy(enemies, "cirno", app.renderer.width + 50, -50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - 50, 50, 750))
 			.addEvent(3000, createLinearProjection(app.renderer.width + 50, -50, 750))
 			.addEvent(3750, createDestructor());
-		let bottomLeft = new Enemy(enemies, "cirno", -50, app.renderer.height + 50, 10)
+		let bottomLeft = new Enemy(enemies, "cirno", -50, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(50, app.renderer.height - 50, 750))
 			.addEvent(3000, createLinearProjection(-50, app.renderer.height + 50, 750))
 			.addEvent(3750, createDestructor());
-		let bottomRight = new Enemy(enemies, "cirno", app.renderer.width + 50, app.renderer.height + 50, 10)
+		let bottomRight = new Enemy(enemies, "cirno", app.renderer.width + 50, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - 50, app.renderer.height - 50, 750))
 			.addEvent(3000, createLinearProjection(app.renderer.width + 50, app.renderer.height + 50, 750))
 			.addEvent(3750, createDestructor());
-		let middle = new Enemy(enemies, "cirno", halfWidth, -50)
+		let middle = new Enemy(enemies, "cirno", halfWidth, -50, 30)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1000))
 			.addEvent(3000, createLinearProjection(halfWidth, -50, 1000))
 			.addEvent(3750, createDestructor());
@@ -294,15 +294,15 @@ function initializeStage() {
 
 	for (var k = 0; k < 4; k++) {
 		let sideOffSet = 25 * (k + 1);
-		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 3)
+		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 35)
 			.addEvent(0, createLinearMovement(sideOffSet, 32, 1000))
 			.addEvent(5000 + k * 200, createLinearProjection(app.renderer.width + 30, 2 * app.renderer.height / 3, 750))
 			.addEvent(6000 + k * 200, createDestructor());
-		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 3)
+		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 35)
 			.addEvent(0, createLinearMovement(app.renderer.width - sideOffSet, 32, 1000))
 			.addEvent(5000 + k * 200, createLinearProjection(-30, 2 * (app.renderer.width / 3), 750))
 			.addEvent(6000 + k * 200, createDestructor());
-		let midSide = new Enemy(enemies, "cirno", 30, -20, 3)
+		let midSide = new Enemy(enemies, "cirno", 30, -20, 35)
 			.addEvent(0, createLinearMovement(250 + sideOffSet, 32, 1000))
 			.addEvent(5000 + k * 200, createLinearProjection(halfWidth, app.renderer.width, 1000))
 			.addEvent(6000 + k * 200, createDestructor());
@@ -332,7 +332,7 @@ function initializeStage() {
 
 	for(var i = 0; i < 1; i++) {
 		let n = 50, theta = 0;
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(4000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(5000, createDestructor());
@@ -380,7 +380,7 @@ function initializeStage() {
 		let xSpawn = halfWidth + 350 * xmod;
 		let yOffset = 60 + 60 * k;
 		let xGenerate = halfWidth + 250 * xmod;
-		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset, 3)
+		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset, 25)
 			.addEvent(0, createLinearMovement(xGenerate, yOffset, 500))
 			.addEvent(5000, createLinearProjection(halfWidth + 350 * xmod, yOffset, 500))
 			.addEvent(6000, createDestructor());
@@ -439,7 +439,7 @@ function initializeStage() {
 	master.fragment(1500);
 
 	for(var i = 0; i < 1; i++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(5000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(6000, createDestructor());
@@ -516,12 +516,12 @@ function initializeStage() {
 	}
 
 	for(var i = 0; i < 1; i++) {
-		let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
+		let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth - 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(0, app.renderer.height / 6, 500))
 			.addEvent(9500, createDestructor());
-		let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
+		let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth + 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(app.renderer.width, app.renderer.height / 6, 500))
@@ -598,7 +598,7 @@ function initializeStage() {
 	master.fragment(10500);
 
 	for(var i = 0; i < 1; i++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 35)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(5000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(6000, createDestructor());
@@ -630,12 +630,12 @@ function initializeStage() {
 	master.fragment(1500);
 
 	for(var i = 0; i < 1; i++) {
-		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth - 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(0, app.renderer.height / 6, 500))
 			.addEvent(9500, createDestructor());
-		let right = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let right = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth + 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(app.renderer.width, app.renderer.height / 6, 500))
@@ -750,10 +750,10 @@ function initializeStage() {
 			if(count%5 == 0) {
 				let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 					.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
-					.addEvent(3000, createLinearMovement(halfWidth - 15, halfHeight, 1000))
+					.addEvent(3000, createLinearProjection(halfWidth - 15, halfHeight, 1000))
 				let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 					.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
-					.addEvent(3000, createLinearMovement(halfWidth + 15, halfHeight, 1000))
+					.addEvent(3000, createLinearProjection(halfWidth + 15, halfHeight, 1000))
 
 				master.addEvent(1750 + 1750 * count, (_) => {
 					enemies.dispatch(2);
