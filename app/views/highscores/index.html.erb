@@ -8,10 +8,9 @@
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
-			background-color:  #5dade2 ;
+			background-color:  #FF69B4 ;
 			position: fixed;
 			top: 10px;
-			border-radius: 10px;
 			float: left;
 			border: 2px solid #fefefe; //white
 		}
@@ -27,6 +26,8 @@
 		}
 
 		li a {
+	    text-shadow: 2px 2px black;
+			font-size: large;
 			display: block;
 			color: white;
 			text-align: center;
@@ -34,10 +35,13 @@
 			text-decoration: none;
 		}
 
-		li a:hover {
-			background-color:  #2980b9 ; //hover light pink
+		li a:hover:not(.activePage) {
+			background-color: #cc5490 ;
 		}
 
+		.activePage {
+			background-color: #cc5490 ;
+		}
 		.paddingForNavigation{
 			padding-left: 10%;
 			padding-top: 20px;
@@ -49,73 +53,142 @@
 			background-size: cover;
 		 }
 
-		.userProfile {
-			border-radius: 50%;
-			float: left;
-			width: 100px;
-			height: 100px;
-
-			background-image: url("/QuestionMark.png");
-			background-repeat: no-repeat;
- 			background-position: center center;
- 			background-size: cover;
+		 .currentUser {
+ 	    text-shadow: 2px 2px black;
+ 			border: 2px solid white;
+ 			background-color:  #FF69B4 ;
+ 			width: 20%;
+ 			text-align: center;
+ 			float: right;
+ 			margin-right: 15%;
+ 		}
+		 .wrapper{
+			 border: 50px;
+			 background-image: url("/hi.png");
+			 background-color: #cf5bdd;
+			 width: 80%;
+			 height: 80%;
+			 margin: auto;
+			 position: absolute;
+			 top: 0;
+			 bottom: 0;
+			 left: 0;
+			 right: 0;
 		 }
+		 .container {
+			 margin: auto;
+			 position: absolute;
+			 border: 1px solid white;
+			 background-color:  #FF69B4 ;
+			 width: 80%;
+			 height: 100%;
+			 top: 0;
+			 bottom: 0;
+			 left: 0;
+			 right: 0;
+		}
 
-		.currentUser {
-			border: 2px solid white;
-			background-color:  #5dade2 ;
-			width: 33.3%;
-			height: auto;
-			text-align: center;
-			float: right;
-			border-radius: 10px;
-			margin: auto;
-		 }
-    	.container {
-      border: 2px solid white;
-      background-color:  #5dade2 ;
-     	width: 70%;
-			height: 60%;
-			margin: auto;
-			position: absolute;
-			top: 0;
-			bottom: 0;
-			left: 0;
-			right: 0;
-     }
+		table, td, th {
 
-	</style>
+    }
+
+		table{
+		 border-collapse: collapse;
+     width: 100%;
+		}
+
+		th{
+			text-shadow: 2px 2px black;
+			font-family:arial black;
+			color: white;
+			font-weight: bold;
+			height: 40px;
+		}
+		td{
+			font-family:arial black;
+			color: white;
+			font-weight: bold;
+			width: 40px:
+		}
+
+		center {
+			margin: auto;
+		  text-shadow: 2px 2px black;
+	    border: 1px solid white;
+	    padding: 15px;
+			font-family: arial black;
+			color: white;
+			font-weight: bold;
+		}
+
+
+ </style>
 </head>
 <body class="background">
-	<div class = "paddingForNavigation">
-		<div>
-			 <ul>
-				 <li><a href="/profile" >Campaign</a></li>
-				 <li><a href="/replays"> Replays</a></li>
-				 <li><a href="/highscores?page=1"> Hi-Scores</a></li>
-				 <li><a>Coop</a></li>
-				 <li><a>Message Board</a></li>
-				 <li><a href="/logout">Log Out</a></li>
-				 <li><a href="/driveauth">Connect Drive</a></li>
-			 </ul>
-		</div>
-		<div class="currentUser">
-			 <div class="userProfile"></div>
-			 <p><%= @user.username %></p>
-		</div>
-		<div class="container">
-			 <p> Highscores </p>
+ <div class="currentUser">
+		<div class="userProfile"></div>
+		<p><%= @user.username %></p>
+ </div>
+ <div class="wrapper">
+	 <div class="container">
+	     <table>
+        <center>HIGHSCORES</center>
+				 <tr>
+	        <th>Rank</th>
+	        <th>User</th>
+	        <th>Score</th>
+	      </tr>
+				 <% for i in 1..@count do %>
+					 <% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
+						 <tr>
+								 <th><%= i + ((get_page-1)*20) %><%="."%></th>
+								 <th><%= put_user((i + ((get_page-1)*20))-1) %> </th>
+								 <th> <%= put_score((i + ((get_page-1)*2))-1)%> </th>
+						 </tr>
+					 <% end %>
+				 <% end %>
 				 <div style="position: absolute; bottom: 5px; right: 5px">
-					 <% for i in 1 .. @pages do %>
-					   <a href="/highscores?page=<%=i%>"><%=i%> </a>
+					<% if get_page - 1 >= 1 %>
+						<a href="/highscores?page=<%=(get_page)-1%>"><%="[<<]"%> </a>
+						<% if get_page - 1 > 1 %>
+						 <%="..."%>
+						<% end %>
+					<% end %>
+					<% if get_page == 1 %>
+							<%=[1]%>
+							 <a href="/highscores?page=<%=2%>"><%=[2]%> </a>
+					<% end %>
+					<% if get_page == @intpages %>
+							 <a href="/highscores?page=<%=@intpages-1%>"><%=[@intpages-1]%> </a>
+							 <%=[@intpages]%>
+					<% end %>
+					<% if get_page != @intpages && get_page != 1%>
+							<a href="/highscores?page=<%=(get_page-1)%>"><%=[get_page-1]%> </a>
+							<%=[get_page]%>
+							<a href="/highscores?page=<%=(get_page+1)%>"><%=[get_page+1]%> </a>
+					<% end %>
+					<% if get_page+ 1 <= @intpages %>
+					 <% if get_page+ 1 < @intpages %>
+						<%="..."%>
+					 <% end %>
+					 <a href="/highscores?page=<%=(get_page)+1%>"><%="[>>]"%> </a>
 					<% end %>
 				 </div>
-				 <% for i in 1..@count do %>
-				   <% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
-					 	 <p> <%= i + ((get_page-1)*20) %>. <%= put_entry((i + ((get_page-1)*20))-1) %> </p>
-					 <% end %>
-	       <% end %>
-		</div>
- 	</div>
+			 </table>
+  </div>
+</div>
+ <div class = "paddingForNavigation">
+	 <div>
+			<ul>
+				<li><a href="/profile" >Campaign</a></li>
+				<li><a href="/replays"> Replays</a></li>
+				<li><a class = "activePage"> Hi-Scores</a></li>
+				<li><a>Coop</a></li>
+				<li><a href="/driveauth">Connect Drive</a></li>
+				<li><a href="/logout">Log Out</a></li>
+			</ul>
+	 </div>
+ </div>
+ </div>
 </body>
 </html>
