@@ -56,11 +56,11 @@ function initializeStage() {
 
 	for (var k = 0; k < 3; ++k) {
 		let off = 28 * (k + 1);
-		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 5)
+		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(off, 28, 1000))
 			.addEvent(4500 + k * 250, createLinearProjection(app.renderer.width + 28, halfHeight, 1000))
 			.addEvent(5500 + k * 250, createDestructor());
-		let right = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 50, 5)
+		let right = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - off, 28, 1000))
 			.addEvent(4500 + k * 250, createLinearProjection(-32, halfHeight, 1000))
 			.addEvent(5500 + k * 250, createDestructor());
@@ -72,7 +72,7 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(left._gc))
 				.setRelativeTo(left, -10, 0)
-				.addEvent(0, createProjectionToPlayer(100*xmod, i*100*xmod, 2000));
+				.addEvent(0, createProjectionToPlayer(100*xmod, i*70*xmod, 2000));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(left._gc))
 				.setRelativeTo(left, 10, 0)
@@ -80,7 +80,7 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(right._gc))
 				.setRelativeTo(right, -10, 0)
-				.addEvent(0, createProjectionToPlayer(100*xmod, i*100*xmod, 2000));
+				.addEvent(0, createProjectionToPlayer(100*xmod, i*70*xmod, 2000));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(right._gc))
 				.setRelativeTo(right, 10, 0)
@@ -88,19 +88,19 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(left._gc))
 				.setRelativeTo(left, -30, 0)
-				.addEvent(0, createProjectionToPlayer(0, 0, 2000));
+				.addEvent(0, createProjectionToPlayer(0, 0, 2500));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(left._gc))
 				.setRelativeTo(left, 30, 0)
-				.addEvent(0, createProjectionToPlayer(0, 0, 2000));
+				.addEvent(0, createProjectionToPlayer(0, 0, 2500));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(right._gc))
 				.setRelativeTo(right, -30, 0)
-				.addEvent(0, createProjectionToPlayer(0, 0, 2000));
+				.addEvent(0, createProjectionToPlayer(0, 0, 2500));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(right._gc))
 				.setRelativeTo(right, 30, 0)
-				.addEvent(0, createProjectionToPlayer(0, 0, 2000));
+				.addEvent(0, createProjectionToPlayer(0, 0, 2500));
 			xmod*=-1;
 			master.addEvent(3500 + k * 500 + i * 100, (_) => {
 				enemyProjectiles.dispatch(8);
@@ -111,23 +111,23 @@ function initializeStage() {
 	master.fragment(10000);
 
 	for(var i = 0; i < 1; i++) {
-		let topLeft = new Enemy(enemies, "cirno", -50, -50, 10)
+		let topLeft = new Enemy(enemies, "cirno", -50, -50, 30)
 			.addEvent(0, createLinearMovement(50, 50, 750))
 			.addEvent(3000, createLinearProjection(-50, -50, 750))
 			.addEvent(3750, createDestructor());
-		let topRight = new Enemy(enemies, "cirno", app.renderer.width + 50, -50, 10)
+		let topRight = new Enemy(enemies, "cirno", app.renderer.width + 50, -50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - 50, 50, 750))
 			.addEvent(3000, createLinearProjection(app.renderer.width + 50, -50, 750))
 			.addEvent(3750, createDestructor());
-		let bottomLeft = new Enemy(enemies, "cirno", -50, app.renderer.height + 50, 10)
+		let bottomLeft = new Enemy(enemies, "cirno", -50, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(50, app.renderer.height - 50, 750))
 			.addEvent(3000, createLinearProjection(-50, app.renderer.height + 50, 750))
 			.addEvent(3750, createDestructor());
-		let bottomRight = new Enemy(enemies, "cirno", app.renderer.width + 50, app.renderer.height + 50, 10)
+		let bottomRight = new Enemy(enemies, "cirno", app.renderer.width + 50, app.renderer.height + 50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width - 50, app.renderer.height - 50, 750))
 			.addEvent(3000, createLinearProjection(app.renderer.width + 50, app.renderer.height + 50, 750))
 			.addEvent(3750, createDestructor());
-		let middle = new Enemy(enemies, "cirno", halfWidth, -50)
+		let middle = new Enemy(enemies, "cirno", halfWidth, -50, 30)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1000))
 			.addEvent(3000, createLinearProjection(halfWidth, -50, 1000))
 			.addEvent(3750, createDestructor());
@@ -142,23 +142,23 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "mediumOrbGrey", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(topLeft._gc))
 				.setRelativeTo(topLeft, 20 * Math.cos(theta), 20 * Math.sin(theta))
-				.addEvent(0, createLinearProjection(50 + 100 * Math.cos(theta), 50 + 100 * Math.sin(theta), 500));
+				.addEvent(0, createLinearProjection(50 + 100 * Math.cos(theta), 50 + 100 * Math.sin(theta), 750));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbGrey", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(topRight._gc))
 				.setRelativeTo(topRight,20 * Math.cos(theta), 20 * Math.sin(theta))
-				.addEvent(0, createLinearProjection(app.renderer.width - 50 + 100 * Math.cos(theta), 50 + 100 * Math.sin(theta), 500));
+				.addEvent(0, createLinearProjection(app.renderer.width - 50 + 100 * Math.cos(theta), 50 + 100 * Math.sin(theta), 750));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbGrey", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(bottomLeft._gc))
 				.setRelativeTo(bottomLeft, 20 * Math.cos(theta), 20 * Math.sin(theta))
-				.addEvent(0, createLinearProjection(50 + 100 * Math.cos(theta), app.renderer.height - 50 + 100 * Math.sin(theta), 500));
+				.addEvent(0, createLinearProjection(50 + 100 * Math.cos(theta), app.renderer.height - 50 + 100 * Math.sin(theta), 750));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbGrey", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(bottomRight._gc))
 				.setRelativeTo(bottomRight, 20 * Math.cos(theta), 20 * Math.sin(theta))
-				.addEvent(0, createLinearProjection(app.renderer.width - 50 + 100 * Math.cos(theta), app.renderer.height - 50 + 100 * Math.sin(theta), 500));
+				.addEvent(0, createLinearProjection(app.renderer.width - 50 + 100 * Math.cos(theta), app.renderer.height - 50 + 100 * Math.sin(theta), 750));
 			new BoundedProjectile(enemyProjectiles, "mediumOrbGrey", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(middle._gc))
 				.setRelativeTo(middle, 20 * Math.cos(theta), 20 * Math.sin(theta))
-				.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 500));
+				.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 750));
 			master.addEvent(1250, (_) => {
 				enemyProjectiles.dispatch(5);
 				return REMOVE_EVENT;
@@ -294,17 +294,17 @@ function initializeStage() {
 
 	for (var k = 0; k < 4; k++) {
 		let sideOffSet = 25 * (k + 1);
-		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 3)
+		let leftSide = new Enemy(enemies, "cirno", -28, app.renderer.height + 48, 35)
 			.addEvent(0, createLinearMovement(sideOffSet, 32, 1000))
 			.addEvent(5000 + k * 200, createLinearProjection(app.renderer.width + 30, 2 * app.renderer.height / 3, 750))
 			.addEvent(6000 + k * 200, createDestructor());
-		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 3)
+		let rightSide = new Enemy(enemies, "cirno", app.renderer.width + 28, app.renderer.height + 48, 35)
 			.addEvent(0, createLinearMovement(app.renderer.width - sideOffSet, 32, 1000))
 			.addEvent(5000 + k * 200, createLinearProjection(-30, 2 * (app.renderer.width / 3), 750))
 			.addEvent(6000 + k * 200, createDestructor());
-		let midSide = new Enemy(enemies, "cirno", 30, -20, 3)
+		let midSide = new Enemy(enemies, "cirno", 30, -20, 35)
 			.addEvent(0, createLinearMovement(250 + sideOffSet, 32, 1000))
-			.addEvent(5000, createProjectionToPlayer(0, 0, 500))
+			.addEvent(5000 + k * 200, createLinearProjection(halfWidth, app.renderer.width, 1000))
 			.addEvent(6000 + k * 200, createDestructor());
 
 		new BoundedProjectile(enemyProjectiles, "mediumOrbLightRed", 0, 0, 1)
@@ -332,7 +332,7 @@ function initializeStage() {
 
 	for(var i = 0; i < 1; i++) {
 		let n = 50, theta = 0;
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(4000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(5000, createDestructor());
@@ -362,8 +362,7 @@ function initializeStage() {
 					.dependOn(dependsEnemyAlive(enemy._gc))
 					.setRelativeTo(enemy, 15 * Math.cos(theta), 15 * Math.sin(theta))
 					.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 500));
-			}
-			else {
+			}else {
 				new BoundedProjectile(enemyProjectiles, "orbGreen", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(enemy._gc))
 					.setRelativeTo(enemy, 15 * Math.cos(theta), 15 * Math.sin(theta))
@@ -374,7 +373,6 @@ function initializeStage() {
 			enemyProjectiles.dispatch(36);
 			return REMOVE_EVENT;
 		});
-
 	}
 	master.fragment(1500);
 
@@ -382,7 +380,7 @@ function initializeStage() {
 		let xSpawn = halfWidth + 350 * xmod;
 		let yOffset = 60 + 60 * k;
 		let xGenerate = halfWidth + 250 * xmod;
-		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset, 3)
+		let leftAndRight = new Enemy(enemies, "cirno", xSpawn, yOffset, 25)
 			.addEvent(0, createLinearMovement(xGenerate, yOffset, 500))
 			.addEvent(5000, createLinearProjection(halfWidth + 350 * xmod, yOffset, 500))
 			.addEvent(6000, createDestructor());
@@ -441,7 +439,7 @@ function initializeStage() {
 	master.fragment(1500);
 
 	for(var i = 0; i < 1; i++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(5000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(6000, createDestructor());
@@ -518,12 +516,12 @@ function initializeStage() {
 	}
 
 	for(var i = 0; i < 1; i++) {
-		let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
+		let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth - 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(0, app.renderer.height / 6, 500))
 			.addEvent(9500, createDestructor());
-		let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
+		let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 70)
 			.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth + 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(app.renderer.width, app.renderer.height / 6, 500))
@@ -559,8 +557,7 @@ function initializeStage() {
 					enemyProjectiles.dispatch(4);
 					return REMOVE_EVENT;
 				});
-			}
-			else if(k < 40) {
+			}else if(k < 40) {
 				new BoundedProjectile(enemyProjectiles, "mediumOrbViolet", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(left._gc))
 					.setRelativeTo(left, 0, 0)
@@ -581,8 +578,7 @@ function initializeStage() {
 					enemyProjectiles.dispatch(4);
 					return REMOVE_EVENT;
 				});
-			}
-			else{
+			}else{
 				theta += 2 * Math.PI / 20;
 				new BoundedProjectile(enemyProjectiles, "mediumOrbPink", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(left._gc))
@@ -601,9 +597,8 @@ function initializeStage() {
 	}
 	master.fragment(10500);
 
-
 	for(var i = 0; i < 1; i++) {
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 10)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 35)
 			.addEvent(0, createLinearMovement(halfWidth, halfHeight, 1250))
 			.addEvent(5000, createArcingMovement(app.renderer.width / 4, app.renderer.height / 4, 0, -50, 1000))
 			.addEvent(6000, createDestructor());
@@ -635,12 +630,12 @@ function initializeStage() {
 	master.fragment(1500);
 
 	for(var i = 0; i < 1; i++) {
-		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let left = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth - 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(0, app.renderer.height / 6, 500))
 			.addEvent(9500, createDestructor());
-		let right = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 90)
+		let right = new Enemy(enemies, "cirno", app.renderer.width /2, -100, 50)
 			.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
 			.addEvent(3000, createLinearMovement(halfWidth + 100, halfHeight, 1000))
 			.addEvent(9000, createLinearMovement(app.renderer.width, app.renderer.height / 6, 500))
@@ -653,31 +648,8 @@ function initializeStage() {
 
 		let theta = 0;
 		for(var k = 0; k < 80; k++) {
-			if(k < 20) {
-				theta += 2 * Math.PI / 20;
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(left._gc))
-					.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 + 100 * Math.cos(theta), app.renderer.height / 6 + 100 * Math.sin(theta), 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(left._gc))
-					.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(80 - 100 * Math.cos(theta), app.renderer.height / 6 - 100 * Math.sin(theta), 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(right._gc))
-					.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(app.renderer.width - 80 + 100 * Math.cos(theta), app.renderer.height / 6 + 100 * Math.sin(theta), 500));
-				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
-					.dependOn(dependsEnemyAlive(right._gc))
-					.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, createLinearProjection(app.renderer.width - 80 - 100 * Math.cos(theta), app.renderer.height / 6 - 100 * Math.sin(theta), 500));
-
-				master.addEvent(2000 + k * 50, (_) => {
-					enemyProjectiles.dispatch(4);
-					return REMOVE_EVENT;
-				});
-			}
-			else if(k < 40) {
+			theta += 2 * Math.PI / 20;
+			if(k < 40) {
 				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(left._gc))
 					.setRelativeTo(left, 0, 0)
@@ -698,8 +670,7 @@ function initializeStage() {
 					enemyProjectiles.dispatch(4);
 					return REMOVE_EVENT;
 				});
-			}
-			else{
+			}else{
 				theta += 2 * Math.PI / 20;
 				new BoundedProjectile(enemyProjectiles, "orbYellowGreen", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(left._gc))
@@ -714,7 +685,6 @@ function initializeStage() {
 					return REMOVE_EVENT;
 				});
 			}
-
 		}
 	}
 	master.fragment(10500);
@@ -751,13 +721,39 @@ function initializeStage() {
 				return REMOVE_EVENT;
 			});
 
+			if(count%2 == 0) {
+				for(var j = 0; j < 72; j++) {
+					theta += 2 * Math.PI / 72;
+					new BoundedProjectile(enemyProjectiles, "mediumOrbGreen", 0, 0, 1)
+						.dependOn(dependsEnemyAlive(boss._gc))
+						.setRelativeTo(boss, 15 * Math.cos(theta + count * Math.PI * 0.6), 15 * Math.sin(theta + count * Math.PI * 0.6))
+						.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta + count * Math.PI * 0.6), app.renderer.height / 5 + 100 * Math.sin(theta + count * Math.PI * 0.6), 750));
+				}
+				master.addEvent(750 + 1750 * count, (_) => {
+					enemyProjectiles.dispatch(72);
+					return REMOVE_EVENT;
+				});
+			}else {
+				for(var j = 0; j < 36; j++) {
+					theta += 2 * Math.PI / 36;
+					new BoundedProjectile(enemyProjectiles, "bigOrbGreen", 0, 0, 1)
+						.dependOn(dependsEnemyAlive(boss._gc))
+						.setRelativeTo(boss, 15 * Math.cos(theta + count * Math.PI * 0.6), 15 * Math.sin(theta + count * Math.PI * 0.6))
+						.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta + count * Math.PI * 0.6), app.renderer.height / 5 + 100 * Math.sin(theta + count * Math.PI * 0.6), 1000));
+				}
+				master.addEvent(750 + 1750 * count, (_) => {
+					enemyProjectiles.dispatch(36);
+					return REMOVE_EVENT;
+				});
+			}
+
 			if(count%5 == 0) {
 				let left = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 					.addEvent(0, createLinearMovement(80, app.renderer.height / 6, 1000))
-					.addEvent(3000, createLinearMovement(halfWidth - 15, halfHeight, 1000))
+					.addEvent(3000, createLinearProjection(halfWidth - 15, halfHeight, 1000))
 				let right = new Enemy(enemies, "letty", app.renderer.width /2, -100, 90)
 					.addEvent(0, createLinearMovement(app.renderer.width - 80, app.renderer.height / 6, 1000))
-					.addEvent(3000, createLinearMovement(halfWidth + 15, halfHeight, 1000))
+					.addEvent(3000, createLinearProjection(halfWidth + 15, halfHeight, 1000))
 
 				master.addEvent(1750 + 1750 * count, (_) => {
 					enemies.dispatch(2);
@@ -766,70 +762,42 @@ function initializeStage() {
 
 				for(var j = 0; j < 40; j++) {
 					if(j < 20) {
-						new BoundedProjectile(enemyProjectiles, "mediumOrbViolet", 0, 0, 1)
+						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(left._gc))
 							.setRelativeTo(left, 0, 0)
-							.addEvent(0, createLinearProjection((j - 20) * 50, 0, 1500 + 20 * j));
-						new BoundedProjectile(enemyProjectiles, "mediumOrbViolet", 0, 0, 1)
+							.addEvent(0, createLinearProjection(j * 50, 0, 2250 + 20 * j));
+						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(right._gc))
 							.setRelativeTo(right, 0, 0)
-							.addEvent(0, createLinearProjection(app.renderer.width - (j - 20) * 50, 0, 1500 + 20 * j));
-						new BoundedProjectile(enemyProjectiles, "mediumOrbViolet", 0, 0, 1)
+							.addEvent(0, createLinearProjection(app.renderer.width - j * 50, 0, 2250 + 20 * j));
+						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(left._gc))
 							.setRelativeTo(left, 0, 0)
-							.addEvent(0, createLinearProjection((j - 20) * 50, app.renderer.height, 1500 + 20 * j));
-						new BoundedProjectile(enemyProjectiles, "mediumOrbViolet", 0, 0, 1)
+							.addEvent(0, createLinearProjection(j * 50, app.renderer.height, 2250 + 20 * j));
+						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(right._gc))
 							.setRelativeTo(right, 0, 0)
-							.addEvent(0, createLinearProjection(app.renderer.width - (j - 20) * 50, app.renderer.height, 1500 + 20 * j));
-						master.addEvent(3000 + j * 100 + 1750 * count, (_) => {
+							.addEvent(0, createLinearProjection(app.renderer.width - j * 50, app.renderer.height, 2250 + 20 * j));
+						master.addEvent(3500 + j * 100 + 2000 * count, (_) => {
 							enemyProjectiles.dispatch(4);
 							return REMOVE_EVENT;
 						});
-					}
-					else {
+					}else {
 						theta += 2 * Math.PI / 20;
 						new BoundedProjectile(enemyProjectiles, "mediumOrbPink", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(left._gc))
 							.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
-							.addEvent(0, createLinearProjection(halfWidth - 100 + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 500));
+							.addEvent(0, createLinearProjection(halfWidth - 100 + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 1750));
 						new BoundedProjectile(enemyProjectiles, "mediumOrbPink", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(right._gc))
 							.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
-							.addEvent(0, createLinearProjection(halfWidth + 100 + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 500));
-						master.addEvent(6500 + j * 10 + 1750 * count, (_) => {
+							.addEvent(0, createLinearProjection(halfWidth + 100 + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 1750));
+						master.addEvent(5500 + j * 10 + 2000 * count, (_) => {
 							enemyProjectiles.dispatch(2);
 							return REMOVE_EVENT;
 						});
 					}
 				}
-			}
-
-			if(count%2 == 0) {
-				for(var j = 0; j < 72; j++) {
-					theta += 2 * Math.PI / 72;
-					new BoundedProjectile(enemyProjectiles, "mediumOrbGreen", 0, 0, 1)
-						.dependOn(dependsEnemyAlive(boss._gc))
-						.setRelativeTo(boss, 15 * Math.cos(theta + count * Math.PI * 0.6), 15 * Math.sin(theta + count * Math.PI * 0.6))
-						.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta + count * Math.PI * 0.6), app.renderer.height / 5 + 100 * Math.sin(theta + count * Math.PI * 0.6), 250));
-				}
-				master.addEvent(750 + 1750 * count, (_) => {
-					enemyProjectiles.dispatch(72);
-					return REMOVE_EVENT;
-				});
-			}
-			else {
-				for(var j = 0; j < 36; j++) {
-					theta += 2 * Math.PI / 36;
-					new BoundedProjectile(enemyProjectiles, "bigOrbGreen", 0, 0, 1)
-						.dependOn(dependsEnemyAlive(boss._gc))
-						.setRelativeTo(boss, 15 * Math.cos(theta + count * Math.PI * 0.6), 15 * Math.sin(theta + count * Math.PI * 0.6))
-						.addEvent(0, createLinearProjection(halfWidth + 100 * Math.cos(theta + count * Math.PI * 0.6), app.renderer.height / 5 + 100 * Math.sin(theta + count * Math.PI * 0.6), 500));
-				}
-				master.addEvent(750 + 1750 * count, (_) => {
-					enemyProjectiles.dispatch(36);
-					return REMOVE_EVENT;
-				});
 			}
 			xmod *= 1;
 			count++;
