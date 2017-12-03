@@ -8,7 +8,7 @@
 			margin: 0;
 			padding: 0;
 			overflow: hidden;
-			background-color:  #5dade2 ; //pink
+			background-color:  #FF69B4 ;
 			position: fixed;
 			top: 10px;
 			float: left;
@@ -26,12 +26,7 @@
 		}
 
 		li a {
-			text-shadow:
-				3px 3px 0 #000,
-				-1px -1px 0 #000,  
-				1px -1px 0 #000,
-				-1px 1px 0 #000,
-				1px 1px 0 #000;
+      text-shadow: 2px 2px black;
 			font-size: large;
 			display: block;
 			color: white;
@@ -41,11 +36,11 @@
 		}
 
 		li a:hover:not(.activePage) {
-			background-color: #2980b9; //hover dark blue
+			background-color: #cc5490 ;
 		}
 
 		.activePage {
-			background-color: #000080;
+			background-color: #cc5490 ;
 		}
 
 		.paddingForNavigation{
@@ -60,14 +55,9 @@
 		}
 
 		.currentUser {
-			text-shadow:
-				3px 3px 0 #000,
-				-1px -1px 0 #000,  
-				1px -1px 0 #000,
-				-1px 1px 0 #000,
-				1px 1px 0 #000;
+      text-shadow: 2px 2px black;
 			border: 2px solid white;
-			background-color:  #5dade2 ;
+			background-color:  #FF69B4 ;
 			width: 20%;
 			text-align: center;
 			float: right;
@@ -90,6 +80,6 @@
 	<div class="currentUser">
 		<p><%= @user.username %></p>
 	</div>
-	<p style="position: absolute; top: 200px; left: 200px; background: #2980b9;"> Replays are currently in game for now. After playing the game the replay will automatically commence.</p>
+	<p style="position: absolute; top: 200px; left: 200px; background: #cc5490 ;"> Replays are currently in game for now. After playing the game the replay will automatically commence.</p>
 </body>
 </html>
