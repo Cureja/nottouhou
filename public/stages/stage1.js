@@ -1,7 +1,7 @@
 // Stage 1 
 
 function initializeStage() {
-	/*
+	
 	for(var i = 0; i < 1; i++) {
 		let projectionOne = 150;
 		let projectionTwo = 200;
@@ -107,7 +107,7 @@ function initializeStage() {
 		let offsetY = 0; 
 		let numberProj = 20;
 		let theta = 0;
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, -50, 30)
+		let enemy = new Enemy(enemies, "chen", app.renderer.width / 2, -50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 750))
 			.addEvent(12000, createLinearProjection(-20, 400, 500))
 			.addEvent(13000, createDestructor());
@@ -329,7 +329,7 @@ function initializeStage() {
 		});
 	}
 	master.fragment(10000);
-*/
+
 	for(var i = 0; i < 1; i++) {
 		let boss = new Boss(enemies, "yuyu", app.renderer.width / 2, -50, 150)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750))
@@ -362,11 +362,6 @@ function initializeStage() {
 				return REMOVE_EVENT;
 			});
 		}
-
 	}
-
 }
-
-
-
 

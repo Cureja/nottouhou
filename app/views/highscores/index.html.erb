@@ -26,7 +26,7 @@
 		}
 
 		li a {
-	    text-shadow: 2px 2px black;
+	    	text-shadow: 2px 2px black;
 			font-size: large;
 			display: block;
 			color: white;
@@ -42,19 +42,20 @@
 		.activePage {
 			background-color: #cc5490 ;
 		}
+		
 		.paddingForNavigation{
 			padding-left: 10%;
 			padding-top: 20px;
 
-		 }
+		}
 
 		.background {
 			background: url("/weeb2.jpg") no-repeat center fixed;
 			background-size: cover;
-		 }
+		}
 
-		 .currentUser {
- 	    text-shadow: 2px 2px black;
+		.currentUser {
+ 	    	text-shadow: 2px 2px black;
  			border: 2px solid white;
  			background-color:  #FF69B4 ;
  			width: 20%;
@@ -62,39 +63,36 @@
  			float: right;
  			margin-right: 15%;
  		}
-		 .wrapper{
-			 border: 50px;
-			 background-image: url("/hi.png");
-			 background-color: #cf5bdd;
-			 width: 80%;
-			 height: 80%;
-			 margin: auto;
-			 position: absolute;
-			 top: 0;
-			 bottom: 0;
-			 left: 0;
-			 right: 0;
-		 }
-		 .container {
-			 margin: auto;
-			 position: absolute;
-			 border: 1px solid white;
-			 background-color:  #FF69B4 ;
-			 width: 80%;
-			 height: 100%;
-			 top: 0;
-			 bottom: 0;
-			 left: 0;
-			 right: 0;
+		.wrapper{
+			border: 50px;
+			background-image: url("/hi.png");
+			background-color: #cf5bdd;
+			width: 80%;
+			height: 80%;
+			margin: auto;
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+		.container {
+			margin: auto;
+			position: absolute;
+			border: 1px solid white;
+			background-color:  #FF69B4 ;
+			width: 80%;
+			height: 100%;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
 		}
 
-		table, td, th {
-
-    }
 
 		table{
-		 border-collapse: collapse;
-     width: 100%;
+			border-collapse: collapse;
+			width: 100%;
 		}
 
 		th{
@@ -113,14 +111,13 @@
 
 		center {
 			margin: auto;
-		  text-shadow: 2px 2px black;
-	    border: 1px solid white;
-	    padding: 15px;
+			text-shadow: 2px 2px black;
+			border: 1px solid white;
+			padding: 15px;
 			font-family: arial black;
 			color: white;
 			font-weight: bold;
 		}
-
 
  </style>
 </head>
@@ -131,36 +128,36 @@
  </div>
  <div class="wrapper">
 	 <div class="container">
-	     <table>
-        <center>HIGHSCORES</center>
-				 <tr>
-	        <th>Rank</th>
-	        <th>User</th>
-	        <th>Score</th>
-	      </tr>
-				 <% for i in 1..@count do %>
-					 <% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
-						 <tr>
-								 <th><%= i + ((get_page-1)*20) %><%="."%></th>
-								 <th><%= put_user((i + ((get_page-1)*20))-1) %> </th>
-								 <th> <%= put_score((i + ((get_page-1)*2))-1)%> </th>
-						 </tr>
-					 <% end %>
-				 <% end %>
-				 <div style="position: absolute; bottom: 5px; right: 5px">
+	    <table>
+        	<center>HIGHSCORES</center>
+			<tr>
+	        	<th>Rank</th>
+	        	<th>User</th>
+	        	<th>Score</th>
+	      	</tr>
+			<% for i in 1..@count do %>
+				<% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
+					<tr>
+						<th><%= i + ((get_page-1)*20) %><%="."%></th>
+						<th><%= put_user((i + ((get_page-1)*20))-1) %> </th>
+						<th> <%= put_score((i + ((get_page-1)*2))-1)%> </th>
+						</tr>
+					<% end %>
+				<% end %>
+				<div style="position: absolute; bottom: 5px; right: 5px">
 					<% if get_page - 1 >= 1 %>
 						<a href="/highscores?page=<%=(get_page)-1%>"><%="[<<]"%> </a>
 						<% if get_page - 1 > 1 %>
-						 <%="..."%>
+						<%="..."%>
 						<% end %>
 					<% end %>
 					<% if get_page == 1 %>
 							<%=[1]%>
-							 <a href="/highscores?page=<%=2%>"><%=[2]%> </a>
+							<a href="/highscores?page=<%=2%>"><%=[2]%> </a>
 					<% end %>
 					<% if get_page == @intpages %>
-							 <a href="/highscores?page=<%=@intpages-1%>"><%=[@intpages-1]%> </a>
-							 <%=[@intpages]%>
+							<a href="/highscores?page=<%=@intpages-1%>"><%=[@intpages-1]%> </a>
+							<%=[@intpages]%>
 					<% end %>
 					<% if get_page != @intpages && get_page != 1%>
 							<a href="/highscores?page=<%=(get_page-1)%>"><%=[get_page-1]%> </a>
@@ -168,14 +165,14 @@
 							<a href="/highscores?page=<%=(get_page+1)%>"><%=[get_page+1]%> </a>
 					<% end %>
 					<% if get_page+ 1 <= @intpages %>
-					 <% if get_page+ 1 < @intpages %>
+						<% if get_page+ 1 < @intpages %>
 						<%="..."%>
-					 <% end %>
-					 <a href="/highscores?page=<%=(get_page)+1%>"><%="[>>]"%> </a>
+						<% end %>
+						<a href="/highscores?page=<%=(get_page)+1%>"><%="[>>]"%> </a>
 					<% end %>
-				 </div>
-			 </table>
-  </div>
+				</div>
+		</table>
+	</div>
 </div>
  <div class = "paddingForNavigation">
 	 <div>
