@@ -1,4 +1,5 @@
 function initializeStage() {
+	stageN = 0;
 	var text = new PIXI.Text('Welcome to NotTouhou',{fontFamily : 'sans-serif', fontSize: 25, fill : '#FFFFFF'});
 	text.x = app.renderer.width / 2 - 160;
 	text.y = app.renderer.height / 2;

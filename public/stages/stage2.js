@@ -2,6 +2,7 @@
 //subterranean animism, stage 1, normal
 
 function initializeStage() {
+	stageN = 2;
 	var xmod = -1;
 	let halfWidth = app.renderer.width / 2;
 	let halfHeight = app.renderer.height / 2;

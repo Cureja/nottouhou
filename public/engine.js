@@ -5,6 +5,7 @@ let app;
 let animations;
 let player;
 let allowGameLoop = true;
+let stageN;
 
 $(document).ready(() => {
 	app = new PIXI.Application();
@@ -637,7 +638,8 @@ class Player {
 			console.log("You scored", player.score, "points!");
 			console.log();
 			$.post("/highscores",{score: player.score});
-			$.post("/postreplay",{'events[]': JSON.stringify(replay.self)});
+			console.log(stageN);
+			$.post("/postreplay",{'events[]': JSON.stringify(replay.self), stage: stageN});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -701,15 +703,15 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
-let pastAct;
-if(@replay != null) {
-	deathReplay = true;
-	pastAct = @replay;	
-} else {
+let pastAct = [7];
+// if(@replay != null) {
+// 	deathReplay = true;
+// 	pastAct = @replay;	
+// } else {
 	for(i=0; i<7; i++) {
 		pastAct[i] = false;
 	}
-}
+// }
 let replayIndex = 0;
 let replay = new List(1000);
 PIXI.loader.onComplete.add(() => {
@@ -722,9 +724,9 @@ PIXI.loader.onComplete.add(() => {
 		let xdir = 0;
 		let ydir = 0;
 
-		if(@spectate) {
+		// if(@spectate) {
 
-		}
+		// }
 
 		//replays
 		if(!deathReplay) {

@@ -1,7 +1,7 @@
 // Stage 1 
 
 function initializeStage() {
-	
+	stageN = 1;
 	for(var i = 0; i < 1; i++) {
 		let projectionOne = 150;
 		let projectionTwo = 200;

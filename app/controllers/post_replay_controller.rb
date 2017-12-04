@@ -20,9 +20,9 @@ class PostReplayController < ApplicationController
     drivestate.recreate()
     replay = ReplayWrap.new(user: user)
     replay.service = drivestate.service
-    replay.events = @events                       #-
+    replay.events = @events
+    replay.replay.stage = params[:stage]
     replay.store                                  #-
-    # Replay.create(user_id: user.id, replay_id: replay.replay.replay_id)
     render :json => {
       :success => true
     }

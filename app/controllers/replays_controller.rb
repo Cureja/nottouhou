@@ -12,12 +12,14 @@ class ReplaysController < ApplicationController
   end
 
   def get_replay
-  	replay = ReplayWrap.new(user: @user)
-    replay.service = @drivestate.service
-    id = Replay.find_by(:user_id => @user.id).replay_id
-    if !id.nil? 
-      replay.replay.replay_id = id
-      replay = replay.retrieve
+    if not @user.drive_refresh_token.nil? 
+    	replay = ReplayWrap.new(user: @user)
+      replay.service = @drivestate.service
+      id = Replay.find_by(:user_id => @user.id).replay_id
+      if !id.nil? 
+        replay.replay.replay_id = id
+        replay = replay.retrieve
+      end
     end
   end
   

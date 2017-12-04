@@ -12,9 +12,9 @@ class GameController < ApplicationController
     if @spectate != true then
       @spectate = nil
     end
-    elsif(!@replay.nil?)
-      spectate = nil;
-    end
+    # if(!@replay.nil?)
+    #   spectate = nil;
+    # end
 
     if @stage.nil? then
       @stage = 1;

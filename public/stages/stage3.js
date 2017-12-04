@@ -1,4 +1,5 @@
 function initializeStage() {
+  stageN = 3;
   for (var k = 0; k < 4; ++k) {
 		let off = 28 * (k + 1);
 		let left = new Enemy(enemies, "cirno", -28, app.renderer.height + 50, 10)
