@@ -32,9 +32,30 @@ function rotation(rotation) {
 
 let spectate = null;
 let replayI = null;
-function input(replayIn, spectateIn) {
+function input(replayIn, spectateIn, followIn) {
 	replayI = replayIn;
+	console.log(spectateIn);
 	spectate = spectateIn;
+	if(spectate > 0) {
+		skipTime = spectate;
+		deathReplay = true;
+		window.removeEventListener("keydown", (e) => {
+			keys[e.keyCode] = true;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+		window.removeEventListener("keyup", (e) => {
+			keys[e.keyCode] = false;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+	}
+	follow = followIn;
+}
+
+let parse = null;
+function read(input) {
+	console.log("WORKS BUT");
+	console.log(input);
+	parse = input;
 }
 
 class Animations {
@@ -320,7 +341,7 @@ class Entity {
 		}
 		let delta = getTimeNow() - this.spawnTime;
 	 	if (this.tracker === null) { 
-	 		delta += 68000; 
+	 		delta += skipTime; 
 	 	}
 		let e;
 		for (var k = 0, length = this.events.length; k < length; ++k) {
@@ -439,10 +460,8 @@ class Master extends Entity {
 		}
 	}
 
-	catchUp(time) {
-	}	
 }
-let test = 68000;
+let skipTime = 0;
 let master = new Master();
 
 //enemies should generally have their parents set to the master
@@ -464,7 +483,7 @@ class Enemy extends Entity {
 	}
 
 	addEvent(offset, fn) {
-		if (master.fragmentTime >= test) {
+		if (master.fragmentTime >= skipTime) {
 			super.addEvent(offset, fn);
 		}
 		else {
@@ -523,9 +542,8 @@ class Projectile extends Entity {
 	}
 	
 	addEvent(offset, fn) {
-		if (master.fragmentTime >= test) {
+		if (master.fragmentTime >= skipTime) {
 			super.addEvent(offset, fn);
-			//test = test-offset;
 		}else {
 			super.addEvent(offset, (_) => {
 			return REMOVE_EVENT;
@@ -743,10 +761,6 @@ PIXI.loader.onComplete.add(() => {
 		let xdir = 0;
 		let ydir = 0;
 
-		if(spectate) {
-
-	 	}
-
 		//replays
 		if(!deathReplay) {
 			let currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
@@ -755,14 +769,24 @@ PIXI.loader.onComplete.add(() => {
 			for(n=0; n<currAct.length; n++) {
 				if(pastAct[n] != currAct[n]) {
 					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
+					if(spectate==-1) {
+						let stringify = JSON.stringify(replay.self);
+						// console.log(stringify);
+						$.post("/spectate",{x});
+
+	 				}
 					pastAct[n] = currAct[n];
 				}
 			}
 		} else {
-			if(getTimeNow()-startTime > deathTime) {
+			if(spectate > 0) {
+				$.get("/spectate/"+follow);
+				// console.log(parse);
+				replay.self = JSON.parse(parse);
+			} else if(getTimeNow()-startTime > deathTime) {
 				player.die();
 			}
-			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime) {
+			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime-skipTime) {
 				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
 				// Commented out: Accuracy check, with super button mash gets at most 6 pixels off?
 				// if(replay.get(replayIndex).location.x  != player.getLocation().x || replay.get(replayIndex).location.y != player.getLocation().y) {

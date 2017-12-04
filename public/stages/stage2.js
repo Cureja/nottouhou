@@ -803,5 +803,4 @@ function initializeStage() {
 			count++;
 		}
 	}
-	// master.catchUp(20000);
 }

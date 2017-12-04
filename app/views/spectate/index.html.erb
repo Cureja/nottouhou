@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+	<title>Profile - <%=@user.username%></title>
+	<style>
+		ul {
+			list-style-type: none;
+			margin: 0;
+			padding: 0;
+			overflow: hidden;
+			background-color:  #FF69B4 ;
+			position: fixed;
+			top: 10px;
+			float: left;
+			border: 2px solid #fefefe; //white
+		}
+
+		p {
+			font-family: sans-serif;
+			color: white;
+			font-weight: bold;
+		}
+
+		li {
+			float:left;
+		}
+
+		li a {
+      text-shadow: 2px 2px black;
+			font-size: large;
+			display: block;
+			color: white;
+			text-align: center;
+			padding: 14px 16px;
+			text-decoration: none;
+		}
+
+		li a:hover:not(.activePage) {
+			background-color: #cc5490 ;
+		}
+
+		.activePage {
+			background-color: #cc5490 ;
+		}
+
+		.paddingForNavigation{
+			padding-left: 10%;
+			padding-top: 20px;
+
+		}
+
+		.background {
+			background: url("/weeb2.jpg") no-repeat center fixed;
+			background-size: cover;
+		}
+
+		.currentUser {
+      		text-shadow: 2px 2px black;
+			border: 2px solid white;
+			background-color:  #FF69B4 ;
+			width: 20%;
+			text-align: center;
+			float: right;
+			margin-right: 15%;
+		 }
+
+	</style>
+</head>
+<body class="background">
+	<div class = "paddingForNavigation">
+		<ul>
+			<li><a href="/profile" >Campaign</a></li>
+			<li><a href="/replays" >Replays</a></li>
+			<li><a class = "activePage"> Spectate</a></li>
+      		<li><a href="/highscores?page=1"> Hi-Scores</a></li>
+			<li><a>Coop</a></li>
+			<li><a href="/driveauth">Connect Drive</a></li>
+			<li><a href="/logout">Log Out</a></li>
+		</ul>
+	</div>
+	<div class="currentUser">
+		<p><%= @user.username %></p>
+	</div>
+	<p style="position: absolute; top: 200px; left: 200px; background: #cc5490 ;"> Specs.</p>
+</body>
+</html>
