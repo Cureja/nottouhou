@@ -1,0 +1,5 @@
+{"frames": {"chen0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 37, "h": 58}, "rotated": false, "sourceSize": {"h": 63, "w": 37}, "spriteSourceSize": {"y": 0, "x": 0, "w": 37, "h": 63}},
+            "chen1": {"trimmed": false, "frame": {"y": 0, "x": 48, "w": 37, "h": 58}, "rotated": false, "sourceSize": {"h": 63, "w": 37}, "spriteSourceSize": {"y": 0, "x": 0, "w": 37, "h": 63}},
+            "chen2": {"trimmed": false, "frame": {"y": 0, "x": 96, "w": 37, "h": 58}, "rotated": false, "sourceSize": {"h": 63, "w": 37}, "spriteSourceSize": {"y": 0, "x": 0, "w": 37, "h": 63}},
+            "chen3": {"trimmed": false, "frame": {"y": 0, "x": 144, "w": 37, "h": 58}, "rotated": false, "sourceSize": {"h": 63, "w": 37}, "spriteSourceSize": {"y": 0, "x": 0, "w": 37, "h": 63}}},
+            "meta": {"image": "src/chen.png", "format": "RGBA8888"}}

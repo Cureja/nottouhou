@@ -80,7 +80,7 @@ function createProjectionToPlayer(offX, offY, overMS) {
 	}
 }
 
-function customProjectionDumb(theta) {
+function customProjectionNova(theta) {
 	return (entity) => {
 		return createLinearProjection(player.handle.x + 100 * Math.cos(theta), player.handle.y + 100 * Math.sin(theta), 1500)(entity);
 	}

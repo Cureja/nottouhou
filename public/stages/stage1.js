@@ -65,7 +65,7 @@ function initializeStage() {
 		let offsetY = 0;
 		let novaFire = new Enemy(enemies, "cirno", app.renderer.width / 2, -20, 25)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 750))
-			.addEvent(8000, createLinearProjection(app.renderer.width/2, -25, 500))
+			.addEvent(8000, createLinearProjection(app.renderer.width / 2, -25, 500))
 			.addEvent(8500, createDestructor());
 
 		master.addEvent(1000, (_) => {
@@ -89,23 +89,25 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "orbMagenta", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(novaFire._gc))
 				.setRelativeTo(novaFire, 0, 0)
-				.addEvent(0, createSpiralProjection(10, 12, 1000))
-				.addEvent(0 + k * 50, createProjectionToPlayer(offsetX, offsetY, 500));
+				.addEvent(0, createSpiralProjection(10, 32, 1000))
+				.addEvent(500 + k * 100, createProjectionToPlayer(offsetX, offsetY, 2500));
 
-			master.addEvent(2000 + k * 50, (_) => {
+			master.addEvent(1750 + k * 100, (_) => {
 				enemyProjectiles.dispatch(1);
-				return REMOVE_EVENT;
+			return REMOVE_EVENT;
 			});
 		}
+
 	}
+
 	master.fragment(8500);
-				
+					
 	for(var k = 0; k < 1; k++){
 		let offsetX = 0;
 		let offsetY = 0; 
 		let numberProj = 20;
 		let theta = 0;
-		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, 630, 30)
+		let enemy = new Enemy(enemies, "cirno", app.renderer.width / 2, -50, 30)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 750))
 			.addEvent(12000, createLinearProjection(-20, 400, 500))
 			.addEvent(13000, createDestructor());
@@ -293,9 +295,9 @@ function initializeStage() {
 			new BoundedProjectile(enemyProjectiles, "orbYellow", 0, 0, 1)
 				.dependOn(dependsEnemyAlive(enemy._gc))
 				.setRelativeTo(enemy, 0, 0)
-				.addEvent(0 + v * 400, createArcingMovement(50 + xoffSet * i, 150, 100 + xoffSet * i, 300, 500))
-				.addEvent(500 + v * 400, createArcingMovement(150 + xoffSet * i, 450, 100 + xoffSet * i, 600, 500))
-				.addEvent(1000 + v * 400, createLinearProjection(100 + xoffSet * i, 620, 500))	
+				.addEvent(0 + v * 200, createArcingMovement(50 + xoffSet * i, 150, 100 + xoffSet * i, 300, 500))
+				.addEvent(500 + v * 200, createArcingMovement(150 + xoffSet * i, 450, 100 + xoffSet * i, 600, 500))
+				.addEvent(1000 + v * 200, createLinearProjection(100 + xoffSet * i, 620, 500))	
 		}
 
 		master.addEvent(5000, (_) => {
@@ -327,9 +329,9 @@ function initializeStage() {
 		});
 	}
 	master.fragment(10000);
-	*/
+*/
 	for(var i = 0; i < 1; i++) {
-		let boss = new Enemy(enemies, "letty", app.renderer.width / 2, -50, 150)
+		let boss = new Boss(enemies, "yuyu", app.renderer.width / 2, -50, 150)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750))
 
 		master.addEvent(0, (_) => {
@@ -342,19 +344,17 @@ function initializeStage() {
 		    self.handle.y += (player.handle.y - self.handle.y) / 30;
 		    return 10;
 		});
-
 		
 		for(var k = 0; k < 100; k++) {
 			let theta = 0;
-			let numberProj = 30;
+			let numberProj = 25;
 			let specialNumberX = 300;
 			let specialNumberY = 300;
 			for(var j = 0; j < numberProj; j++) {
-
 				new BoundedProjectile(enemyProjectiles, "mediumOrbGreen", 0, 0, 1)
 					.dependOn(dependsEnemyAlive(boss._gc))
 					.setRelativeTo(boss, 15 * Math.cos(theta), 15 * Math.sin(theta))
-					.addEvent(0, customProjectionNova());
+					.addEvent(0, customProjectionNova(theta));
 				theta += (2 * Math.PI) / numberProj;
 			}
 			master.addEvent(1550 + 1000 * k, (_) => {

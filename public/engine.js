@@ -95,6 +95,8 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 
 animations.load("cirno", 4, true, null);
 animations.load("letty", 4, true, null);
+animations.load("chen", 4, true, null);
+animations.load("yuyu", 3, true, null);
 animations.load("fairyBlue", 8, true, null);
 animations.load("fairyRed", 8, true, null);
 animations.load("fairyGreen", 8, true, null);
