@@ -9,15 +9,13 @@ class GameController < ApplicationController
     @replay = params[:replay]
     @stage = params[:stage]
     @spectate = params[:spectate]
-    if @spectate != true then
+    if @spectate  then
       @spectate = nil
-    end
-    elsif(!@replay.nil?)
-      spectate = nil;
     end
 
     if @stage.nil? then
       @stage = 1;
     end
+    
   end
 end

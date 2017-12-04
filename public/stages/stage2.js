@@ -760,30 +760,30 @@ function initializeStage() {
 					return REMOVE_EVENT;
 				});
 
-				for(var j = 0; j < 40; j++) {
-					if(j < 20) {
+				for(var j = 0; j < 30; j++) {
+					if(j < 15) {
+						// new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
+						// 	.dependOn(dependsEnemyAlive(left._gc))
+						// 	.setRelativeTo(left, 0, 0)
+						// 	.addEvent(0, createLinearProjection(j * 50, 0, 2250 + 20 * j));
+						// new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
+						// 	.dependOn(dependsEnemyAlive(right._gc))
+						// 	.setRelativeTo(right, 0, 0)
+						// 	.addEvent(0, createLinearProjection(app.renderer.width - j * 50, 0, 2250 + 20 * j));
 						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(left._gc))
 							.setRelativeTo(left, 0, 0)
-							.addEvent(0, createLinearProjection(j * 50, 0, 2250 + 20 * j));
+							.addEvent(0, createLinearProjection(j * 50, app.renderer.height, 4000 + 50 * j));
 						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(right._gc))
 							.setRelativeTo(right, 0, 0)
-							.addEvent(0, createLinearProjection(app.renderer.width - j * 50, 0, 2250 + 20 * j));
-						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
-							.dependOn(dependsEnemyAlive(left._gc))
-							.setRelativeTo(left, 0, 0)
-							.addEvent(0, createLinearProjection(j * 50, app.renderer.height, 2250 + 20 * j));
-						new BoundedProjectile(enemyProjectiles, "mediumOrbTurquoise", 0, 0, 1)
-							.dependOn(dependsEnemyAlive(right._gc))
-							.setRelativeTo(right, 0, 0)
-							.addEvent(0, createLinearProjection(app.renderer.width - j * 50, app.renderer.height, 2250 + 20 * j));
-						master.addEvent(3500 + j * 100 + 2000 * count, (_) => {
-							enemyProjectiles.dispatch(4);
+							.addEvent(0, createLinearProjection(app.renderer.width - j * 50, app.renderer.height, 5000 + 50 * j));
+						master.addEvent(2600 + 1750 * count, (_) => {
+							enemyProjectiles.dispatch(2);
 							return REMOVE_EVENT;
 						});
 					}else {
-						theta += 2 * Math.PI / 20;
+						theta += 2 * Math.PI / 10;
 						new BoundedProjectile(enemyProjectiles, "mediumOrbPink", 0, 0, 1)
 							.dependOn(dependsEnemyAlive(left._gc))
 							.setRelativeTo(left, 15 * Math.cos(theta), 15 * Math.sin(theta))
@@ -792,7 +792,7 @@ function initializeStage() {
 							.dependOn(dependsEnemyAlive(right._gc))
 							.setRelativeTo(right, 15 * Math.cos(theta), 15 * Math.sin(theta))
 							.addEvent(0, createLinearProjection(halfWidth + 100 + 100 * Math.cos(theta), halfHeight + 100 * Math.sin(theta), 1750));
-						master.addEvent(5500 + j * 10 + 2000 * count, (_) => {
+						master.addEvent(2300 + 1750 * count, (_) => {
 							enemyProjectiles.dispatch(2);
 							return REMOVE_EVENT;
 						});
@@ -803,4 +803,5 @@ function initializeStage() {
 			count++;
 		}
 	}
+	// master.catchUp(20000);
 }

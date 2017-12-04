@@ -30,6 +30,13 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
+let spectate = null;
+let replayI = null;
+function input(replayIn, spectateIn) {
+	replayI = replayIn;
+	spectate = spectateIn;
+}
+
 class Animations {
 	constructor() {
 		Animations.self = this;
@@ -268,7 +275,6 @@ let enemies = new Dispatcher();
 
 const EVENT_TIME = 0;
 const EVENT_FN = 1;
-
 class Entity {
 	constructor(tracker, frames, x, y) {
 		this.tracker = tracker;
@@ -313,6 +319,9 @@ class Entity {
 			return;
 		}
 		let delta = getTimeNow() - this.spawnTime;
+	 	if (this.tracker === null) { 
+	 		delta += 68000; 
+	 	}
 		let e;
 		for (var k = 0, length = this.events.length; k < length; ++k) {
 			e = this.events.get(k);
@@ -431,20 +440,9 @@ class Master extends Entity {
 	}
 
 	catchUp(time) {
-			if (this.destroyed || !this.ensureAlive()) {
-				return;
-			}
-			let delta = getTimeNow() - time;
-			let e;
-			for (var k = 0, length = this.events.length; k < length; ++k) {
-				e = this.events.get(k);
-				if (e !== null && e[EVENT_TIME] <= delta) {
-					this.events.untrack(e);
-				}
-			}
-	}
+	}	
 }
-
+let test = 68000;
 let master = new Master();
 
 //enemies should generally have their parents set to the master
@@ -463,6 +461,18 @@ class Enemy extends Entity {
 			player.score += this.points;
 			this.destroy();
 		}
+	}
+
+	addEvent(offset, fn) {
+		if (master.fragmentTime >= test) {
+			super.addEvent(offset, fn);
+		}
+		else {
+			super.addEvent(offset, (_) => {
+			return REMOVE_EVENT;
+			});
+		}
+		return this;
 	}
 
 	destroy() {
@@ -511,6 +521,18 @@ class Projectile extends Entity {
 		});
 		return this;
 	}
+	
+	addEvent(offset, fn) {
+		if (master.fragmentTime >= test) {
+			super.addEvent(offset, fn);
+			//test = test-offset;
+		}else {
+			super.addEvent(offset, (_) => {
+			return REMOVE_EVENT;
+		});
+		}
+		return this;
+	}
 }
 
 class BoundedProjectile extends Projectile {
@@ -526,6 +548,7 @@ class BoundedProjectile extends Projectile {
 			super.onUpdate(_);
 		}
 	}
+
 }
 
 class Player {
@@ -698,10 +721,11 @@ window.addEventListener("keyup", (e) => {
 });
 
 animations.execute();
-let pastAct;
-if(@replay != null) {
+let pastAct = [7];
+
+if(replayI != null) {
 	deathReplay = true;
-	pastAct = @replay;	
+	replay = replayI;	
 } else {
 	for(i=0; i<7; i++) {
 		pastAct[i] = false;
@@ -719,9 +743,9 @@ PIXI.loader.onComplete.add(() => {
 		let xdir = 0;
 		let ydir = 0;
 
-		if(@spectate) {
+		if(spectate) {
 
-		}
+	 	}
 
 		//replays
 		if(!deathReplay) {

@@ -9,8 +9,9 @@ class Replay < ApplicationRecord
   Make a replay with:
     replay = ReplayWrap.new
   See replay_wrap.rb for specifics on arguments to the constructor.
-  Give it events:
+  Give it events and stage number:
     replay.events = arrayofevents
+    replay.stage = integer
   Give it a DriveState service so it can connect to drive:
     replay.service = drivestate.service
   Store it in drive:
