@@ -13,18 +13,12 @@ class GameController < ApplicationController
     if @replay.nil? then
       @replay = false;
     end
-<<<<<<< HEAD
-    # if(!@replay.nil?)
-    #   spectate = nil;
-    # end
-=======
     if @spectate.nil? then
       @spectate = false;
     end
     if @follow.nil? then
       @follow = false;
     end
->>>>>>> Spectate
 
     if @stage.nil? then
       @stage = 0;

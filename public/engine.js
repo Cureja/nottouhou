@@ -31,11 +31,15 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
-let spectate = null;
-let replayI = null;
+let spectate = false;
+let replayI = false;
 function input(replayIn, spectateIn, followIn) {
 	replayI = replayIn;
-	console.log(spectateIn);
+	if(replayI != false) {
+		console.log("SAVEME");
+		deathReplay = true;
+		replay = replayI;
+	}
 	spectate = spectateIn;
 	if(spectate > 0) {
 		skipTime = spectate;
@@ -343,8 +347,8 @@ class Entity {
 			return;
 		}
 		let delta = getTimeNow() - this.spawnTime;
-	 	if (this.tracker === null) { 
-	 		delta += skipTime; 
+	 	if (this.tracker === null) {
+	 		delta += skipTime;
 	 	}
 		let e;
 		for (var k = 0, length = this.events.length; k < length; ++k) {
@@ -543,7 +547,7 @@ class Projectile extends Entity {
 		});
 		return this;
 	}
-	
+
 	addEvent(offset, fn) {
 		if (master.fragmentTime >= skipTime) {
 			super.addEvent(offset, fn);
@@ -680,7 +684,7 @@ class Player {
 			console.log();
 			$.post("/highscores",{score: player.score});
 			console.log(stageN);
-			$.post("/postreplay",{'events[]': JSON.stringify(replay.self), stage: stageN});
+			$.post("/postreplay",{'events[]': replay.self, stage: stageN});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -745,24 +749,18 @@ window.addEventListener("keyup", (e) => {
 
 animations.execute();
 let pastAct = [7];
-<<<<<<< HEAD
-// if(@replay != null) {
-// 	deathReplay = true;
-// 	pastAct = @replay;	
-// } else {
-=======
 
+let replay = new List(1000);
 if(replayI != null) {
 	deathReplay = true;
-	replay = replayI;	
+	replay.self = replayI;
 } else {
->>>>>>> Spectate
 	for(i=0; i<7; i++) {
 		pastAct[i] = false;
 	}
-// }
+}
 let replayIndex = 0;
-let replay = new List(1000);
+
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
 	app.ticker.add(() => {
@@ -773,13 +771,6 @@ PIXI.loader.onComplete.add(() => {
 		let xdir = 0;
 		let ydir = 0;
 
-<<<<<<< HEAD
-		// if(@spectate) {
-
-		// }
-
-=======
->>>>>>> Spectate
 		//replays
 		if(!deathReplay) {
 			let currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],

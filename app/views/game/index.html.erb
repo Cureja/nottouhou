@@ -4,9 +4,25 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+	<script src="stages/stage<%=@stage%>.js"></script>
+
+	<script>
+		let events = [
+		<%= @somereplay.each do |e| %>
+			<%= e %>,
+		<% end %>
+		];
+
+		/*
+		user requests page for replay
+		you fetch the replay from drive
+		@somereplay.retrieve gives you your event array
+		you're done. this page renders
+		*/
+	</script>
 	<script src="engine.js"></script>
 	<script src="events.js"></script>
-	<script src="stages/stage<%=@stage%>.js"></script>
+
 	<script>input(<%= @replay %>, <%= @spectate %>, <%= @follow %>);</script>
 	<style>
 	ul {
@@ -18,11 +34,7 @@
 		position: fixed;
 		top: 10px;
 		float: left;
-<<<<<<< HEAD
 		border: 2px solid #fefefe;
-=======
-		border: 2px solid #fefefe; //almostWhite
->>>>>>> Spectate
 	}
 
 	p {
