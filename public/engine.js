@@ -623,6 +623,7 @@ class Player {
 			console.log("You scored", player.score, "points!");
 			console.log();
 			$.post("/highscores",{score: player.score});
+			$.post("/postreplay",{'events[]': JSON.stringify(replay.self)});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -740,7 +741,6 @@ PIXI.loader.onComplete.add(() => {
 			keys[VK_D] = pastAct[6];
 		}
 		// replays end
-
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
 		}
