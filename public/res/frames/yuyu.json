@@ -1,0 +1,4 @@
+{"frames": {"yuyu0": {"trimmed": false, "frame": {"y": 0, "x": 0, "w": 27, "h": 72}, "rotated": false, "sourceSize": {"h": 72, "w": 27}, "spriteSourceSize": {"y": 0, "x": 0, "w": 27, "h": 72}},
+            "yuyu1": {"trimmed": false, "frame": {"y": 0, "x": 48, "w": 27, "h": 72}, "rotated": false, "sourceSize": {"h": 72, "w": 27}, "spriteSourceSize": {"y": 0, "x": 0, "w": 27, "h": 72}},
+            "yuyu2": {"trimmed": false, "frame": {"y": 0, "x": 95, "w": 27, "h": 72}, "rotated": false, "sourceSize": {"h": 72, "w": 27}, "spriteSourceSize": {"y": 0, "x": 0, "w": 27, "h": 72}}},
+            "meta": {"image": "src/yuyuko.png", "format": "RGBA8888"}}

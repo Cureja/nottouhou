@@ -691,7 +691,7 @@ function initializeStage() {
 
 	for(var i = 0; i < 1; i++) {
 		let theta = 0, count = 0, travelTime = 2500, ymod = app.renderer.height /6;
-		let boss = new Boss(enemies, "letty", halfWidth, -50, 150)
+		let boss = new Boss(enemies, "chen", halfWidth, -50, 150)
 			.addEvent(0, createLinearMovement(halfWidth, app.renderer.height / 5, 750));
 		master.addEvent(1000, (_) => {
 			enemies.dispatch(1);
@@ -733,7 +733,7 @@ function initializeStage() {
 					enemyProjectiles.dispatch(72);
 					return REMOVE_EVENT;
 				});
-			}else {
+			} else {
 				for(var j = 0; j < 36; j++) {
 					theta += 2 * Math.PI / 36;
 					new BoundedProjectile(enemyProjectiles, "bigOrbGreen", 0, 0, 1)

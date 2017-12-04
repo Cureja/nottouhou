@@ -80,6 +80,12 @@ function createProjectionToPlayer(offX, offY, overMS) {
 	}
 }
 
+function customProjectionNova(theta) {
+	return (entity) => {
+		return createLinearProjection(player.handle.x + 100 * Math.cos(theta), player.handle.y + 100 * Math.sin(theta), 1500)(entity);
+	}
+}
+ 
 /**
 * Creates a movement event that moves an entity in an arc.
 * The line will be a Bezier Curve with curveX,curveY as a "pull" on your begin and end coordinates

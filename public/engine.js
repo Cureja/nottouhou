@@ -95,6 +95,8 @@ animations.load("playerIdleRight", 7, false, (frame) => {
 
 animations.load("cirno", 4, true, null);
 animations.load("letty", 4, true, null);
+animations.load("chen", 4, true, null);
+animations.load("yuyu", 3, true, null);
 animations.load("fairyBlue", 8, true, null);
 animations.load("fairyRed", 8, true, null);
 animations.load("fairyGreen", 8, true, null);
@@ -635,6 +637,7 @@ class Player {
 			console.log("You scored", player.score, "points!");
 			console.log();
 			$.post("/highscores",{score: player.score});
+			$.post("/postreplay",{'events[]': JSON.stringify(replay.self)});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -761,7 +764,6 @@ PIXI.loader.onComplete.add(() => {
 			keys[VK_D] = pastAct[6];
 		}
 		// replays end
-
 		if ((keys[VK_UP] || keys[VK_W]) && ydir == 0) {
 			ydir = -1;
 		}

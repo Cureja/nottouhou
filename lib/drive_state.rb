@@ -32,7 +32,7 @@ class DriveState
     return true
   end
 
-  def recreate
+  def recreate()
     credentials = Google::Auth::UserRefreshCredentials.new(
       client_id: "520788856982-o79jg4d27s9ogvs358unqnntiv7k52ah.apps.googleusercontent.com",
       client_secret: "L5lNtMEmS6tGXXpMAdFkxrRd",
