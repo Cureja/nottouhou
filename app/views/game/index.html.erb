@@ -7,6 +7,7 @@
 	<script src="engine.js"></script>
 	<script src="events.js"></script>
 	<script src="stages/stage<%=@stage%>.js"></script>
+	<script>input(<%= @replay %>, <%= @spectate %>, <%= @follow %>);</script>
 	<style>
 	ul {
 		list-style-type: none;
@@ -17,7 +18,11 @@
 		position: fixed;
 		top: 10px;
 		float: left;
+<<<<<<< HEAD
 		border: 2px solid #fefefe;
+=======
+		border: 2px solid #fefefe; //almostWhite
+>>>>>>> Spectate
 	}
 
 	p {

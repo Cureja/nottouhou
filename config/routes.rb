@@ -23,6 +23,11 @@ Rails.application.routes.draw do
 
   get '/replays' => 'replays#index'
 
+  get '/spectate' => 'spectate#index'
+  get '/spectate/:user_id' => 'spectate#show'
+  post '/spectate' => 'spectate#create'
+  delete '/spectate' => 'spectate#delete'
+
   post '/postreplay' => 'post_replay#create'
 
   root 'front#index'

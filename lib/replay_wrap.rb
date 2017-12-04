@@ -31,7 +31,7 @@ class ReplayWrap
 
   def retrieve
     contents = @service.drive.get_file(@replay.replay_id, download_dest: StringIO.new)
-    @events = Marshal.load(contents.string)
+    @events = JSON.parse(Marshal.load(contents.string))
   end
 
   def delete

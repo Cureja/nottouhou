@@ -1,6 +1,6 @@
 class SpectateController < ApplicationController
   skip_before_action :verify_authenticity_token
-  if !defined? @@games
+  if not defined? @@games
     @@games = {}
   end
 
@@ -12,9 +12,15 @@ class SpectateController < ApplicationController
   end
 
   def create 
-    @@games[@user.id] = JSON.stringify(params[:replay])
+    @@games[@user.id] = params[:replay]
+  end
+
+  def show
+    params[:user_id]
+    @read = @@games[ @user.id ] 
   end
 
   def delete 
     @@games[@user.id] = nil;
+  end
 end
