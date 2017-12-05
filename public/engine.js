@@ -33,11 +33,11 @@ function rotation(rotation) {
 
 let spectate = false;
 let replayI = false;
-function input(spectateIn, followIn) {
-	replayI = events;
-	if(replayI != null) {
+function input(replayIn, spectateIn, followIn) {
+	replayI = replayIn;
+	if(replayI != false) {
 		deathReplay = true;
-		replay.self = replayI;
+		replay.self = events;
 	}
 	spectate = spectateIn;
 	if(spectate > 0) {
@@ -743,14 +743,10 @@ animations.execute();
 let pastAct = [7];
 
 let replay = new List(1000);
-if(replayI != null) {
-	deathReplay = true;
-	replay.self = replayI;
-} else {
-	for(i=0; i<7; i++) {
-		pastAct[i] = false;
-	}
+for(i=0; i<7; i++) {
+	pastAct[i] = false;
 }
+
 let replayIndex = 0;
 
 PIXI.loader.onComplete.add(() => {
