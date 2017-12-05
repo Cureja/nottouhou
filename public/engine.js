@@ -745,22 +745,15 @@ window.addEventListener("keyup", (e) => {
 
 animations.execute();
 let pastAct = [7];
-<<<<<<< HEAD
-// if(@replay != null) {
-// 	deathReplay = true;
-// 	pastAct = @replay;	
-// } else {
-=======
 
 if(replayI != null) {
 	deathReplay = true;
 	replay = replayI;	
 } else {
->>>>>>> Spectate
 	for(i=0; i<7; i++) {
 		pastAct[i] = false;
 	}
-// }
+}
 let replayIndex = 0;
 let replay = new List(1000);
 PIXI.loader.onComplete.add(() => {
@@ -772,15 +765,6 @@ PIXI.loader.onComplete.add(() => {
 
 		let xdir = 0;
 		let ydir = 0;
-
-<<<<<<< HEAD
-		// if(@spectate) {
-
-		// }
-
-=======
->>>>>>> Spectate
-		//replays
 		if(!deathReplay) {
 			let currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
 						    keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]];

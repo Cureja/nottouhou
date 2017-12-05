@@ -1,6 +1,7 @@
 // Stage 1 
 
 function initializeStage() {
+	
 	stageN = 1;
 	for(var i = 0; i < 1; i++) {
 		let projectionOne = 150;
@@ -310,10 +311,10 @@ function initializeStage() {
 	
 	for(var i = 0; i < 20; i++){
 		let redEnemy = new Enemy(enemies, "fairyRed", app.renderer.width / 2, -28, 8)
-			.addEvent(200 + 500 * i, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1000))
-			.addEvent(1250 + 500 * i, createSpiralProjection(32, 54, 2500));
-
-		master.addEvent(0, (_) => {
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1000))
+			.addEvent(1000, createSpiralProjection(32, 54, 2500));
+		
+		master.addEvent(1000 + 300 * i, (_) => {
 			redEnemy.dispatch(1);
 			return REMOVE_EVENT;
 		});
@@ -323,13 +324,14 @@ function initializeStage() {
 				.setRelativeTo(redEnemy, 0 , 0)
 				.addEvent(0, createProjectionToPlayer(0, 0, 1000));
 
-		master.addEvent(1350 + 500 * i, (_) => {
+		master.addEvent(1350 + 300 * i, (_) => {
 			enemyProjectiles.dispatch(1);
 			return REMOVE_EVENT;
 		});
 	}
-	master.fragment(10000);
 
+	master.fragment(10000);
+	
 	for(var i = 0; i < 1; i++) {
 		let boss = new Boss(enemies, "yuyu", app.renderer.width / 2, -50, 150)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750))
