@@ -41,6 +41,7 @@ function input(replayIn, spectateIn, followIn) {
 	}
 	spectate = spectateIn;
 	if(spectate > 0) {
+		console.log(spectate);
 		skipTime = spectate;
 		deathReplay = true;
 		window.removeEventListener("keydown", (e) => {
@@ -743,7 +744,7 @@ animations.execute();
 let pastAct = [7];
 
 
-let replay = new List(1000);
+let replay = new List(70);
 for(i=0; i<7; i++) {
 	pastAct[i] = false;
 }
@@ -756,6 +757,7 @@ PIXI.loader.onComplete.add(() => {
 		if (!allowGameLoop) {
 			return;
 		}
+		console.log(replay.size());
 
 		let xdir = 0;
 		let ydir = 0;
