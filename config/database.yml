@@ -23,13 +23,13 @@ default: &default
 
 development:
   <<: *default
-  # database: nottouhou_development
+  database: nottouhou_development
 
-  # CSIL database
-  database: cmpt276
-  username: cmpt276
-  password: thecmpt276Passw0rd
-  host: localhost
+  # # CSIL database
+  # database: cmpt276
+  # username: cmpt276
+  # password: thecmpt276Passw0rd
+  # host: localhost
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
