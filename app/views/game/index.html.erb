@@ -52,7 +52,7 @@
 	}
 
 	li a {
-        text-shadow: 2px 2px black;
+    text-shadow: 2px 2px black;
 		font-size: large;
 		display: block;
 		color: white;
@@ -72,9 +72,9 @@
 	}
 
 	.currentUser {
-  		text-shadow: 2px 2px black;
+  	text-shadow: 2px 2px black;
 		border: 2px solid white;
-		background-color:  #FF69B4 ;
+		background-color: #FF69B4;
 		width: 20%;
 		text-align: center;
 		float: right;
@@ -100,19 +100,6 @@
 	</style>
 </head>
 <body class="background">
-	<div class = "paddingForNavigation">
-		<ul>
-			<li><a href="/profile" >Campaign</a></li>
-			<li><a href="/replays?page=1"> Replays</a></li>
-      		<li><a href="/highscores?page=1"> Hi-Scores</a></li>
-			<li><a>Coop</a></li>
-			<li><a href="/driveauth">Connect Drive</a></li>
-			<li><a href="/logout">Log Out</a></li>
-		</ul>
-	</div>
-	<div class="currentUser">
-	     <p><%= @user.username %></p>
-	</div>
 	<div class="game_container" id="game-container">
 	</div>
 </body>
