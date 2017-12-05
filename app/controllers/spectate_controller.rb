@@ -1,8 +1,8 @@
+
 class SpectateController < ApplicationController
   skip_before_action :verify_authenticity_token
-  if not defined? @@games
-    @@games = {}
-  end
+
+  @@games = {}
 
   def index
     @user = current_user
@@ -11,16 +11,20 @@ class SpectateController < ApplicationController
     end
   end
 
-  def create 
+  def create
+    @user = current_user
     @@games[@user.id] = params[:replay]
   end
 
   def show
-    params[:user_id]
-    @read = @@games[ @user.id ] 
+    @read = @@games[params[:user_id].to_i]
+    render :json => {
+      :events => @read
+    }
   end
 
-  def delete 
+  def delete
+    @user = current_user
     @@games[@user.id] = nil;
   end
 end
