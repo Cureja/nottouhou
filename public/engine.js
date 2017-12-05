@@ -33,12 +33,11 @@ function rotation(rotation) {
 
 let spectate = false;
 let replayI = false;
-function input(replayIn, spectateIn, followIn) {
-	replayI = replayIn;
-	if(replayI != false) {
-		console.log("SAVEME");
+function input(spectateIn, followIn) {
+	replayI = events;
+	if(replayI != null) {
 		deathReplay = true;
-		replay = replayI;
+		replay.self = replayI;
 	}
 	spectate = spectateIn;
 	if(spectate > 0) {
@@ -54,13 +53,6 @@ function input(replayIn, spectateIn, followIn) {
 		});
 	}
 	follow = followIn;
-}
-
-let parse = null;
-function read(input) {
-	console.log("WORKS BUT");
-	console.log(input);
-	parse = input;
 }
 
 class Animations {
@@ -782,17 +774,19 @@ PIXI.loader.onComplete.add(() => {
 					if(spectate==-1) {
 						let stringify = JSON.stringify(replay.self);
 						// console.log(stringify);
-						$.post("/spectate",{x});
-
+						$.post("/spectate", {
+								events: stringify
+						});
 	 				}
 					pastAct[n] = currAct[n];
 				}
 			}
 		} else {
 			if(spectate > 0) {
-				$.get("/spectate/"+follow);
-				// console.log(parse);
-				replay.self = JSON.parse(parse);
+				$.get("/spectate/"+follow, {}, (result) => {
+					events = JSON.parse(result);
+				});
+				replay.self = events;
 			} else if(getTimeNow()-startTime > deathTime) {
 				player.die();
 			}
