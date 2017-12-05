@@ -1,8 +1,8 @@
-// Stage 1 
+// Stage 1
 
 function initializeStage() {
-	
-	stageN = 1;
+
+	stageN = 1;/*
 	for(var i = 0; i < 1; i++) {
 		let projectionOne = 150;
 		let projectionTwo = 200;
@@ -102,10 +102,10 @@ function initializeStage() {
 	}
 
 	master.fragment(8500);
-					
+
 	for(var k = 0; k < 1; k++){
 		let offsetX = 0;
-		let offsetY = 0; 
+		let offsetY = 0;
 		let numberProj = 20;
 		let theta = 0;
 		let enemy = new Enemy(enemies, "chen", app.renderer.width / 2, -50, 30)
@@ -206,7 +206,7 @@ function initializeStage() {
 		master.addEvent(4000, (_) => {
 			enemyProjectiles.dispatch(numberProj);
 			return REMOVE_EVENT;
-		});		
+		});
 	}
 	master.fragment(13000);
 
@@ -279,7 +279,7 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 	}
-	
+
 	for(var i = 0; i < 2; i++) {
 		let xoffSet = 400;
 		let enemy = new Enemy(enemies, "cirno", 100 + xoffSet * i, -20, 20)
@@ -290,7 +290,7 @@ function initializeStage() {
 		master.addEvent(1000, (_) => {
 			enemy.dispatch(1);
 			return REMOVE_EVENT;
-		});	
+		});
 
 		for(var v = 0; v < 10; v++) {
 			new BoundedProjectile(enemyProjectiles, "orbYellow", 0, 0, 1)
@@ -298,7 +298,7 @@ function initializeStage() {
 				.setRelativeTo(enemy, 0, 0)
 				.addEvent(0 + v * 200, createArcingMovement(50 + xoffSet * i, 150, 100 + xoffSet * i, 300, 500))
 				.addEvent(500 + v * 200, createArcingMovement(150 + xoffSet * i, 450, 100 + xoffSet * i, 600, 500))
-				.addEvent(1000 + v * 200, createLinearProjection(100 + xoffSet * i, 620, 500))	
+				.addEvent(1000 + v * 200, createLinearProjection(100 + xoffSet * i, 620, 500))
 		}
 
 		master.addEvent(5000, (_) => {
@@ -306,16 +306,16 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 	}
-	
+
 	master.fragment(11000);
-	
+*/
 	for(var i = 0; i < 20; i++){
 		let redEnemy = new Enemy(enemies, "fairyRed", app.renderer.width / 2, -28, 8)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1000))
 			.addEvent(1000, createSpiralProjection(32, 54, 2500));
-		
+
 		master.addEvent(1000 + 300 * i, (_) => {
-			redEnemy.dispatch(1);
+			enemies.dispatch(1);
 			return REMOVE_EVENT;
 		});
 
@@ -329,12 +329,11 @@ function initializeStage() {
 			return REMOVE_EVENT;
 		});
 	}
-
 	master.fragment(10000);
-	
+
 	for(var i = 0; i < 1; i++) {
 		let boss = new Boss(enemies, "yuyu", app.renderer.width / 2, -50, 150)
-			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750))
+			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 5, 750));
 
 		master.addEvent(0, (_) => {
 			enemies.dispatch(1);
@@ -346,7 +345,7 @@ function initializeStage() {
 		    self.handle.y += (player.handle.y - self.handle.y) / 30;
 		    return 10;
 		});
-		
+
 		for(var k = 0; k < 100; k++) {
 			let theta = 0;
 			let numberProj = 25;
@@ -366,4 +365,3 @@ function initializeStage() {
 		}
 	}
 }
-
