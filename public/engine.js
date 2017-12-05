@@ -31,11 +31,14 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
-let spectate = null;
-let replayI = null;
+let spectate = false;
+let replayI = false;
 function input(replayIn, spectateIn, followIn) {
 	replayI = replayIn;
-	console.log(spectateIn);
+	if(replayI != false) {
+		deathReplay = true;
+		replay.self = events;
+	}
 	spectate = spectateIn;
 	if(spectate > 0) {
 		skipTime = spectate;
@@ -50,13 +53,6 @@ function input(replayIn, spectateIn, followIn) {
 		});
 	}
 	follow = followIn;
-}
-
-let parse = null;
-function read(input) {
-	console.log("WORKS BUT");
-	console.log(input);
-	parse = input;
 }
 
 class Animations {
@@ -343,8 +339,8 @@ class Entity {
 			return;
 		}
 		let delta = getTimeNow() - this.spawnTime;
-	 	if (this.tracker === null) { 
-	 		delta += skipTime; 
+	 	if (this.tracker === null) {
+	 		delta += skipTime;
 	 	}
 		let e;
 		for (var k = 0, length = this.events.length; k < length; ++k) {
@@ -543,7 +539,7 @@ class Projectile extends Entity {
 		});
 		return this;
 	}
-	
+
 	addEvent(offset, fn) {
 		if (master.fragmentTime >= skipTime) {
 			super.addEvent(offset, fn);
@@ -680,7 +676,7 @@ class Player {
 			console.log();
 			$.post("/highscores",{score: player.score});
 			console.log(stageN);
-			$.post("/postreplay",{'events[]': JSON.stringify(replay.self), stage: stageN});
+			$.post("/postreplay",{'events[]': replay.self, stage: stageN});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -746,16 +742,14 @@ window.addEventListener("keyup", (e) => {
 animations.execute();
 let pastAct = [7];
 
-if(replayI != null) {
-	deathReplay = true;
-	replay = replayI;	
-} else {
-	for(i=0; i<7; i++) {
-		pastAct[i] = false;
-	}
-}
-let replayIndex = 0;
+
 let replay = new List(1000);
+for(i=0; i<7; i++) {
+	pastAct[i] = false;
+}
+
+let replayIndex = 0;
+
 PIXI.loader.onComplete.add(() => {
 	player = new Player();
 	app.ticker.add(() => {
@@ -765,6 +759,8 @@ PIXI.loader.onComplete.add(() => {
 
 		let xdir = 0;
 		let ydir = 0;
+
+		//replays
 		if(!deathReplay) {
 			let currAct = [keys[VK_X], keys[VK_Z], keys[VK_SHIFT], keys[VK_UP]||keys[VK_W],
 						    keys[VK_DOWN]||keys[VK_S], keys[VK_LEFT]||keys[VK_A], keys[VK_RIGHT]||keys[VK_D]];
@@ -775,17 +771,19 @@ PIXI.loader.onComplete.add(() => {
 					if(spectate==-1) {
 						let stringify = JSON.stringify(replay.self);
 						// console.log(stringify);
-						$.post("/spectate",{x});
-
+						$.post("/spectate", {
+								events: stringify
+						});
 	 				}
 					pastAct[n] = currAct[n];
 				}
 			}
 		} else {
 			if(spectate > 0) {
-				$.get("/spectate/"+follow);
-				// console.log(parse);
-				replay.self = JSON.parse(parse);
+				$.get("/spectate/"+follow, {}, (result) => {
+					events = JSON.parse(result);
+				});
+				replay.self = events;
 			} else if(getTimeNow()-startTime > deathTime) {
 				player.die();
 			}

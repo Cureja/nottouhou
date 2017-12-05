@@ -1,9 +1,14 @@
+
+require "drive_state"
+require "replay_wrap"
+
 class ReplaysController < ApplicationController
   skip_before_action :verify_authenticity_token
   helper_method :get_replay
   helper_method :get_stage
   helper_method :get_time
   helper_method :get_page
+
   def index
     @count = Replay.count
     @pages = (@count/20.to_f).ceil
@@ -18,17 +23,17 @@ class ReplaysController < ApplicationController
   end
 
   def get_replay(value=1)
-    if not @user.drive_refresh_token.nil? 
+    if not @user.drive_refresh_token.nil?
     	replay = ReplayWrap.new(user: @user)
       replay.service = @drivestate.service
       id = Replay.order('created_at').offset(value).first.replay_id
-      if !id.nil? 
+      if !id.nil?
         replay.replay.replay_id = id
         replay = replay.retrieve
       end
     end
   end
-  
+
   def get_time(value=1)
     time = Replay.order('created_at').offset(value).first
     if !time.nil?
