@@ -19,7 +19,7 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
   	assert_select "a[href=?]", driveauth_path
   end
 
-  test "links to logou" do
+  test "links to logout" do
   	assert_select "a[href=?]", logout_path
   end
 end
