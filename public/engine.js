@@ -51,12 +51,12 @@ function input(replayIn, spectateIn, followIn) {
 	follow = followIn;
 }
 
-let parse = null;
-function read(input) {
-	console.log("WORKS BUT");
-	console.log(input);
-	parse = input;
-}
+// let parse = null;
+// function read(input) {
+// 	console.log("WORKS BUT");
+// 	console.log(input);
+// 	parse = input;
+// }
 
 class Animations {
 	constructor() {
@@ -771,8 +771,9 @@ PIXI.loader.onComplete.add(() => {
 					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
 					if(spectate==-1) {
 						let stringify = JSON.stringify(replay.self);
-						// console.log(stringify);
-						$.post("/spectate",{x});
+						$.post("/spectate", {
+							replay: stringify
+						});
 
 	 				}
 					pastAct[n] = currAct[n];
@@ -780,9 +781,11 @@ PIXI.loader.onComplete.add(() => {
 			}
 		} else {
 			if(spectate > 0) {
-				$.get("/spectate/"+follow);
+				$.get("/spectate/"+follow, {}, (result) => {
+					//replay.self = JSON.parse(result).events;
+					console.log(result);
+				});
 				// console.log(parse);
-				replay.self = JSON.parse(parse);
 			} else if(getTimeNow()-startTime > deathTime) {
 				player.die();
 			}
