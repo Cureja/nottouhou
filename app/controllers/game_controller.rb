@@ -6,7 +6,7 @@ class GameController < ApplicationController
     if @user.nil? then
       redirect_to :controller => "login", :action => "index"
     end
-    @replay = false;
+    @replay = params[:replay];
     @stage = params[:stage]
     @spectate = params[:spectate]
     @follow = params[:follow]

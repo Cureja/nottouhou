@@ -17,6 +17,7 @@ class SpectateController < ApplicationController
   end
 
   def show
+    # print "huh #{@@games[params[:user_id].to_i]}"
     @read = @@games[params[:user_id].to_i]
     render :json => {
       :events => @read

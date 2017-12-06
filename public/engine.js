@@ -31,31 +31,6 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
-let spectate = false;
-let replayI = false;
-function input(replayIn, spectateIn, followIn) {
-	replayI = replayIn;
-	if(replayI != false) {
-		deathReplay = true;
-		replay.self = events;
-	}
-	spectate = spectateIn;
-	if(spectate > 0) {
-		console.log(spectate);
-		skipTime = spectate;
-		deathReplay = true;
-		window.removeEventListener("keydown", (e) => {
-			keys[e.keyCode] = true;
-			keys[VK_SHIFT] = e.shiftKey;
-		});
-		window.removeEventListener("keyup", (e) => {
-			keys[e.keyCode] = false;
-			keys[VK_SHIFT] = e.shiftKey;
-		});
-	}
-	follow = followIn;
-}
-
 class Animations {
 	constructor() {
 		Animations.self = this;
@@ -232,15 +207,16 @@ class List {
 }
 
 let spectate = false;
-let replayI = false;
 let replay = new List(100);
 function input(replayIn, spectateIn, followIn) {
-	replayI = replayIn;
-	if(new String(replayI).trim() != new String("false").trim() ) {
+	let replayI = replayIn;
+	if(new String(replayI).trim() !== new String("false").trim() ) {
+		console.log("redead");
 		deathReplay = true;
 		replay.self = JSON.parse(replayI);
 		replay.length = replay.self.length;
-		deathTime = replay.pop()
+		deathTime = replay.pop();
+		console.log("redead");
 	} else {
 		replay = new List(100);
 		for(i=0; i<7; i++) {
@@ -248,8 +224,9 @@ function input(replayIn, spectateIn, followIn) {
 		}
 	}
 	spectate = spectateIn;
-	if(spectate !== false) {
+	if(spectate !== false && spectate !==-1) {
 		skipTime = spectate;
+		console.log("spdead");
 		deathReplay = true;
 		window.removeEventListener("keydown", (e) => {
 			keys[e.keyCode] = true;
@@ -790,7 +767,6 @@ PIXI.loader.onComplete.add(() => {
 		if (!allowGameLoop) {
 			return;
 		}
-		console.log(replay.size());
 
 		let xdir = 0;
 		let ydir = 0;
@@ -808,7 +784,7 @@ PIXI.loader.onComplete.add(() => {
 						let stringify = JSON.stringify(replay.self);
 						// console.log(stringify);
 						$.post("/spectate", {
-								events: stringify
+							replay: stringify
 						});
 	 				}
 					pastAct[n] = currAct[n];
@@ -820,14 +796,14 @@ PIXI.loader.onComplete.add(() => {
 			// }
 			if(spectate > 0) {
 				$.get("/spectate/"+follow, {}, (result) => {
-					events = JSON.parse(result);
+					console.log(JSON.parse(result.events));
+					replay.self = JSON.parse(result.events);
+					replay.length = 1000;
 				});
-				replay.self = events;
 			} else if(getTimeNow()-startTime > deathTime) {
 				player.die();
 			}
-			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime-skipTime) {
-				console.log("WHY NO WORK");
+			while(replayIndex < replay.size() && replay.get(replayIndex) != null && replay.get(replayIndex).time < getTimeNow()-startTime-skipTime) {
 				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
 				// Commented out: Accuracy check, with super button mash gets at most 6 pixels off?
 				// if(replay.get(replayIndex).location.x  != player.getLocation().x || replay.get(replayIndex).location.y != player.getLocation().y) {
