@@ -14,18 +14,17 @@ class ReplaysController < ApplicationController
     @pages = (@count/20.to_f).ceil
     @intpages = @pages.to_i
     @user = current_user
-    @drivestate = DriveState.new(@user)
-    # if drivestate -- Check if has drivestate
-    @drivestate.recreate
     if @user.nil? then
       redirect_to :controller => "login", :action => "index"
     end
   end
 
-  def get_replay(value=1)
-    if not @user.drive_refresh_token.nil?
+  def get_replay(value=0)
+    if not current_user.drive_refresh_token.nil?
+      drivestate = DriveState.new(@user)
+      drivestate.recreate
     	replay = ReplayWrap.new(user: @user)
-      replay.service = @drivestate.service
+      replay.service = drivestate.service
       id = Replay.order('created_at').offset(value).first.replay_id
       if !id.nil?
         replay.replay.replay_id = id
@@ -34,14 +33,14 @@ class ReplaysController < ApplicationController
     end
   end
 
-  def get_time(value=1)
+  def get_time(value=0)
     time = Replay.order('created_at').offset(value).first
     if !time.nil?
       return time.created_at
     end
    end
 
-  def get_stage(value=1)
+  def get_stage(value=0)
     stage = Replay.order('created_at').offset(value).first
     if !stage.nil?
       return stage.stage

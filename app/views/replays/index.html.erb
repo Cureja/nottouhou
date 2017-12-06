@@ -122,9 +122,9 @@
 				<% for i in 1..@count do %>
 					<% if i <= 20 && (i + ((get_page-1)*20)) <= @count %>
 						<tr>
-							<th><a href="/game?stage=<%= get_stage((i + ((get_page-1)*2))-1)%>&replay= <%= get_replay ((get_page-1)*20) %>"style="color: white" > Link </a></th>
+							<th><a href="/game?stage=<%= get_stage((i + ((get_page-1)*2))-1)%>&replay= <%= get_replay (i+(get_page-1)*20-1) %>"style="color: white" > Link </a></th>
 							<th><%= get_time((i + ((get_page-1)*20))-1) %> </th>
-							<th> <%= get_stage((i + ((get_page-1)*2))-1)%> </th>
+							<th> <%= get_stage((i + ((get_page-1)*20))-1)%> </th>
 						</tr>
 						<% end %>
 					<% end %>

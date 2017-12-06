@@ -1,0 +1,15 @@
+ 	<script>
+		<% if @replay != false then %>
+			let events = [
+				<%= @replay.each do |e| %>
+					<%= e %>,
+				<% end %>
+			];
+		<% end %>
+		/*
+		user requests page for replay
+		you fetch the replay from drive
+		@somereplay.retrieve gives you your event array
+		you're done. this page renders
+		*/
+	</script>

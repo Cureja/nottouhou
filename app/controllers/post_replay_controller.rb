@@ -22,7 +22,7 @@ class PostReplayController < ApplicationController
     replay.service = drivestate.service
     replay.events = @events
     replay.replay.stage = params[:stage]
-    replay.store                                  #-
+    replay.store
     render :json => {
       :success => true
     }

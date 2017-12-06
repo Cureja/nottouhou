@@ -31,30 +31,6 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
-let spectate = false;
-let replayI = false;
-function input(replayIn, spectateIn, followIn) {
-	replayI = replayIn;
-	if(replayI != false) {
-		deathReplay = true;
-		replay.self = events;
-	}
-	spectate = spectateIn;
-	if(spectate > 0) {
-		skipTime = spectate;
-		deathReplay = true;
-		window.removeEventListener("keydown", (e) => {
-			keys[e.keyCode] = true;
-			keys[VK_SHIFT] = e.shiftKey;
-		});
-		window.removeEventListener("keyup", (e) => {
-			keys[e.keyCode] = false;
-			keys[VK_SHIFT] = e.shiftKey;
-		});
-	}
-	follow = followIn;
-}
-
 class Animations {
 	constructor() {
 		Animations.self = this;
@@ -218,11 +194,48 @@ class List {
 		return ret;
 	}
 
+	trim() {
+		this.self = this.self.slice(0,this.length);
+		console.log(this.self);
+	}
+
 	clear() {
 		for (var k = 0, length = this.length; k < length; ++k) {
 			this.self[k] = null;
 		}
 	}
+}
+
+let spectate = false;
+let replayI = false;
+let replay = new List(100);
+function input(replayIn, spectateIn, followIn) {
+	replayI = replayIn;
+	if(new String(replayI).trim() != new String("false").trim() ) {
+		deathReplay = true;
+		replay.self = JSON.parse(replayI);
+		replay.length = replay.self.length;
+		deathTime = replay.pop()
+	} else {
+		replay = new List(100);
+		for(i=0; i<7; i++) {
+			pastAct[i] = false;
+		}
+	}
+	spectate = spectateIn;
+	if(spectate !== false) {
+		skipTime = spectate;
+		deathReplay = true;
+		window.removeEventListener("keydown", (e) => {
+			keys[e.keyCode] = true;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+		window.removeEventListener("keyup", (e) => {
+			keys[e.keyCode] = false;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+	}
+	follow = followIn;
 }
 
 class GarbageCollector extends List {
@@ -676,7 +689,9 @@ class Player {
 			console.log();
 			$.post("/highscores",{score: player.score});
 			console.log(stageN);
-			$.post("/postreplay",{'events[]': replay.self, stage: stageN});
+			replay.trim();
+			replay.push(deathTime);
+			$.post("/postreplay",{'events': JSON.stringify(replay.self), stage: stageN});
 			master = new Master();
 			animations.clear();
 			app.stage.removeChild(player.handle)
@@ -742,11 +757,6 @@ window.addEventListener("keyup", (e) => {
 animations.execute();
 let pastAct = [7];
 
-let replay = new List(1000);
-for(i=0; i<7; i++) {
-	pastAct[i] = false;
-}
-
 let replayIndex = 0;
 
 PIXI.loader.onComplete.add(() => {
@@ -767,6 +777,7 @@ PIXI.loader.onComplete.add(() => {
 			for(n=0; n<currAct.length; n++) {
 				if(pastAct[n] != currAct[n]) {
 					replay.push({key:n, time:getTimeNow()-startTime, location:player.getLocation()});
+					//replay.push(getTimeNow()-startTime);
 					if(spectate==-1) {
 						let stringify = JSON.stringify(replay.self);
 						// console.log(stringify);
@@ -778,6 +789,9 @@ PIXI.loader.onComplete.add(() => {
 				}
 			}
 		} else {
+			// if(new String(replayI).trim() != new String("\"false\"").trim() ) {
+
+			// }
 			if(spectate > 0) {
 				$.get("/spectate/"+follow, {}, (result) => {
 					events = JSON.parse(result);
@@ -787,6 +801,7 @@ PIXI.loader.onComplete.add(() => {
 				player.die();
 			}
 			while(replayIndex < replay.size() && replay.get(replayIndex).time < getTimeNow()-startTime-skipTime) {
+				console.log("WHY NO WORK");
 				pastAct[replay.get(replayIndex).key] = !pastAct[replay.get(replayIndex).key];
 				// Commented out: Accuracy check, with super button mash gets at most 6 pixels off?
 				// if(replay.get(replayIndex).location.x  != player.getLocation().x || replay.get(replayIndex).location.y != player.getLocation().y) {
