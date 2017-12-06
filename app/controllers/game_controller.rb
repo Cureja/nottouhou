@@ -6,13 +6,14 @@ class GameController < ApplicationController
     if @user.nil? then
       redirect_to :controller => "login", :action => "index"
     end
-    @replay = params[:replay]
+    @replay = false;
     @stage = params[:stage]
     @spectate = params[:spectate]
     @follow = params[:follow]
     if @replay.nil? then
       @replay = false;
     end
+
     if @spectate.nil? then
       @spectate = false;
     end

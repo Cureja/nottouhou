@@ -31,6 +31,31 @@ function rotation(rotation) {
 	return rotations[Math.floor(rotation / 45)];
 }
 
+let spectate = false;
+let replayI = false;
+function input(replayIn, spectateIn, followIn) {
+	replayI = replayIn;
+	if(replayI != false) {
+		deathReplay = true;
+		replay.self = events;
+	}
+	spectate = spectateIn;
+	if(spectate > 0) {
+		console.log(spectate);
+		skipTime = spectate;
+		deathReplay = true;
+		window.removeEventListener("keydown", (e) => {
+			keys[e.keyCode] = true;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+		window.removeEventListener("keyup", (e) => {
+			keys[e.keyCode] = false;
+			keys[VK_SHIFT] = e.shiftKey;
+		});
+	}
+	follow = followIn;
+}
+
 class Animations {
 	constructor() {
 		Animations.self = this;
@@ -765,6 +790,7 @@ PIXI.loader.onComplete.add(() => {
 		if (!allowGameLoop) {
 			return;
 		}
+		console.log(replay.size());
 
 		let xdir = 0;
 		let ydir = 0;
