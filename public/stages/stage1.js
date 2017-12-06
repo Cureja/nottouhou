@@ -2,7 +2,7 @@
 
 function initializeStage() {
 
-	stageN = 1;/*
+	stageN = 1;
 	for(var i = 0; i < 1; i++) {
 		let projectionOne = 150;
 		let projectionTwo = 200;
@@ -308,7 +308,7 @@ function initializeStage() {
 	}
 
 	master.fragment(11000);
-*/
+
 	for(var i = 0; i < 20; i++){
 		let redEnemy = new Enemy(enemies, "fairyRed", app.renderer.width / 2, -28, 8)
 			.addEvent(0, createLinearMovement(app.renderer.width / 2, app.renderer.height / 2, 1000))
