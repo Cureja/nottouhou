@@ -44,7 +44,7 @@
 		}
 
 		.paddingForNavigation{
-			padding-left: 10%;
+			padding-left: 50px;
 			padding-top: 20px;
 
 		}
@@ -55,26 +55,27 @@
 		}
 
 		.currentUser {
+			float:right;
       		text-shadow: 2px 2px black;
 			border: 2px solid white;
 			background-color:  #FF69B4 ;
-			width: 20%;
+			width: 750px;
 			text-align: center;
-			float: right;
-			margin-right: 15%;
+		
 		 }
 
 		 .container {
-			 margin: auto;
-			 position: absolute;
+		 	 margin: 0 auto;
 			 border: 1px solid white;
 			 background-color:  #FF69B4 ;
 			 width: 1000px;
 			 height: 1000px;
-			 top: 0;
-			 bottom: 0;
-			 left: 0;
-			 right: 0;
+
+
+		}
+
+		.topad{
+			padding-top: 100px;
 		}
 
 
@@ -107,13 +108,19 @@
 			font-weight: bold;
 		}
 
+		.wrap {
+		    width: auto;
+            height: auto;
+            min-width: 100%;
+            min-height: 100%;
+	     }
+
 	</style>
 </head>
 <body class="background">
- <div class="currentUser">
-		<div class="userProfile"></div>
-		<p><%= @user.username %></p>
- </div>
+ <div class ="wrap">
+  <div class="currentUser"><p><%= @user.username %></p></div>
+    <div class="topad">
 	 <div class="container">
 	    <table>
         	<center>HIGHSCORES</center>
@@ -164,8 +171,8 @@
 				  <% end %>
 		</table>
 	</div>
-</div>
- <div class = "paddingForNavigation">
+   </div>
+  <div class = "paddingForNavigation">
 	 <div>
 			<ul>
 				<li><a href="/profile" >Campaign</a></li>
@@ -177,6 +184,6 @@
 			</ul>
 	 </div>
  </div>
- </div>
+</div>
 </body>
 </html>

@@ -57,7 +57,7 @@
 		}
 
 		.paddingForNavigation{
-			padding-left: 10%;
+			padding-left: 50px;
 			padding-top: 20px;
 		}
 
@@ -67,14 +67,15 @@
 		}
 
 		.currentUser {
-	    	text-shadow: 2px 2px black;
+			float:right;
+      		text-shadow: 2px 2px black;
 			border: 2px solid white;
 			background-color:  #FF69B4 ;
-			width: 20%;
+			width: 750px;
 			text-align: center;
-			float: right;
-			margin-right: 15%;
-		}
+		
+		 }
+
 		table {
 			border-spacing: 20px;
 		}
@@ -89,10 +90,19 @@
 			border: 2px solid white;
 			background-color:  #FF69B4 ;
 		}
+
+		.wrap {
+		    width: auto;
+            height: auto;
+            min-width: 100%;
+            min-height: 100%;
+	     }
+
 	</style>
 </head>
 </head>
 <body class="background">
+   <div class ="wrap">
 	<div class = "paddingForNavigation">
 		<ul>
 		<li><a class = "activePage">Campaign</a></li>
@@ -116,5 +126,6 @@
 			</tr>
 		</table>
 	</div>
+   </div>
 </body>
 </html>
