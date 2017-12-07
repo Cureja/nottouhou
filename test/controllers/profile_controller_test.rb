@@ -7,13 +7,9 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
     follow_redirect!
   end
 
-  test "links to replays" do
-  	assert_select "a[href=?]", replays_path
-  end
-
-  test "links to highscores" do
-  	assert_select "a[href=?]", highscores_path
-  end
+#  test "links to highscores" do
+#  	assert_select li, highscores_path
+#  end
 
   test "links to drive authenticate" do
   	assert_select "a[href=?]", driveauth_path
@@ -21,5 +17,17 @@ class ProfileControllerTest < ActionDispatch::IntegrationTest
 
   test "links to logout" do
   	assert_select "a[href=?]", logout_path
+  end
+  
+  test "links to tutorial stage" do
+    assert_select "th", "Tutorial"  
+  end
+
+  test "links to stage 1" do
+    assert_select "th", "Stage 1"
+  end
+
+  test "links to stage 2" do
+    assert_select "th", "Stage 2"
   end
 end
