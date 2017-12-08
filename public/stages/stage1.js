@@ -22,9 +22,7 @@ function initializeStage() {
 			.addEvent(12500, createDestructor());
 
 		master.addEvent(0, (_) => {
-			spiralEnemies.dispatch(1);
-			spiralEnemiesTwo.dispatch(1);
-			spiralEnemiesThree.dispatch(1);
+			enemies.dispatch(3);
 		});
 
 		for(var i = 0; i < 50; i++) {
@@ -70,7 +68,7 @@ function initializeStage() {
 			.addEvent(8500, createDestructor());
 
 		master.addEvent(1000, (_) => {
-			novaFire.dispatch(1);
+			enemies.dispatch(1);
 			return REMOVE_EVENT;
 		});
 
@@ -114,7 +112,7 @@ function initializeStage() {
 			.addEvent(13000, createDestructor());
 
 		master.addEvent(1000, (_) => {
-			enemy.dispatch(1);
+			enemies.dispatch(1);
 			return REMOVE_EVENT;
 		});
 
@@ -254,7 +252,7 @@ function initializeStage() {
 		}
 
 		master.addEvent(1000, (_) => {
-			enemy.dispatch(1);
+			enemies.dispatch(1);
 			return REMOVE_EVENT;
 		});
 
@@ -288,7 +286,7 @@ function initializeStage() {
 			.addEvent(11000, createDestructor());
 
 		master.addEvent(1000, (_) => {
-			enemy.dispatch(1);
+			enemies.dispatch(1);
 			return REMOVE_EVENT;
 		});
 
